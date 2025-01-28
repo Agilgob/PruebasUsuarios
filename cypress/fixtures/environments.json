@@ -1,0 +1,29 @@
+{
+
+  "local" : {},
+
+  
+  "sandbox":{
+    "filename" : "localhost.json",
+    "documentoPDF" : "assets/documento.pdf",
+    "imagenPNG" : "assets/imagen.png",
+
+    "funcionarioURL" : "https://sandbox.funcionario.cjj.gob.mx/",
+    "ciudadanoURL" : "https://sandbox.ciudadano.cjj.gob.mx/", 
+    "superadminURL" : "https://sandbox.superadmin.cjj.gob.mx/", 
+    "modeladorURL" : "https://sandbox.nilo.cjj.gob.mx/"
+  },
+
+  "productivo" : {
+    "filename" : "localhost.json",
+    "documentoPDF" : "assets/documento.pdf",
+    "imagenPNG" : "assets/imagen.png",
+
+    "funcionarioURL" : "https://funcionario.cjj.gob.mx/",
+    "ciudadanoURL" : "https://ciudadano.cjj.gob.mx/", 
+    "superadminURL" : "https://superadmin.cjj.gob.mx/", 
+    "modeladorURL" : "https://nilo.cjj.gob.mx/"
+  }
+
+}
+
