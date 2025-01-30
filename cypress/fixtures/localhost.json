@@ -1,0 +1,15 @@
+{
+  "secretarioAcuerdos" : {
+    "mail" : "secretarioAcuerdos_001@dominio.com",
+    "password" : "acuerdos_12345"
+  },
+
+
+  
+  "url" : {
+    "funcionario" : "https://sandbox.ciudadano.cjj.gob.mx/",
+    "ciudadano" : "https://sandbox.ciudadano.cjj.gob.mx/", 
+    "superadmin" : "https://sandbox.superadmin.cjj.gob.mx/", 
+    "modelador" : "https://sandbox.modelador.cjj.gob.mx/"
+  }
+}
