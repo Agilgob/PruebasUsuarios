@@ -1,9 +1,12 @@
 {
   "secretarioAcuerdos" : {
     "email" : "abogado_acuerdos.subfloor157@simplelogin.com",
-    "password" : "12345678"
+    "password" : "12345678",
+    "archivoFirel" : "assets/Firel/CICF870709HNESVR02.pfx",
+    "passwordFirel" : "autlan1296"
   },
 
+  "documentoPDF" : "assets/documento.pdf", 
 
   
   "url" : {

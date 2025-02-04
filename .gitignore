@@ -1,1 +1,5 @@
 node_modules/
+force.sh
+cypress/screenshots
+cypress/videos
+cypress/downloads
