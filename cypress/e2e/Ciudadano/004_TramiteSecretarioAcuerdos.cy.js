@@ -3,6 +3,7 @@
 describe('Inicia Tramite desde el portal de ciudadano', () => {
     let testData;
     let ciudadano;
+    let tramite;
 
     before(() => { 
         // Carga los datos del archivo de datos para utilizarlos en el test
@@ -10,6 +11,8 @@ describe('Inicia Tramite desde el portal de ciudadano', () => {
         cy.fixture('localhost').then((data) => {
             testData = data;
             ciudadano = testData.ciudadanoManuel;
+            tramite = testData.tramites.civiles_familiares_mercantiles;
+        
         });
     });
 
@@ -28,14 +31,14 @@ describe('Inicia Tramite desde el portal de ciudadano', () => {
             cy.get('.procedure-card').should('have.length.greaterThan', 0);
     
             // Buscar un trámite
-            cy.get('#searcher').type(ciudadano.tramite);
+            cy.get('#searcher').type(tramite.nombre);
             cy.get('i.ti-search')
                 .parent()
                 .should('be.visible')
                 .and('be.enabled')
                 .click();
 
-            cy.get('.procedure-card').filter(`:contains("${ciudadano.tramite}")`).first().as('tramite');
+            cy.get('.procedure-card').filter(`:contains("${tramite.nombre}")`).first().as('tramite');
             cy.get('@tramite').contains('button', 'Ir al trámite').click();
 
             // Iniciar tramite
@@ -44,41 +47,41 @@ describe('Inicia Tramite desde el portal de ciudadano', () => {
                 .and('be.enabled')
                 .click();
 
-            // Llenado de Demanda Inicial
+            // // Llenado de Demanda Inicial
             // const fecha = new Date();
-            // cy.log(`FECHA: ${fecha}`);
-            // const fechaISO = fecha.toISOString().split('T')[0]; REVIEW se muestra un dia incorrecto en la 
-            
+            // const fechaLocal = fecha.toLocaleDateString('es-MX', { timeZone: 'America/Mexico_City' }).split('/').reverse().join('-'); 
+            // cy.log(`FECHA: ${fecha}, FECHA LOCAL: ${fechaLocal}`); // REVIEW corroborar que la fecha sea correcta
 
-            // Verifica que el input tiene el valor esperado y que está deshabilitado
+            // // Verifica que el input tiene el valor esperado y que está deshabilitado
             // cy.get('input[name="fecha_de_presentacion"]').as('fechaPresentacion');
             // cy.get('@fechaPresentacion').should('be.disabled');
             // cy.get('@fechaPresentacion').should('have.attr', 'value')
             // .then((val) => {
-            //     expect(val).to.equal(fechaISO);
+            //     expect(val).to.equal(fechaLocal);
             // })
             
-
-            cy.llenarSelect('Partido Judicial', 'Partido Judicial Tepatitlan');
-            cy.llenarSelect('Materia', 'Familiar');
-            cy.llenarSelect('Clave del tipo de juicio', 'Ejecución de Sentencia Jalisco');
-            cy.llenarSelect('Tipo de Vía', 'Juicio Civil Ejecutivo')
-            cy.llenarSelect('Elige el regimén del Actor o Promovente', 'Fisica')
-            cy.llenarSelect('¿Existe representante legal para el actor?', 'No')
-            cy.llenarSelect('¿Existe abogado patrono para el actor?', 'No')
+            // Formulario que se parametriza desde el archivo de datos (fixture)
+            cy.llenarSelect('Partido Judicial', tramite.partidoJudicial);
+            cy.llenarSelect('Materia', tramite.materia);
+            cy.llenarSelect('Clave del tipo de juicio', tramite.claveTipoJuicio);
+            cy.llenarSelect('Tipo de Vía', tramite.tipoVia);
+            cy.llenarSelect('Elige el regimén del Actor o Promovente', tramite.regimenActor);
+            cy.llenarSelect('¿Existe representante legal para el actor?', tramite.representanteLegal);
+            cy.llenarSelect('¿Existe abogado patrono para el actor?', tramite.abogadoPatrono);
 
             cy.get('button').contains('Agregar Firma').click()
             cy.cargarArchivoFirel(ciudadano.archivoFirel, ciudadano.passwordFirel);
             
             cy.cargarDocumento('Agregar Archivo', testData.documentoPDF)
+            cy.wait(5000)
             cy.contains('button', 'Firmar').should('be.visible').and('be.enabled').click();
-            cy.llenarSelect('Para este caso, ¿Es necesario agregar demandado?', 'No')
+            cy.llenarSelect('Para este caso, ¿Es necesario agregar demandado?', tramite.agregarDemandado);
 
-            cy.contains('button', 'Siguiente').click(); // TO DO Sandbox indica que el documento no se ha firmado, revisar
-            cy.wait(4000);
-            cy.contains('button', 'Siguiente').click();
+            cy.contains('button', 'Siguiente').click(); 
+            cy.contains('button', 'Confirmar', {timeout:15000}).click();
 
         })
     })
+
 })
 

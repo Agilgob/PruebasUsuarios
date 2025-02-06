@@ -4,25 +4,55 @@
     "funcionario" : "https://sandbox.funcionario.cjj.gob.mx/",
     "ciudadano" : "https://sandbox.ciudadano.cjj.gob.mx/", 
     "superadmin" : "https://sandbox.superadmin.cjj.gob.mx/", 
-    "modelador" : "https://sandbox.modelador.cjj.gob.mx/"
+    "modelador" : "https://sandbox.nilo.cjj.gob.mx/"
   },
 
-  
+
   "secretarioAcuerdos" : {
       "email" : "abogado_acuerdos.subfloor157@simplelogin.com",
       "password" : "12345678",
       "archivoFirel" : "assets/Firel/CICF870709HNESVR02.pfx",
       "passwordFirel" : "autlan1296"
   },
+  "secretarioAcuerdos2" : {
+    "email" : "secretarioacuerdos002.serotonin848@simplelogin.com",
+    "password" : "mvsec.acuerdosdos",
+    "archivoFirel" : "assets/Firel/COAA000405MJCRLDA6.pfx",
+    "passwordFirel" : "Cordoba2024"
+  },
+
 
   "ciudadanoManuel" : {
     "email" : "manuel@agilgob.com",
     "password" : "1cafeArabica",
     "archivoFirel" : "assets/Firel/CICF870709HNESVR02.pfx",
     "passwordFirel" : "autlan1296",
-    "tramite" : "Módulo de prácticas",
     "documentoIdentificacion" : "assets/INE-demo.png"
   },
+
+
+  "ciudadanoManuel2" : {
+    "descripcion" : "Ciudadano para generar tramites para secretario de acuerdos y turnados internos y externos",
+    "email" : "manuel@agilgob.com",
+    "password" : "1cafeArabica",
+    "archivoFirel" : "assets/Firel/CICF870709HNESVR02.pfx",
+    "passwordFirel" : "autlan1296"
+  },
+
+  "tramites" : {
+    "civiles_familiares_mercantiles" : {
+      "nombre" : "Juzgados Civiles, Familiares y Mercantiles en línea",
+      "partidoJudicial" : "Partido Testing SecAcu",
+      "materia" : "Familiar",
+      "claveTipoJuicio" : "Dependencia económica",
+      "tipoVia" : "Juicio Civil Sumario",
+      "regimenActor" : "Fisica",
+      "representanteLegal" : "No",
+      "abogadoPatrono" : "No",
+      "agregarDemandado" : "No"
+    }
+  },
+
 
   "documentoPDF" : "assets/documento.pdf"
 

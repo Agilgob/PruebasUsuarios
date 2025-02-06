@@ -15,7 +15,7 @@ describe('Gestión de trámites', () => {
         cy.visit(testData.url.funcionario);
         cy.loginFuncionario(funcionario.email, funcionario.password);
     });
-
+    
     describe('Iniciar tramite', () => {
         it('Inicia un trámite y concluye la creacion', () => {
             cy.get('.one_column .fa-align-justify').click();
@@ -31,7 +31,7 @@ describe('Gestión de trámites', () => {
 
             cy.get('@targetCard').contains('Ir al trámite').click();
             
-
+             // TO DO  modificar el codigo desde aqui para agregar multifirma
             // Agrega la firma de tipo Firel
             cy.get('button').contains('Agregar Firma').click();
             cy.cargarArchivoFirel(funcionario.archivoFirel, funcionario.passwordFirel);
