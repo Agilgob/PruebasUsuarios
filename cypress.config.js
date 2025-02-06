@@ -6,5 +6,9 @@ module.exports = defineConfig({
       // implement node event listeners here
     },
   },
-  defaultCommandTimeout: 10000, 
+  
+  defaultCommandTimeout: 10000,
+  video: true,
+  videoCompression: 32,
+  videosFolder: 'cypress/videos'
 });

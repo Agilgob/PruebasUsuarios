@@ -1,5 +1,6 @@
 node_modules/
 force.sh
-cypress/screenshots
-cypress/videos
-cypress/downloads
+cypress/screenshots/
+cypress/videos/
+cypress/downloads/
+cypress/outputs/

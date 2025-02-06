@@ -2,7 +2,9 @@ describe('Gestión de trámites', () => {
     let testData;
     let funcionario;
 
-    before(() => {
+    before(() => { 
+        // Carga los datos del archivo de datos para utilizarlos en el test
+        // funcionario almacena los datos de cualquier funcionario en el archivo de datos
         cy.fixture('localhost').then((data) => {
             testData = data;
             funcionario = testData.secretarioAcuerdos;
@@ -48,8 +50,6 @@ describe('Gestión de trámites', () => {
             cy.readFile('cypress/downloads/deleteme.pdf', 'binary').should((buffer) => {
                 expect(buffer.length).to.be.greaterThan(0);
             });
-            //cy.task('deleteFile', 'cypress/downloads/deleteme.pdf'); TO DO crear metodo para eliminar archivo
-
             cy.get('button').contains('Siguiente').click();
             cy.get('button').contains('Confirmar').click();
 
