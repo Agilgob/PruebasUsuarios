@@ -1,0 +1,39 @@
+
+
+{
+    "partido" : "Partido Testing SecAcu",
+    "Juzgados" : [
+    {
+        "nombre" : "Juzgado Pruebas Secretario Acuerdos2",
+        "materia" : "Civil",
+        "usuarios" : [
+        {
+            "usuario" : "sacuerdos.mvaldez01",
+            "correo": "secretarioacuerdosmerca01.require753@simplelogin.com",
+            "grupo": "Secretario de Acuerdos"
+        },
+        {
+            "usuario" : "samerca.mvaldez02",
+            "correo": "secretarioacuerdosmerca02.octane601@simplelogin.com",
+            "grupo": "Secretario de Acuerdos"
+        }
+        ]
+    },
+    {
+        "nombre" : "Juzgado Pruebas Secretario Acuerdos",
+        "materia" : "Familiar",
+        "usuarios" : [
+        {
+            "usuario" : "manuel.valdezz",
+            "correo": "abogado_acuerdos.subfloor157@simplelogin.com",
+            "grupo": "Secretario de Acuerdos"
+        },
+        {
+            "usuario" : "mvsec.acuerdosdos",
+            "correo": "secretarioacuerdos002.serotonin848@simplelogin.com",
+            "grupo": "Secretario de Acuerdos"
+        }
+        ]
+    }
+    ]
+}
