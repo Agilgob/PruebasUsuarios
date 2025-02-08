@@ -5,10 +5,13 @@ describe('Gestión de trámites', () => {
         cy.fixture('localhost').then((data) => {
             testData = data;
         });
+        cy.fixture('urls').then((data) => {
+            urls = data;
+        });
     });
 
     beforeEach(() => {
-        cy.visit(testData.url.funcionario);
+        cy.visit(urls.funcionario);
         cy.loginFuncionario(testData.secretarioAcuerdos.email, testData.secretarioAcuerdos.password);
     });
 
