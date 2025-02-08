@@ -1,0 +1,12 @@
+{
+
+  "filename" : "localhost.json",
+  "documentoPDF" : "assets/documento.pdf",
+
+  "funcionarioURL" : "https://sandbox.funcionario.cjj.gob.mx/",
+  "ciudadanoURL" : "https://sandbox.ciudadano.cjj.gob.mx/", 
+  "superadminURL" : "https://sandbox.superadmin.cjj.gob.mx/", 
+  "modeladorURL" : "https://sandbox.nilo.cjj.gob.mx/"
+
+}
+
