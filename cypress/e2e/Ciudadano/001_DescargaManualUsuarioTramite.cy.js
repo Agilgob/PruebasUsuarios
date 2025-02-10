@@ -23,7 +23,7 @@ describe('Inicia Tramite desde el portal de ciudadano', () => {
         it('Inicia un trámite y concluye la creacion', () => {
             // Ir a tramites disponibles
             cy.get('.principal-nav  ul').as('menuPrincipal');
-            cy.get('@menuPrincipal').contains('Trámites disponibles').click();
+            cy.get('@menuPrincipal').contains('Tramites disponibles').click();
     
             // Verifica que existan trámites disponibles
             cy.get('.procedure-card').should('have.length.greaterThan', 0);

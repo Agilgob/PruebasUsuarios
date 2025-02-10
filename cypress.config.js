@@ -13,8 +13,7 @@ module.exports = defineConfig({
   videosFolder: 'cypress/videos',
 
   env : {
-
-    secretario : 'secretarioAcuerdos',
+    funcionario : 'secretarioAcuerdos01',
     ciudadano : 'ciudadanoManuel',
     tramite : "civiles_familiares_mercantiles",
     testData : 'testDataSandbox'

@@ -3,18 +3,44 @@
 describe('Inicia Tramite desde el portal de ciudadano', () => {
     let testData;
     let ciudadano;
+    let tramite;
+    let funcionario;
 
     before(() => { 
         // Carga los datos del archivo de datos para utilizarlos en el test
         // ciudadano almacena los datos de cualquier Ciudadano en el archivo de datos
-        cy.fixture('localhost').then((data) => {
+
+        const ciudadanoEnv = Cypress.env('ciudadano');
+        const tramiteEnv = Cypress.env('tramite');
+        const testDataEnv = Cypress.env('testData');
+        const funcionarioEnv = Cypress.env('funcionario');
+
+        cy.log(`CIUDADANO ENV : ${ciudadanoEnv}`)
+        cy.log(`TRAMITE ENV : ${tramiteEnv}`)
+        cy.log(`TESTDATA ENV FILE: ${testDataEnv}`)
+        cy.log(`FUNCIONARIO ENV : ${funcionario}`)
+
+
+        cy.fixture(testDataEnv).then((data) => {
             testData = data;
-            ciudadano = testData.ciudadanoManuel;
         });
+
+        cy.fixture('ciudadanos').then((data) => {
+            ciudadano = data[ciudadanoEnv];
+        });
+
+        cy.fixture('tramites').then((data) => {
+            tramite = data[tramiteEnv];
+        });
+
+        cy.fixture('funcionarios').then((data) => {
+            funcionario = data[funcionarioEnv];
+        })
+
     });
 
     beforeEach(() => {
-        cy.visit(testData.url.ciudadano);
+        cy.visit(testData.ciudadanoURL);
         cy.loginCiudadano(ciudadano.email, ciudadano.password);
     });
     

@@ -1,18 +1,46 @@
 describe('Gestión de trámites', () => {
     let testData;
+    let ciudadano;
+    let tramite;
+    let funcionario;
 
-    before(() => {
-        cy.fixture('localhost').then((data) => {
+    before(() => { 
+        // Carga los datos del archivo de datos para utilizarlos en el test
+        // ciudadano almacena los datos de cualquier Ciudadano en el archivo de datos
+
+        const ciudadanoEnv = Cypress.env('ciudadano');
+        const tramiteEnv = Cypress.env('tramite');
+        const testDataEnv = Cypress.env('testData');
+        const funcionarioEnv = Cypress.env('funcionario');
+
+        cy.log(`CIUDADANO ENV : ${ciudadanoEnv}`)
+        cy.log(`TRAMITE ENV : ${tramiteEnv}`)
+        cy.log(`TESTDATA ENV FILE: ${testDataEnv}`)
+        cy.log(`FUNCIONARIO ENV : ${funcionarioEnv}`)
+
+
+        cy.fixture(testDataEnv).then((data) => {
             testData = data;
         });
-        cy.fixture('urls').then((data) => {
-            urls = data;
+
+        cy.fixture('ciudadanos').then((data) => {
+              ciudadano = data[ciudadanoEnv];
+          });
+
+        cy.fixture('tramites').then((data) => {
+            tramite = data[tramiteEnv];
         });
+
+        cy.fixture('funcionarios').then((data) => {
+            funcionario = data[funcionarioEnv];
+        })
+
     });
 
     beforeEach(() => {
-        cy.visit(urls.funcionario);
-        cy.loginFuncionario(testData.secretarioAcuerdos.email, testData.secretarioAcuerdos.password);
+        cy.visit(testData.funcionarioURL);
+        cy.loginFuncionario(funcionario.email, funcionario.password);
+
     });
 
     describe('Iniciar y cancelar trámites', () => {
@@ -27,7 +55,7 @@ describe('Gestión de trámites', () => {
                 .then((tramitesIniciados) => {
                     tramitesIniciados = tramitesIniciados.trim();
     
-                    cy.get('@barraMenuTramites').contains('Trámites Disponibles').click();
+                    cy.get('@barraMenuTramites').contains('Tramites Disponibles').click();
                     cy.get('.procedure-card')
                         .contains('Firmado Electrónico de Documentos')
                         .parents('.procedure-card')
@@ -35,11 +63,13 @@ describe('Gestión de trámites', () => {
     
                     cy.get('@targetCard').contains('Ir al trámite').click();
                     cy.contains('Cancelar').click();
-    
+                    cy.screenshot('CANCELAR_TRAMITE');
                     cy.get('@barraMenuTramites')
                         .contains('Trámites iniciados')
                         .invoke('text')
                         .should('eq', tramitesIniciados);
+                    cy.screenshot('CANCELAR_TRAMITE');
+
                 });
         });
     });

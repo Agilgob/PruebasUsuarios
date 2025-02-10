@@ -40,5 +40,39 @@
                 "passwordFirel" : "Cordoba2024"
             }
         }
+
+    },
+
+    "secretarioAcuerdos03" : {
+        "email" : "secretarioacuerdosmerca02.octane601@simplelogin.com",
+        "username" : "samerca.mvaldez02",
+        "password" : "samerca.mvaldez02",
+        "archivoFirel" : "assets/Firel/COAA000405MJCRLDA6.pfx",
+        "passwordFirel" : "Cordova2024"
+    },
+
+    "secretarioAcuerdos04" : {
+        "email" : "secretarioacuerdosmerca01.require753@simplelogin.com",
+        "username" : "sacuerdos.mvaldez01",
+        "password" : "sacuerdos.mvaldez01",
+        "archivoFirel" : "assets/Firel/CICF870709HNESVR02.pfx",
+        "passwordFirel" : "autlan1296"
+    },
+
+    "secretarioAcuerdos01" : {
+        "email" : "abogado_acuerdos.subfloor157@simplelogin.com",
+        "username" : "manuel.valdezz",
+        "password" : "12345678",
+        "archivoFirel" : "assets/Firel/CICF870709HNESVR02.pfx",
+        "passwordFirel" : "autlan1296"
+    },
+
+    "secretarioAcuerdos02" : {
+        "email" : "secretarioacuerdos002.serotonin848@simplelogin.com",
+        "username" : "mvsec.acuerdosdos",
+        "password" : "mvsec.acuerdosdos",
+        "archivoFirel" : "assets/Firel/COAA000405MJCRLDA6.pfx",
+        "passwordFirel" : "Cordova2024"
+
     }
 }
