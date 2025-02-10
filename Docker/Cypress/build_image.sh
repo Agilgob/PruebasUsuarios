@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# Obtener el hash del último commit (primeros 15 caracteres)
+# Obtener el SHA del último commit (primeros 15 caracteres)
 HASH=$(git rev-parse HEAD | cut -c1-15)
 IMAGE_NAME="cypress-agilgob:$HASH"
 
-# Verificar si existe una imagen con el mismo hash
+# Verificar si existe una imagen con el mismo SHA
 EXISTING_IMAGE=$(docker images --format "{{.Repository}}:{{.Tag}}" | grep "cypress-agilgob:" | awk -F: '{print $2}')
 
 if [[ -z "$EXISTING_IMAGE" ]]; then
