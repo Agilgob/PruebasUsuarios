@@ -24,8 +24,8 @@ describe('Gestión de trámites', () => {
         });
 
         cy.fixture('ciudadanos').then((data) => {
-            ciudadano = data[ciudadanoEnv];
-        });
+              ciudadano = data[ciudadanoEnv];
+          });
 
         cy.fixture('tramites').then((data) => {
             tramite = data[tramiteEnv];
@@ -40,6 +40,7 @@ describe('Gestión de trámites', () => {
     beforeEach(() => {
         cy.visit(testData.funcionarioURL);
         cy.loginFuncionario(funcionario.email, funcionario.password);
+
     });
 
     describe('Iniciar y cancelar trámites', () => {

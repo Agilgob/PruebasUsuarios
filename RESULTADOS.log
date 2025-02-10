@@ -1,0 +1,54 @@
+
+
+  Inicia Tramite desde el portal de ciudadano
+    Inicia un tramite y concluye la creacion
+      ✓ Inicia un trámite y concluye la creacion (32597ms)
+
+
+  1 passing (36s)
+
+
+  (Video)
+
+  -  Video output: /home/manner/Repositorios/PruebasUsuarios/cypress/videos/004_TramiteSecretarioAcuerdos.cy.js.mp4
+
+
+
+  Inicia Tramite desde el portal de ciudadano
+    Inicia un tramite y concluye la creacion
+      ✓ Inicia un trámite y concluye la creacion (34584ms)
+
+
+  1 passing (37s)
+
+
+  (Video)
+
+  -  Video output: /home/manner/Repositorios/PruebasUsuarios/cypress/videos/004_TramiteSecretarioAcuerdos.cy.js.mp4
+
+
+
+  Inicia Tramite desde el portal de ciudadano
+    Inicia un tramite y concluye la creacion
+      1) Inicia un trámite y concluye la creacion
+
+
+  0 passing (47s)
+  1 failing
+
+  1) Inicia Tramite desde el portal de ciudadano
+       Inicia un tramite y concluye la creacion
+         Inicia un trámite y concluye la creacion:
+     AssertionError: Timed out retrying after 10000ms: Expected to find element: `:contains("Tipo de documento:")`, but never found it. Queried from:
+
+              > cy.get(.col-md-12 .row)
+      at Context.eval (webpack:///./cypress/support/actions/demandaInicial.js:7:30)
+      at wrapped (https://sandbox.ciudadano.cjj.gob.mx/__cypress/runner/cypress_runner.js:137875:43)
+
+
+
+
+  (Video)
+
+  -  Video output: /home/manner/Repositorios/PruebasUsuarios/cypress/videos/004_TramiteSecretarioAcuerdos.cy.js.mp4
+

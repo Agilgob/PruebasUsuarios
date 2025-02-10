@@ -21,7 +21,6 @@ describe('Inicia Tramite desde el portal de ciudadano', () => {
         cy.log(`TESTDATA ENV FILE: ${testDataEnv}`)
         cy.log(`FUNCIONARIO ENV : ${funcionario}`)
 
-
         cy.fixture(testDataEnv).then((data) => {
             testData = data;
         });
@@ -123,6 +122,7 @@ describe('Inicia Tramite desde el portal de ciudadano', () => {
 
             }
             cy.screenshot()
+
             // ANEXOS TO DO Corregir los paths del modal de anexos ya que no coinciden con em metodo cy.llenarSelect del form 
             if(tramite.subirAnexo){
                 cy.contains('b', ' Agregar Campo para subir anexos').click()
@@ -132,6 +132,7 @@ describe('Inicia Tramite desde el portal de ciudadano', () => {
                 cy.cargarDocumento('* Selecciona el archivo a subir', ciudadano.documentoIdentificacion) // TO DO Corroborar que funcione
                 cy.wait(2000)
                 cy.contains('.modal-content button', 'Agregar').click()
+
             }
             cy.screenshot()
 
