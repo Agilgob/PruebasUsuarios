@@ -6,7 +6,7 @@ ENV_VARS=("FUNCIONARIO" "CIUDADANO" "TRAMITE" "TEST_DATA")
 
 # Verificar si la variable de entorno folder_name está definida
 if [ -z "$SPEC" ]; then
-  echo "Error: La variable de entorno 'folder_name' no está definida."
+  echo "Error: La variable de entorno 'SPEC' no está definida."
   exit 1
 fi
 
