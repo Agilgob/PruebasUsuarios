@@ -20,7 +20,9 @@ for VAR in "${ENV_VARS[@]}"; do
 done
 
 
+# Obtener la imagen de docker cypress-agilgob mas reciente   
+DOCKER_IMAGE=$(docker images --format "{{.Repository}}:{{.Tag}}" | grep "cypress-agilgob:")
 
 
 # Ejecutar Cypress con la variable de entorno
-npx cypress run --spec "$SPEC" --reporter cypress-mochawesome-reporter $CYPRESS_ARGS
+npx cypress run --spec "$SPEC" --reporter cypress-mochawesome-reporter $CYPRESS_ARGS $DOCKER_IMAGE
