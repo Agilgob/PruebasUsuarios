@@ -1,7 +1,16 @@
 #!/bin/bash
 
 
+# Este script se ejecuta desde adentro del contendor que se levanta 
+
+
+
 ENV_VARS=("FUNCIONARIO" "CIUDADANO" "TRAMITE" "TEST_DATA")
+
+echo "FUNCIONARIO : $FUNCIONARIO"
+echo "CIUDADANO : $CIUDADANO"
+echo "TRAMITE : $TRAMITE"
+echo "TEST_DATA : $TEST_DATA"
 
 
 # Verificar si la variable de entorno folder_name está definida
@@ -20,9 +29,5 @@ for VAR in "${ENV_VARS[@]}"; do
 done
 
 
-# Obtener la imagen de docker cypress-agilgob mas reciente   
-DOCKER_IMAGE=$(docker images --format "{{.Repository}}:{{.Tag}}" | grep "cypress-agilgob:")
-
-
 # Ejecutar Cypress con la variable de entorno
-npx cypress run --spec "$SPEC" --reporter cypress-mochawesome-reporter $CYPRESS_ARGS $DOCKER_IMAGE
+npx cypress run --spec "$SPEC" --reporter cypress-mochawesome-reporter $CYPRESS_ARGS 
