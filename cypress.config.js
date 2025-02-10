@@ -14,7 +14,7 @@ module.exports = defineConfig({
 
   env : {
 
-    secretario : 'secretarioAcuerdos',
+    funcionario : 'secretarioAcuerdos01',
     ciudadano : 'ciudadanoManuel',
     tramite : "civiles_familiares_mercantiles",
     testData : 'testDataSandbox'

@@ -5,6 +5,7 @@ describe('Inicia Tramite desde el portal de ciudadano', () => {
     let testData;
     let ciudadano;
     let tramite;
+    let funcionario;
 
     before(() => { 
         // Carga los datos del archivo de datos para utilizarlos en el test
@@ -13,10 +14,12 @@ describe('Inicia Tramite desde el portal de ciudadano', () => {
         const ciudadanoEnv = Cypress.env('ciudadano');
         const tramiteEnv = Cypress.env('tramite');
         const testDataEnv = Cypress.env('testData');
+        const funcionarioEnv = Cypress.env('funcionario');
 
         cy.log(`CIUDADANO ENV : ${ciudadanoEnv}`)
         cy.log(`TRAMITE ENV : ${tramiteEnv}`)
         cy.log(`TESTDATA ENV FILE: ${testDataEnv}`)
+        cy.log(`FUNCIONARIO ENV : ${funcionario}`)
 
 
         cy.fixture(testDataEnv).then((data) => {
@@ -31,9 +34,14 @@ describe('Inicia Tramite desde el portal de ciudadano', () => {
             tramite = data[tramiteEnv];
         });
 
+        cy.fixture('funcionarios').then((data) => {
+            funcionario = data[funcionarioEnv];
+        })
+
     });
 
     beforeEach(() => {
+        cy.screenshot('CONFIGS')
         cy.visit(testData.ciudadanoURL);
         cy.loginCiudadano(ciudadano.email, ciudadano.password);
     });
@@ -115,14 +123,15 @@ describe('Inicia Tramite desde el portal de ciudadano', () => {
 
             }
             cy.screenshot()
-            // ANEXOS TO DO Corregir los paths del prompt de anexos ya que no coinciden con em metodo cy.llenarSelect del form 
+            // ANEXOS TO DO Corregir los paths del modal de anexos ya que no coinciden con em metodo cy.llenarSelect del form 
             if(tramite.subirAnexo){
                 cy.contains('b', ' Agregar Campo para subir anexos').click()
-                cy.llenarSelect('Tipo de documento:', tramite.tipoDocumento)
+                cy.llenarSelectModal('* Tipo de documento:', tramite.anexos.tipoDocumento)
                 cy.get('input[placeholder="Agrega una etiqueta para identificar este documento"]')
-                    .type(tramite.etiqueta);
-                cy.contains('button', '* Selecciona el archivo a subir').click(); // TO DO Corroborar que funcione
-                cy.contains('button', 'Agregar').click()
+                    .type(tramite.anexos.etiqueta);
+                cy.cargarDocumento('* Selecciona el archivo a subir', ciudadano.documentoIdentificacion) // TO DO Corroborar que funcione
+                cy.wait(2000)
+                cy.contains('.modal-content button', 'Agregar').click()
             }
             cy.screenshot()
 
