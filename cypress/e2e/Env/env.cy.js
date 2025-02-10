@@ -7,7 +7,7 @@ describe('Inicia Tramite desde el portal de ciudadano', () => {
     before(() => { 
         // Carga los datos del archivo de datos para utilizarlos en el test
         // ciudadano almacena los datos de cualquier Ciudadano en el archivo de datos
-        cy.fixture().then((data) => {
+        cy.fixture('testDataSandbox').then((data) => {
             testData = data;
         });
 
