@@ -9,7 +9,7 @@ EXISTING_IMAGE=$(docker images --format "{{.Repository}}:{{.Tag}}" | grep "cypre
 
 if [[ -z "$EXISTING_IMAGE" ]]; then
     echo "No hay una imagen previa. Construyendo $IMAGE_NAME ..."
-    docker build -t $IMAGE_NAME -f Dockerfile .
+    docker build --no-cache -t $IMAGE_NAME -f Dockerfile .
 else
     if [[ "$EXISTING_IMAGE" == "$HASH" ]]; then
         echo "La imagen actual ya está actualizada con el hash $HASH. No es necesario construir."
@@ -17,6 +17,6 @@ else
         echo "Eliminando imagen previa: cypress-agilgob:$EXISTING_IMAGE"
         docker rmi "cypress-agilgob:$EXISTING_IMAGE"
         echo "Construyendo nueva imagen: $IMAGE_NAME"
-        docker build -t $IMAGE_NAME -f Dockerfile .
+        docker build --no-cache -t $IMAGE_NAME -f Dockerfile .
     fi
 fi
