@@ -14,8 +14,9 @@ else
     if [[ "$EXISTING_IMAGE" == "$HASH" ]]; then
         echo "La imagen actual ya está actualizada con el hash $HASH. No es necesario construir."
     else
-        echo "Eliminando imagen previa: cypress-agilgob:$EXISTING_IMAGE"
-        docker rmi "cypress-agilgob:$EXISTING_IMAGE"
+        # Elminar todas las imagenes con el nombre cypress-agilgob
+        echo "Eliminando imagen previa: cypress-agilgob:$EXISTING_IMAGE"    
+        docker image rm $( docker image ls --format "{{.Repository}}:{{.Tag}}" | grep cypress-agilgob)
         echo "Construyendo nueva imagen: $IMAGE_NAME"
         docker build --no-cache -t $IMAGE_NAME -f Dockerfile .
     fi

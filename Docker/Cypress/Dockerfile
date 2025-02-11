@@ -1,9 +1,11 @@
+# NOTA: Se usa la version cypress/base en lugar de cypress/included por la diferencia 
+# de tamaño de la imagen, la primera pesa 1.4GB y la segunda 3GB pero puede cambiarse sin problema
+# si se desea probar con diferentes navegadores o versiones de cypress
 FROM cypress/base:22.13.1
 
 USER root
 
 WORKDIR /home
-
 
 # TO DO cambiar la branch desde donde se van a ejecutar las pruebas
 RUN git clone --branch SecretarioAcuerdos https://github.com/manuel-agilgob/PruebasUsuarios \
@@ -11,15 +13,6 @@ RUN git clone --branch SecretarioAcuerdos https://github.com/manuel-agilgob/Prue
     && npm install
 
 WORKDIR /home/PruebasUsuarios
-
-
-# TO DO Agregar los parametros de ejecucion de las pruebas de cypress
-# Recibe como parametros las variables de entorno que luego usa cypress para ejecutar las pruebas
-# Dentro del contenedor se valida que las variables de entorno se hayan pasado correctamente
-# Si no se pasan, el proceso termina con codigo 1
-
-# SPEC es la unica variable oblicatoria, para definir el archivo o carpetas que
-# deben ser ejecutados en el entrypoint
 
 ARG spec
 ENV SPEC=${spec}
