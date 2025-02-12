@@ -78,7 +78,10 @@
     "promocion_demanda_fam_merc" : {
         "descripcion" : "recepcion del expediente desde el ciudadano, promocion de la demanda y turnado",
         "nombre" : "P",
-        "expediente" : "L2/2025"
+        "expediente" : "L2/2025",
+        "identificadorDocumento" : "INE",
+        "comentarioDocumento" : "Prueba automatizada de carga de documento",
+        "agregarAnexos" : "si"
 
     }
 

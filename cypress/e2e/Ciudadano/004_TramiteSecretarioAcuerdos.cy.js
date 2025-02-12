@@ -123,13 +123,13 @@ describe('Inicia Tramite desde el portal de ciudadano', () => {
             }
             cy.screenshot()
 
-            // ANEXOS TO DO Corregir los paths del modal de anexos ya que no coinciden con em metodo cy.llenarSelect del form 
+
             if(tramite.subirAnexo){
                 cy.contains('b', ' Agregar Campo para subir anexos').click()
                 cy.llenarSelectModal('* Tipo de documento:', tramite.anexos.tipoDocumento)
                 cy.get('input[placeholder="Agrega una etiqueta para identificar este documento"]')
                     .type(tramite.anexos.etiqueta);
-                cy.cargarDocumento('* Selecciona el archivo a subir', ciudadano.documentoIdentificacion) // TO DO Corroborar que funcione
+                cy.cargarDocumento('* Selecciona el archivo a subir', ciudadano.documentoIdentificacion)
                 cy.wait(2000)
                 cy.contains('.modal-content button', 'Agregar').click()
 
@@ -144,16 +144,3 @@ describe('Inicia Tramite desde el portal de ciudadano', () => {
 
 })
 
-
-            // // Llenado de Demanda Inicial
-            // const fecha = new Date();
-            // const fechaLocal = fecha.toLocaleDateString('es-MX', { timeZone: 'America/Mexico_City' }).split('/').reverse().join('-'); 
-            // cy.log(`FECHA: ${fecha}, FECHA LOCAL: ${fechaLocal}`); // REVIEW corroborar que la fecha sea correcta
-
-            // // Verifica que el input tiene el valor esperado y que está deshabilitado
-            // cy.get('input[name="fecha_de_presentacion"]').as('fechaPresentacion');
-            // cy.get('@fechaPresentacion').should('be.disabled');
-            // cy.get('@fechaPresentacion').should('have.attr', 'value')
-            // .then((val) => {
-            //     expect(val).to.equal(fechaLocal);
-            // })

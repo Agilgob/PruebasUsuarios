@@ -2,6 +2,7 @@
 
   "filename" : "localhost.json",
   "documentoPDF" : "assets/documento.pdf",
+  "imagenPNG" : "assets/imagen.png",
 
   "funcionarioURL" : "https://sandbox.funcionario.cjj.gob.mx/",
   "ciudadanoURL" : "https://sandbox.ciudadano.cjj.gob.mx/", 
