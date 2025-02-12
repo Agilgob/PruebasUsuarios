@@ -7,15 +7,15 @@ module.exports = defineConfig({
     },
   },
   
-  defaultCommandTimeout: 10000,
+  defaultCommandTimeout: 5000,
   video: true,
   videoCompression: 32,
   videosFolder: 'cypress/videos',
 
   env : {
-    funcionario : 'secretarioAcuerdos01',
+    funcionario : 'secretarioAcuerdos02',
     ciudadano : 'ciudadanoManuel',
-    tramite : "civiles_familiares_mercantiles",
+    tramite : "promocion_demanda_fam_merc",
     testData : 'testDataSandbox'
   }
 

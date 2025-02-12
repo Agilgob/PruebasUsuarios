@@ -72,7 +72,8 @@
         "username" : "mvsec.acuerdosdos",
         "password" : "mvsec.acuerdosdos",
         "archivoFirel" : "assets/Firel/COAA000405MJCRLDA6.pfx",
-        "passwordFirel" : "Cordova2024"
+        "passwordFirel" : "Cordova2024",
+        "nombre" : "SECRETARIO ACUERDOS MANUEL VALDEZ"
 
     }
 }

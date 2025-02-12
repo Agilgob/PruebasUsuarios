@@ -38,7 +38,7 @@ RUN apt-get update  -qq \
 RUN groupmod -g 1001 docker && \
     usermod -aG docker jenkins
 
-LABEL description="Jenkins con dependencias para ejecutar pruebas en Cypress, mostrar reportes de pruebas y desactivar CSP"
+LABEL description="Jenkins con dependencias para ejecutar pruebas en Cypress, mostrar reportes de pruebas y ejecutar Docker"
 USER jenkins
 
 

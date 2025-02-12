@@ -44,7 +44,7 @@ describe('Gestión de trámites', () => {
 
     describe('Iniciar tramite', () => {
         it('Inicia un trámite y concluye la creacion', () => {
-            cy.get('.one_column .fa-align-justify').click();
+            cy.get('.navbar-brand .fa-align-justify').click();
             cy.get('[title="Sección de trámites"]').click();
             cy.wait(2000);  
 
