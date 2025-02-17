@@ -2,10 +2,11 @@
 
 describe('Inicia Tramite desde el portal de ciudadano', () => {
     
-    let testData;
-    let ciudadano;
-    let tramite;
-    let funcionario;
+    let testData = {};
+    let tramite = {};
+    let funcionario = {};
+    let ciudadano = {};
+    ciudadano.expedientes = {};
 
     before(() => { 
         // Carga los datos del archivo de datos para utilizarlos en el test
@@ -16,17 +17,17 @@ describe('Inicia Tramite desde el portal de ciudadano', () => {
         const testDataEnv = Cypress.env('testData');
         const funcionarioEnv = Cypress.env('funcionario');
 
-        cy.log(`CIUDADANO ENV : ${ciudadanoEnv}`)
-        cy.log(`TRAMITE ENV : ${tramiteEnv}`)
-        cy.log(`TESTDATA ENV FILE: ${testDataEnv}`)
-        cy.log(`FUNCIONARIO ENV : ${funcionario}`)
+        console.log(`CIUDADANO ENV : ${ciudadanoEnv}`)
+        console.log(`TRAMITE ENV : ${tramiteEnv}`)
+        console.log(`TESTDATA ENV FILE: ${testDataEnv}`)
+        console.log(`FUNCIONARIO ENV : ${funcionarioEnv}`)
 
         cy.fixture(testDataEnv).then((data) => {
             testData = data;
         });
 
         cy.fixture('ciudadanos').then((data) => {
-            ciudadano = data[ciudadanoEnv];
+            ciudadano = data[ciudadanoEnv];``
         });
 
         cy.fixture('tramites').then((data) => {
@@ -40,13 +41,40 @@ describe('Inicia Tramite desde el portal de ciudadano', () => {
     });
 
     beforeEach(() => {
-        cy.screenshot('CONFIGS')
-        cy.visit(testData.ciudadanoURL);
-        cy.loginCiudadano(ciudadano.email, ciudadano.password);
+        cy.session('userSession', () => {
+            cy.visit(testData.ciudadanoURL);
+            cy.loginCiudadano(ciudadano.email, ciudadano.password);
+            cy.wait(2000);
+            cy.getCookie('authentication_token_02').should('exist');
+        });
     });
-    
+
+
+
     context('Inicia un tramite y concluye la creacion', () => {
+
+
+        it('Comprobar si el ciudadano tiene expedientes y cuales son', () => {
+            cy.visit('https://sandbox.ciudadano.cjj.gob.mx');
+            
+            cy.intercept('GET', 'https://sandbox.nilo.cjj.gob.mx/api/v1/electronic_expedients/find_expedient/10?page=1').as('expedients');
+            cy.get('a[href="/my-expedients"]').click();
+            cy.wait('@expedients').then((interception) => {
+    
+                expect(interception.response.statusCode).to.eq(200);
+                ciudadano.expedientes = interception.response.body.data;
+                cy.exec('mkdir -p tmp');
+                cy.writeFile('tmp/ciudadano.json', ciudadano);
+                
+            });
+    
+        });
+
+
+
         it('Inicia un trámite y concluye la creacion', () => {
+            cy.visit('https://sandbox.ciudadano.cjj.gob.mx');
+
             // Ir a tramites disponibles
             cy.get('.principal-nav  ul').as('menuPrincipal');
             cy.get('@menuPrincipal').contains('Trámites disponibles').click();
