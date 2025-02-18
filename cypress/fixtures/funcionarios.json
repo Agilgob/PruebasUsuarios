@@ -64,7 +64,8 @@
         "username" : "manuel.valdezz",
         "password" : "12345678",
         "archivoFirel" : "assets/Firel/CICF870709HNESVR02.pfx",
-        "passwordFirel" : "autlan1296"
+        "passwordFirel" : "autlan1296",
+        "nombre" : "MANUEL VALDEZ ACUERDOS"
     },
 
     "secretarioAcuerdos02" : {

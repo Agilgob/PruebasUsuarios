@@ -1,3 +1,8 @@
+import {getNewExpedientId} from '../../support/commands';
+
+
+
+
 
 
 describe('Inicia Tramite desde el portal de ciudadano', () => {
@@ -17,10 +22,12 @@ describe('Inicia Tramite desde el portal de ciudadano', () => {
         const testDataEnv = Cypress.env('testData');
         const funcionarioEnv = Cypress.env('funcionario');
 
-        console.log(`CIUDADANO ENV : ${ciudadanoEnv}`)
-        console.log(`TRAMITE ENV : ${tramiteEnv}`)
-        console.log(`TESTDATA ENV FILE: ${testDataEnv}`)
-        console.log(`FUNCIONARIO ENV : ${funcionarioEnv}`)
+        const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+
+        cy.writeFile(`tmp/c_${timestamp}.log`, `CIUDADANO ENV : ${ciudadanoEnv} \n`, {flag : 'a+'});
+        cy.writeFile(`tmp/c_${timestamp}.log`, `TRAMITE ENV : ${tramiteEnv} \n`, {flag : 'a+'});
+        cy.writeFile(`tmp/c_${timestamp}.log`, `TESTDATA ENV FILE: ${testDataEnv} \n`, {flag : 'a+'});
+        cy.writeFile(`tmp/c_${timestamp}.log`, `FUNCIONARIO ENV : ${funcionarioEnv} \n`, {flag : 'a+'});
 
         cy.fixture(testDataEnv).then((data) => {
             testData = data;
@@ -53,22 +60,13 @@ describe('Inicia Tramite desde el portal de ciudadano', () => {
 
     context('Inicia un tramite y concluye la creacion', () => {
 
-
-        it('Comprobar si el ciudadano tiene expedientes y cuales son', () => {
-            cy.visit('https://sandbox.ciudadano.cjj.gob.mx');
-            
-            cy.intercept('GET', 'https://sandbox.nilo.cjj.gob.mx/api/v1/electronic_expedients/find_expedient/10?page=1').as('expedients');
-            cy.get('a[href="/my-expedients"]').click();
-            cy.wait('@expedients').then((interception) => {
-    
-                expect(interception.response.statusCode).to.eq(200);
-                ciudadano.expedientes = interception.response.body.data;
-                cy.exec('mkdir -p tmp');
-                cy.writeFile('tmp/ciudadano.json', ciudadano);
+        it('captura expedientes del ciudadano antes de inciar', () => {
+            cy.checkCitizenExpedients(testData.ciudadanoURL, '_inicio').then((expedients) => {
+                cy.log(expedients);
+                testData.expedientCreated = false;
                 
-            });
-    
-        });
+            })
+        })
 
 
 
@@ -162,12 +160,79 @@ describe('Inicia Tramite desde el portal de ciudadano', () => {
                 cy.contains('.modal-content button', 'Agregar').click()
 
             }
-            cy.screenshot()
+            cy.screenshot("Campos llenados")
+            // TO DO
+            // Comprobar si es posible eliminar los wait explicitos esperando la respuesta
+            // de la api (quiza un metodo PUT o POST) y hacer un wait explicito breve despues
+            // de recibir laa confirmacion
+            cy.contains('button', 'Siguiente',{timeout:15000}).click(); 
+            cy.wait(6000) 
+            cy.screenshot("Enviar formulario")
+            cy.contains('button', 'Confirmar', {timeout:15000}).click();
+            cy.wait(6000) 
+            cy.screenshot("Confirmar envio")
 
-            // cy.contains('button', 'Siguiente').click(); 
-            // cy.contains('button', 'Confirmar', {timeout:15000}).click();
+            testData.expedientCreated = true;
 
         })
+
+
+        it('Captura expedientes despues de la creacion de un nuevo tramite', () => {
+            if(!testData.expedientCreated) {
+                throw new Error('No se ha creado un nuevo expediente');
+            }
+
+            cy.readFile('tmp/ciudadano_expedients_inicio.json').then((data) => {
+                cy.wrap(data).as('firstExpedients'); // Guardamos la primera captura con cy.wrap()
+            });
+        
+            function retryCapture(attempt = 1) {
+                if (attempt > 10) {
+                    throw new Error('No se encontró un nuevo expediente después de 10 intentos.');
+                }
+        
+                cy.log(`Intento ${attempt} por capturar expedientes`);
+                cy.wait(5000);
+        
+                cy.checkCitizenExpedients(testData.ciudadanoURL, '_final').then((second) => {
+                    cy.get('@firstExpedients').then((first) => {
+                        if (second.electronicExpedients.length > first.electronicExpedients.length) {
+                            cy.log('Expedientes capturados, TOTAL: ' + second.electronicExpedients.length);
+                            cy.wrap(second).as('secondExpedients'); // Guardamos el segundo JSON
+                        } else {
+                            retryCapture(attempt + 1); // Reintentar hasta 10 veces
+                        }
+                    });
+                });
+            }
+        
+            retryCapture(); // Iniciar la función recursiva
+        
+            cy.then(() => {
+                cy.get('@firstExpedients').then((first) => {
+                    cy.get('@secondExpedients').then((second) => {
+                        cy.log(first);
+                        cy.log(second);
+        
+                        const newExpedient = getNewExpedientId(first.electronicExpedients, second.electronicExpedients);
+                        expect(newExpedient).to.not.be.null;
+                        expect(second.electronicExpedients).to.have.length.greaterThan(0);
+                        expect(second.electronicExpedients).to.have.length.greaterThan(first.electronicExpedients.length);
+        
+                        cy.log(newExpedient);
+        
+                        testData.ciudadano = ciudadano;
+                        testData.tramite = tramite;
+                        testData.funcionario = funcionario;
+                        testData.expediente = newExpedient;
+        
+                        cy.writeFile('tmp/testData.json', testData);
+                    });
+                });
+            });
+        });
+
+        
     })
 
 })

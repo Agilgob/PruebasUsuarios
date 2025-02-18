@@ -79,25 +79,25 @@ describe('Recepción de Trámite', () => {
     });
     
 
-    // it("Los botones de accion son accesibles para el funcionario", () => {
-    //     cy.visit(tramite.url, {failOnStatusCode: false});
-    //     cy.get('section[class^="ExpedientActions_actions"]').as('accionesExpediente');
-    //     cy.get('@accionesExpediente').should('be.visible');
+    it("Los botones de accion son accesibles para el funcionario", () => {
+        cy.visit(tramite.url, {failOnStatusCode: false});
+        cy.get('section[class^="ExpedientActions_actions"]').as('accionesExpediente');
+        cy.get('@accionesExpediente').should('be.visible');
 
-    //     const acciones = ['Imprimir carátula', 'Turnar expediente', 'Indicadores', 'Permisos de expediente', 'Agregar documento',
-    //         'Ver expediente completo', 'Descarga expediente', 'Generar código QR', 'Listar Partes'
-    //     ];
+        const acciones = ['Imprimir carátula', 'Turnar expediente', 'Indicadores', 'Permisos de expediente', 'Agregar documento',
+            'Ver expediente completo', 'Descarga expediente', 'Generar código QR', 'Listar Partes'
+        ];
 
-    //     cy.log(`BOTONES DE ACCION ${acciones}`)
+        cy.log(`BOTONES DE ACCION ${acciones}`)
 
-    //     acciones.forEach((accion) => {
-    //         cy.get('@accionesExpediente').get('button').filter(`:contains("${accion}")`).first().as('imprimirCaratula');
-    //         cy.get('@imprimirCaratula')
-    //             .should('be.visible')
-    //             .and('be.enabled')
-    //             .and('have.descendants', 'i');
-    //     })
-    // })
+        acciones.forEach((accion) => {
+            cy.get('@accionesExpediente').get('button').filter(`:contains("${accion}")`).first().as('imprimirCaratula');
+            cy.get('@imprimirCaratula')
+                .should('be.visible')
+                .and('be.enabled')
+                .and('have.descendants', 'i');
+        })
+    })
 
 
     it("Acuerdos, notificaciones, sentencias correos y oficios son accesibles", () => {
@@ -131,55 +131,55 @@ describe('Recepción de Trámite', () => {
     });
     
 
-    // it('El expediente permite agregar documento Promocion', () => {
+    it('El expediente permite agregar documento Promocion', () => {
 
-    //     // Agregar documento Promocion
+        // Agregar documento Promocion
         
-    //     cy.visit(tramite.url, {failOnStatusCode: false});
-    //     cy.get('section[class^="ExpedientActions_actions"]').as('accionesExpediente');
-    //     cy.get('@accionesExpediente').get('button').filter(':contains("Agregar documento")').first().click();
-    //     cy.get('.modal-dialog', {'timeout':2000}).filter(':contains("Nuevo documento")').first().as('modalAgregarDocumento');
-    //     cy.get('@modalAgregarDocumento').should('be.visible');
-    //     cy.get('@modalAgregarDocumento').find('.select-body-modal__control').click()
-    //     cy.get('@modalAgregarDocumento').find('.select-body-modal__menu').contains('Promoción').click()
+        cy.visit(tramite.url, {failOnStatusCode: false});
+        cy.get('section[class^="ExpedientActions_actions"]').as('accionesExpediente');
+        cy.get('@accionesExpediente').get('button').filter(':contains("Agregar documento")').first().click();
+        cy.get('.modal-dialog', {'timeout':2000}).filter(':contains("Nuevo documento")').first().as('modalAgregarDocumento');
+        cy.get('@modalAgregarDocumento').should('be.visible');
+        cy.get('@modalAgregarDocumento').find('.select-body-modal__control').click()
+        cy.get('@modalAgregarDocumento').find('.select-body-modal__menu').contains('Promoción').click()
 
-    //         // Agregar firma
-    //         cy.get('@modalAgregarDocumento').contains('button', 'Agregar Firma').click();
+            // Agregar firma
+            cy.get('@modalAgregarDocumento').contains('button', 'Agregar Firma').click();
 
-    //         // Agregar archivo .pfx en modal Firma Electronica
-    //         cy.get('div .modal-dialog').filter(':contains("Firma Electronica")').first().as('modalFirmaElectronica');
-    //         cy.get('@modalFirmaElectronica').should('be.visible');
-    //         cy.get('@modalFirmaElectronica').contains('button', 'Agregar Archivo')
-    //             .siblings('input').selectFile( funcionario.archivoFirel , { force: true });
-    //         cy.get('@modalFirmaElectronica').get('input[placeholder="Password"]').type(funcionario.passwordFirel);
-    //         // cy.get('@modalFirmaElectronica').contains('button', 'Agregar').click(); // TO DO habilitar
-    //         cy.get('@modalFirmaElectronica').contains('button', 'Cancelar').click();
+            // Agregar archivo .pfx en modal Firma Electronica
+            cy.get('div .modal-dialog').filter(':contains("Firma Electronica")').first().as('modalFirmaElectronica');
+            cy.get('@modalFirmaElectronica').should('be.visible');
+            cy.get('@modalFirmaElectronica').contains('button', 'Agregar Archivo')
+                .siblings('input').selectFile( funcionario.archivoFirel , { force: true });
+            cy.get('@modalFirmaElectronica').get('input[placeholder="Password"]').type(funcionario.passwordFirel);
+            // cy.get('@modalFirmaElectronica').contains('button', 'Agregar').click(); // TO DO habilitar
+            cy.get('@modalFirmaElectronica').contains('button', 'Cancelar').click();
 
-    //     cy.get('@modalAgregarDocumento').get('input[placeholder="Agrega una etiqueta para identificar este documento"]')
-    //         .type(tramite.identificadorDocumento);
-    //     cy.get('@modalAgregarDocumento').get('textarea[aria-label="Comentarios"]')
-    //         .type(tramite.comentarioDocumento);
+        cy.get('@modalAgregarDocumento').get('input[placeholder="Agrega una etiqueta para identificar este documento"]')
+            .type(tramite.identificadorDocumento);
+        cy.get('@modalAgregarDocumento').get('textarea[aria-label="Comentarios"]')
+            .type(tramite.comentarioDocumento);
         
-    //     cy.get('#fileInputNewDocuemnt') // Asegura que el selector sea correcto
-    //         .should('have.attr', 'type', 'file')
-    //         .and('have.attr', 'accept', '.pdf, .doc, .docx')
-    //         .and('not.be.visible')
-    //         .and('be.enabled')
-    //         .selectFile(testData.documentoPDF, { force: true });
-    //     cy.wait(2000)
+        cy.get('#fileInputNewDocuemnt') // Asegura que el selector sea correcto
+            .should('have.attr', 'type', 'file')
+            .and('have.attr', 'accept', '.pdf, .doc, .docx')
+            .and('not.be.visible')
+            .and('be.enabled')
+            .selectFile(testData.documentoPDF, { force: true });
+        cy.wait(2000)
 
-    //     cy.get('@modalAgregarDocumento').find('[aria-label="Nombre del promovente"]')
-    //         .type(funcionario.nombre);
+        cy.get('@modalAgregarDocumento').find('[aria-label="Nombre del promovente"]')
+            .type(funcionario.nombre);
         
-    //     cy.get('@modalAgregarDocumento')
-    //         .get('.form-group')
-    //         .contains('label', '¿Quieres agregar anexos?')
-    //         .parent()
-    //         .find(`.form-check-input#${tramite.agregarAnexos}`) // input de opciones
-    //         .click()
+        cy.get('@modalAgregarDocumento')
+            .get('.form-group')
+            .contains('label', '¿Quieres agregar anexos?')
+            .parent()
+            .find(`.form-check-input#${tramite.agregarAnexos}`) // input de opciones
+            .click()
         
-    //     cy.get('@modalAgregarDocumento').contains('button', 'Cancelar').click();
-    //     // cy.get('@modalAgregarDocumento').contains('button', 'Firmar').click(); TO DO habilitar
-    // });
+        cy.get('@modalAgregarDocumento').contains('button', 'Cancelar').click();
+        // cy.get('@modalAgregarDocumento').contains('button', 'Firmar').click(); TO DO habilitar
+    });
 
 });
