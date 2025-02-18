@@ -41,15 +41,9 @@ describe('Inicia Tramite desde el portal de ciudadano', () => {
 
 
     it('should visit the environment page', () => {
-    
-        cy.log(`CIUDADANO : ${ciudadano.email}`)
-
-        cy.log(`TRAMITE NOMBRE: ${tramite.nombre}`)
-        cy.log(`TRAMITE PARTIDO JUDICIAL: ${tramite.partidoJudicial}`)
-        cy.log(`TRAMITE MATERIA: ${tramite.materia}`)
-        cy.log(`TRAMITE CLAVE TIPO JUICIO: ${tramite.claveTipoJuicio}`)
-
-        cy.log(`TESTDATA : ${testData}`)
+        let prueba = Cypress.env('prueba');
+        cy.writeFile('tmp/prueba.txt', prueba, {flag: 'a+'});
+        cy.writeFile('tmp/prueba.txt', prueba.foo, {flag: 'a+'});
         
     });
 
