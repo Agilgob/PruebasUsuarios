@@ -1,12 +1,11 @@
 import {getNewExpedientId} from '../../support/commands';
-import { loadTestData, saveTestData } from '../../support/loadTestData';
-
+import { saveTestData } from '../../support/loadTestData';
 
 
 
 describe('Juzgados Civiles, Familiares y Mercantiles en línea', () => {
     
-    let testData = {}
+    let testData = {} // No eliminar ya que aqui es donde se genera el archivo de datos
 
     before(() => { 
         loadTestData();
@@ -134,15 +133,8 @@ describe('Juzgados Civiles, Familiares y Mercantiles en línea', () => {
                 cy.contains('.modal-content button', 'Agregar').click()
                 cy.screenshot("Subir anexo")
             }
-            
-
-
-
-            // // TO DO
-            // // Comprobar si es posible eliminar los wait explicitos esperando la respuesta
-            // // de la api (quiza un metodo PUT o POST) y hacer un wait explicito breve despues
-            // // de recibir laa confirmacion
-
+    
+            // Confirma la creacion de los expedientes validando la respuesta del servidor
             cy.contains('button', 'Siguiente', {timeout:15000}).click(); 
             cy.intercept('POST', 'https://sandbox.nilo.cjj.gob.mx/api/v1/execute_stage').as('execute_stage');
             cy.wait('@execute_stage').then((interception) => {

@@ -28,6 +28,7 @@ import './actions/login';
 import './actions/demandaInicial';
 
 import './funcionario/inicio';
+import './funcionario/expediente';
 
 import './overwrite'
 

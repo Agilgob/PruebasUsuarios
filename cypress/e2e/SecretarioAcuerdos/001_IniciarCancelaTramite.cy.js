@@ -1,54 +1,34 @@
-describe('Gestión de trámites', () => {
-    let testData;
-    let ciudadano;
-    let tramite;
-    let funcionario;
+import { loadTestData, saveTestData } from '../../support/loadTestData';
 
+describe('Inicia el tramite luego lo cancela', () => {
+    
     before(() => { 
-        // Carga los datos del archivo de datos para utilizarlos en el test
-        // ciudadano almacena los datos de cualquier Ciudadano en el archivo de datos
-
-        const ciudadanoEnv = Cypress.env('ciudadano');
-        const tramiteEnv = Cypress.env('tramite');
-        const testDataEnv = Cypress.env('testData');
-        const funcionarioEnv = Cypress.env('funcionario');
-
-        cy.log(`CIUDADANO ENV : ${ciudadanoEnv}`)
-        cy.log(`TRAMITE ENV : ${tramiteEnv}`)
-        cy.log(`TESTDATA ENV FILE: ${testDataEnv}`)
-        cy.log(`FUNCIONARIO ENV : ${funcionarioEnv}`)
-
-
-        cy.fixture(testDataEnv).then((data) => {
-            testData = data;
-        });
-
-        cy.fixture('ciudadanos').then((data) => {
-              ciudadano = data[ciudadanoEnv];
-          });
-
-        cy.fixture('tramites').then((data) => {
-            tramite = data[tramiteEnv];
-        });
-
-        cy.fixture('funcionarios').then((data) => {
-            funcionario = data[funcionarioEnv];
-        })
-
+        loadTestData();
     });
 
-    beforeEach(() => {
-        cy.visit(testData.funcionarioURL);
-        cy.loginFuncionario(funcionario.email, funcionario.password);
 
+    beforeEach(() => {
+        cy.session('sesionFuncionario', () => {
+            
+            cy.clearCookies();
+            cy.clearLocalStorage();
+            cy.visit(environment.funcionarioURL);
+            cy.loginFuncionario(funcionario.email, funcionario.password);
+            cy.wait(2000);
+            cy.getCookie('authentication_token_03', { timeout: 5000 }).should('exist');
+        }, {
+            cacheAcrossSpecs: true // Ensures session is persisted across test files
+        });
     });
 
     describe('Iniciar y cancelar trámites', () => {
-        it('Inicia un trámite que después cancela', () => {
+
+        it('El contador de tramites no deberia cambiar si se calcela el tramite iniciado', () => {
+            cy.visit(environment.funcionarioURL);
             cy.get('.one_column .fa-align-justify').click();
             cy.get('[title="Sección de trámites"]').click();
             cy.get('.principal-nav > .container').as('barraMenuTramites');
-    
+            
             cy.get('@barraMenuTramites')
                 .contains('Trámites iniciados')
                 .invoke('text')
