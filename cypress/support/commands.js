@@ -29,6 +29,7 @@ import './actions/demandaInicial';
 
 import './funcionario/inicio';
 
+import './overwrite'
 
 
 Cypress.Commands.add('checkCitizenExpedients', (citizenURL, suffix="") => {
