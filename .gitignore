@@ -5,3 +5,4 @@ cypress/videos/
 cypress/downloads/
 cypress/outputs/
 tmp/
+cypress-mochawesome-reporter.log
