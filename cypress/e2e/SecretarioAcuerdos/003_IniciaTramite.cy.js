@@ -17,9 +17,9 @@ describe('Gestión de trámites', () => {
             cy.get('[title="Sección de trámites"]').click();
             cy.wait(2000);  
 
-            cy.get('.principal-nav > .container').as('barraMenuTramites');
-            cy.get('@barraMenuTramites').contains('Tramites Disponibles').click();
-            cy.get('.procedure-card')
+            cy.get('.principal-nav > .container', {log:false} ).as('barraMenuTramites');
+            cy.get('@barraMenuTramites', {log:false}).contains('Tramites Disponibles', {log:false}).click();
+            cy.get('.procedure-card', {log:false})
                 .contains('Firmado Electrónico de Documentos')
                 .parents('.procedure-card')
                 .as('targetCard');
@@ -47,8 +47,8 @@ describe('Gestión de trámites', () => {
             // }); // FIXME La descarga se hace pero el nombre de archivo no coincide
             cy.screenshot()
           
-
-            cy.get('button').contains('Siguiente').click();
+            // TO DO Agregar las intercepciones para confirmar el POST en el servidor
+            cy.get('button').contains('Siguiente').click(); 
             cy.get('button').contains('Confirmar').click();
             cy.screenshot()
 

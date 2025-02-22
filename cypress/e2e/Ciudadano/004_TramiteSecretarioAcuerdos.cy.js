@@ -1,12 +1,10 @@
 import {getNewExpedientId} from '../../support/commands';
-import { saveTestData } from '../../support/loadTestData';
+import { saveTestData, loadTestData } from '../../support/loadTestData';
 
 
 
 describe('Juzgados Civiles, Familiares y Mercantiles en línea', () => {
     
-    let testData = {} // No eliminar ya que aqui es donde se genera el archivo de datos
-
     before(() => { 
         loadTestData();
         testData.expedientCreated = false;
@@ -136,7 +134,7 @@ describe('Juzgados Civiles, Familiares y Mercantiles en línea', () => {
     
             // Confirma la creacion de los expedientes validando la respuesta del servidor
             cy.contains('button', 'Siguiente', {timeout:15000}).click(); 
-            cy.intercept('POST', 'https://sandbox.nilo.cjj.gob.mx/api/v1/execute_stage').as('execute_stage');
+            cy.intercept('POST', `${environment.modeladorURL}api/v1/execute_stage`).as('execute_stage');
             cy.wait('@execute_stage').then((interception) => {
                 expect(interception.response.statusCode).to.eq(200);
                 cy.log("RESPUESTA A POST execute_stage " + JSON.stringify(interception.response.body));
@@ -200,8 +198,7 @@ describe('Juzgados Civiles, Familiares y Mercantiles en línea', () => {
                         expect(second.electronicExpedients).to.have.length.greaterThan(first.electronicExpedients.length);
         
                         cy.log(newExpedient);
-        
-
+                        
                         testData.expediente = newExpedient;
                         saveTestData();
                     });

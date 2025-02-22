@@ -1,28 +1,23 @@
 import { loadTestData, saveTestData } from '../../support/loadTestData';
+import {getNewExpedientId} from '../../support/commands';
 
 describe('Inicia Tramite desde el portal de ciudadano', () => {
 
 
     before(() => {
         loadTestData();
-        testData.expedientCreated = false;
     });
     
     
     it('Ejemplo de uso de variables', () => {
-        cy.log(`testData ${JSON.stringify(testData)}`)
-        cy.log(`ciudadano ${JSON.stringify(ciudadano)}`)
-        cy.log(`funcionario ${JSON.stringify(funcionario)}`)
-        cy.log(`environment ${JSON.stringify(environment)}`)
-        cy.log(`tramite ${JSON.stringify(tramite)}`)
-
+        cy.readFile('tmp/ciudadano_expedients_inicio.json').then((first) => {
+            cy.wrap(first).as('firstExpedients');
+            cy.readFile('tmp/ciudadano_expedients_final.json').then((second) => {
+                cy.wrap(second).as('secondExpedients');
+                testData.expediente = getNewExpedientId(first.electronicExpedients, second.electronicExpedients);
+                saveTestData();
+            });
+        })
     });
-
-    it('Ejemplo de uso de variables', () => {
-       testData.todoFunca = "No del todo"
-         saveTestData();
-
-    });
-
 
 });
