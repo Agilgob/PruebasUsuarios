@@ -10,7 +10,7 @@ describe('Recibe el expediente como segundo secretario', () => {
 
 
     beforeEach(() => {
-        cy.session('sesionFuncionarioTurnado', () => {
+        cy.session('sesionFuncionario', () => {
             
             cy.clearCookies();
             cy.clearLocalStorage();
