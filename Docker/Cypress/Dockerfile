@@ -8,26 +8,26 @@ USER root
 WORKDIR /home
 
 # TO DO cambiar la branch desde donde se van a ejecutar las pruebas
-RUN git clone --branch main https://github.com/manuel-agilgob/PruebasUsuarios \
+RUN git clone --branch SecretarioAcuerdos https://github.com/manuel-agilgob/PruebasUsuarios \
     && cd PruebasUsuarios \
     && npm install
 
 WORKDIR /home/PruebasUsuarios
 
-ARG spec
-ENV SPEC=${spec}
+ARG SPECS
+ENV specs=${spec}
 
-ARG funcionario 
-ENV FUNCIONARIO=${funcionario}
+ARG FUNCIONARIO 
+ENV funcionario=${FUNCIONARIO}
 
-ARG ciudadano 
-ENV CIUDADANO=${ciudadano}
+ARG CIUDADANO 
+ENV ciudadano=${CIUDADANO}
 
-ARG tramite 
-ENV TRAMITE=${tramite}
+ARG TRAMITE 
+ENV tramite=${TRAMITE}
 
-ARG jsonFile 
-ENV JSON_FILE=${jsonFile}
+ARG JSON_FILE 
+ENV jsonFile=${JSON_FILE}
 
 COPY run_tests.sh .
 RUN chmod +x run_tests.sh
