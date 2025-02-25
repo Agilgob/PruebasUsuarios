@@ -45,3 +45,9 @@ ___
     - Si el valor no está vacío, agrega la variable y su valor a `CYPRESS_ARGS` en el formato `--env VAR=VALUE`.
 5. Ejecuta Cypress utilizando `npx`, pasando como argumentos la especificación (`--spec "$SPEC"`), el reportero (`--reporter cypress-mochawesome-reporter`), y las variables de entorno adicionales (`$CYPRESS_ARGS`).
 
+
+
+
+Crea un volumen para almacenar las evidencias de ejecucion :
+`docker volume create --opt type=none --opt device=cypress-reports --opt o=bind cypress_reports`
+

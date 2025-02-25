@@ -10,7 +10,7 @@ ENV_VARS=("FUNCIONARIO" "CIUDADANO" "TRAMITE" "TEST_DATA")
 echo "FUNCIONARIO : $FUNCIONARIO"
 echo "CIUDADANO : $CIUDADANO"
 echo "TRAMITE : $TRAMITE"
-echo "TEST_DATA : $TEST_DATA"
+echo "JSON_FILE : $JSON_FILE"
 
 
 # Verificar si la variable de entorno folder_name está definida
@@ -30,4 +30,4 @@ done
 
 
 # Ejecutar Cypress con la variable de entorno
-npx cypress run --spec "$SPEC" --reporter cypress-mochawesome-reporter $CYPRESS_ARGS 
+npx cypress run --spec "$SPEC" $CYPRESS_ARGS 

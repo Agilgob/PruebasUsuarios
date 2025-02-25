@@ -17,7 +17,6 @@ WORKDIR /home/PruebasUsuarios
 ARG spec
 ENV SPEC=${spec}
 
-
 ARG funcionario 
 ENV FUNCIONARIO=${funcionario}
 
@@ -27,8 +26,8 @@ ENV CIUDADANO=${ciudadano}
 ARG tramite 
 ENV TRAMITE=${tramite}
 
-ARG testData 
-ENV TEST_DATA=${testData}
+ARG jsonFile 
+ENV JSON_FILE=${jsonFile}
 
 COPY run_tests.sh .
 RUN chmod +x run_tests.sh
