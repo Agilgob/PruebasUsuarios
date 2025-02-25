@@ -8,7 +8,7 @@ USER root
 WORKDIR /home
 
 # TO DO cambiar la branch desde donde se van a ejecutar las pruebas
-RUN git clone --branch SecretarioAcuerdos https://github.com/manuel-agilgob/PruebasUsuarios \
+RUN git clone --branch main https://github.com/manuel-agilgob/PruebasUsuarios \
     && cd PruebasUsuarios \
     && npm install
 
