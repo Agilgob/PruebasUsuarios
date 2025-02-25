@@ -65,9 +65,6 @@ describe('Recibe el expediente como segundo secretario', () => {
             cy.writeFile('expedienteRecibido.json', interception.response.body);
             cy.wait(1000)
         })
-        
-        // TODO Agregar intersect para esperar a que el modal se cierre
-        // TODO ejecutar pruebas de action buttons despues de recibir el expediente
 
     })
 

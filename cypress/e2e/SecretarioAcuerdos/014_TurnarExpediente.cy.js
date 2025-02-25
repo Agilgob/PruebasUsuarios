@@ -11,7 +11,7 @@ describe('Turnado interno de expediente', () => {
             testData.expedientFound = false;
         }
         cy.fixture('funcionarios').then((funcionarios) => {
-            secretarioParaTurnar = funcionarios['secretarioAcuerdos02']
+            const secretarioParaTurnar = funcionarios[funcionario.turnaA]
             if(!secretarioParaTurnar.email){
                 throw new Error("Abortada porque no se ha encontrado el funcionario a quien turnar");
             }

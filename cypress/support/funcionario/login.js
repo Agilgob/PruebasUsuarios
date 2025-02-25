@@ -9,5 +9,11 @@ Cypress.Commands.add('loginFuncionario', (email, password) => {
     cy.get('@password').type(password)
     
     cy.contains('Ingresar').should('be.visible')
+    cy.intercept('POST', `${environment.modeladorURL}api/v1/auth/sign_in`).as('login')
     cy.contains('Ingresar').click()
+    cy.wait('@login').then((interception) => {
+        expect(interception.response.statusCode).to.eq(200)
+      })
+      cy.wait(1000)
     })
+

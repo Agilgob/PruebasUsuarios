@@ -6,18 +6,18 @@
 
 # npx cypress run --spec "cypress/e2e/Ciudadano/001*.cy.js" \
 #     --env ciudadano=ciudadanoManuel
-npx cypress run --spec "cypress/e2e/Ciudadano/004*.cy.js" \
-    --env ciudadano=ciudadanoManuel,tramite=civiles_familiares_mercantiles_abogado_demandado,funcionario=secretarioAcuerdos01
+# npx cypress run --spec "cypress/e2e/Ciudadano/004*.cy.js" \
+#     --env ciudadano=ciudadanoManuel,tramite=civiles_familiares_mercantiles_abogado_demandado,funcionario=secretarioAcuerdos01
 
 
 # # Inicia y cancela tramites, luego los elimina
 # npx cypress run --spec 'cypress/e2e/SecretarioAcuerdos/001*.cy.js' --env jsonFile=true --quiet
-npx cypress run --spec 'cypress/e2e/SecretarioAcuerdos/002*.cy.js' --env jsonFile=true --quiet
+# npx cypress run --spec 'cypress/e2e/SecretarioAcuerdos/002*.cy.js' --env jsonFile=true --quiet
 
-npx cypress run --spec 'cypress/e2e/SecretarioAcuerdos/003*.cy.js' --env jsonFile=true --quiet
+# npx cypress run --spec 'cypress/e2e/SecretarioAcuerdos/003*.cy.js' --env jsonFile=true --quiet
 # npx cypress run --spec 'cypress/e2e/SecretarioAcuerdos/007*.cy.js' --env jsonFile=true --quiet 
 # npx cypress run --spec 'cypress/e2e/SecretarioAcuerdos/008*.cy.js' --env jsonFile=true --quiet 
-npx cypress run --spec 'cypress/e2e/SecretarioAcuerdos/009*.cy.js' --env jsonFile=true --quiet 
+# npx cypress run --spec 'cypress/e2e/SecretarioAcuerdos/009*.cy.js' --env jsonFile=true --quiet 
 # npx cypress run --spec 'cypress/e2e/SecretarioAcuerdos/010*.cy.js' --env jsonFile=true --quiet 
 # npx cypress run --spec 'cypress/e2e/SecretarioAcuerdos/011*.cy.js' --env jsonFile=true --quiet 
 # npx cypress run --spec 'cypress/e2e/SecretarioAcuerdos/012*.cy.js' --env jsonFile=true --quiet 
