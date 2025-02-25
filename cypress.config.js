@@ -16,7 +16,7 @@ module.exports = defineConfig({
     saveAllAttempts: true,
     overwrite: false,
     autoCleanReports: false,
-    reportFilename : "[name]-[status]",
+    reportFilename : "[status]-[name]",
     debug: true    
   },
 

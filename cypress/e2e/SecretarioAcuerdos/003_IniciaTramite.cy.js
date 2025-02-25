@@ -1,6 +1,6 @@
 import { loadTestData, saveTestData } from '../../support/loadTestData';
 
-describe('Gestión de trámites', () => {
+describe('Es posible iniciar un tramite desde el funcionario', () => {
 
     before(() => { 
         loadTestData();
@@ -35,21 +35,27 @@ describe('Gestión de trámites', () => {
             cy.cargarDocumento('Agregar Archivo', environment.documentoPDF);
             cy.log('Archivo PDF agregado correctamente');
 
-            // Firmar
+            // Firmar TO DO usar intercept
             cy.get('button').contains('Firmar').should('exist').click();
             cy.get('button').contains('Siguiente').click();
 
             // Descarga el documento cargado
             cy.get('.file-upload-wrapper.d-block img.d-block', {timeout:10000}).click()
             
-            // cy.readFile('cypress/downloads/deleteme.pdf', 'binary').should((buffer) => {
-            //     expect(buffer.length).to.be.greaterThan(0);
-            // }); // FIXME La descarga se hace pero el nombre de archivo no coincide
             cy.screenshot()
           
-            // TO DO Agregar las intercepciones para confirmar el POST en el servidor
+            cy.intercept('POST', /\/api\/v1\/execute_stage$/).as('execute_stage');
             cy.get('button').contains('Siguiente').click(); 
+            cy.wait('@execute_stage').then((interception) => {
+                expect(interception.response.statusCode).to.eq(200);
+            })
+
+            cy.intercept('POST', /\/api\/v1\/finalize_stage$/).as('finalize_stage');
             cy.get('button').contains('Confirmar').click();
+            cy.wait('@finalize_stage').then((interception) => {
+                expect(interception.response.statusCode).to.eq(200);
+                expect(interception.response.body.data.error).to.eq(false);
+            })
             cy.screenshot()
 
         });

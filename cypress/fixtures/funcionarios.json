@@ -65,7 +65,8 @@
         "password" : "12345678",
         "archivoFirel" : "assets/Firel/CICF870709HNESVR02.pfx",
         "passwordFirel" : "autlan1296",
-        "nombre" : "MANUEL VALDEZ ACUERDOS"
+        "nombre" : "MANUEL VALDEZ ACUERDOS",
+        "turnaA" : "secretarioAcuerdos02"
     },
 
     "secretarioAcuerdos02" : {
@@ -74,7 +75,8 @@
         "password" : "mvsec.acuerdosdos",
         "archivoFirel" : "assets/Firel/COAA000405MJCRLDA6.pfx",
         "passwordFirel" : "Cordova2024",
-        "nombre" : "SECRETARIO ACUERDOS MANUEL VALDEZ"
+        "nombre" : "SECRETARIO ACUERDOS MANUEL VALDEZ",
+        "turnaA" : "secretarioAcuerdos01"
 
     }
 }

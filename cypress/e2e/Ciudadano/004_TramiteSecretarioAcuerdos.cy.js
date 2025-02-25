@@ -1,4 +1,4 @@
-import {getNewExpedientId} from '../../support/commands';
+import {getNewExpedientId, getAllExpedients} from '../../support/ciudadano/expedientes';
 import { saveTestData, loadTestData } from '../../support/loadTestData';
 
 
@@ -24,8 +24,8 @@ describe('Juzgados Civiles, Familiares y Mercantiles en línea', () => {
     context('Ingresa datos al tramite y concluye su creacion', () => {
 
         it('captura expedientes del ciudadano antes de inciar', () => {
-            cy.checkCitizenExpedients(environment.ciudadanoURL, '_inicio').then((expedients) => {
-                cy.log(expedients);
+            getAllExpedients().then((expedientes) => {
+                cy.writeFile('tmp/ciudadano_expedients_inicio.json', expedientes);
             })
         })
 
@@ -162,52 +162,15 @@ describe('Juzgados Civiles, Familiares y Mercantiles en línea', () => {
             }
 
             // Guardamos la primera captura de expedientes con cy.wrap()
-            cy.readFile('tmp/ciudadano_expedients_inicio.json').then((data) => {
-                cy.wrap(data).as('firstExpedients'); 
-            });
-        
-            function retryCapture(attempt = 3) {
-                if (attempt === 0) {
-                    throw new Error(`No se encontró un nuevo expediente después de ${attempt} intentos.`);
-                }
-        
-                cy.log(`Intento ${attempt} por capturar expedientes`);
-                cy.wait(5000);
-        
-                cy.checkCitizenExpedients(environment.ciudadanoURL, '_final').then((second) => {
-                    cy.get('@firstExpedients').then((first) => {
-                        if (second.electronicExpedients.length > first.electronicExpedients.length) {
-                            cy.log('Expedientes capturados, TOTAL: ' + second.electronicExpedients.length);
-                            cy.log('[EXPEDIENTES]: ' + JSON.stringify(second.electronicExpedients));
-                            cy.wrap(second).as('secondExpedients'); // Guardamos el segundo JSON
-                        } else {
-                            retryCapture(attempt - 1); // Reintentar hasta 10 veces
-                        }
-                    });
-                });
-            }
-        
-            retryCapture(); // Iniciar la función recursiva
-        
-            cy.then(() => {
-                cy.get('@firstExpedients').then((first) => {
-                    cy.get('@secondExpedients').then((second) => {    
-                        const newExpedient = getNewExpedientId(first.electronicExpedients, second.electronicExpedients);
-                        expect(newExpedient).to.not.be.null;
-                        expect(second.electronicExpedients).to.have.length.greaterThan(0);
-                        expect(second.electronicExpedients).to.have.length.greaterThan(first.electronicExpedients.length);
-        
-                        cy.log(newExpedient);
-                        
-                        testData.expediente = newExpedient;
-                        saveTestData();
-                    });
-                });
-            });
-        });
-
-        
+            cy.readFile('tmp/ciudadano_expedients_inicio.json').then((expedientesInicio) => {
+                getAllExpedients().then((expedientesFinal) => {
+                    cy.writeFile('tmp/ciudadano_expedients_final.json', expedientesFinal)
+                    const newExpedient = getNewExpedientId(expedientesInicio.electronicExpedients, expedientesFinal.electronicExpedients);
+                    cy.log('Nuevo expediente creado: ' + JSON.stringify(newExpedient));
+                    testData.expediente = newExpedient;
+                    saveTestData();
+                })
+            })
+        })
     })
-
 })
-

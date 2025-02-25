@@ -1,48 +1,39 @@
 FROM jenkins/jenkins:lts
+LABEL description="Jenkins con dependencias para ejecutar pruebas en Cypress, mostrar reportes de pruebas y ejecutar Docker"
+
+ARG DOCKER_GID=137
+
 USER root
 
-# Actualiza los paquetes e instala las dependencias para ejecutar las pruebas
-# en Cypress (el resto se instala como plugins en Jenkins)
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    libgtk2.0-0 \
-    libgtk-3-0 \
-    libgbm-dev \
-    libnotify-dev \
-    libnss3 \
-    libxss1 \
-    libasound2 \
-    libxtst6 \
-    xauth \
-    xvfb \
-    nano \
-    curl \
-    && curl -fsSL https://deb.nodesource.com/setup_20.x |  bash - \
-    && apt-get install -y nodejs \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+# Instalar dependencias, agregar repositorio de Docker y solo instalar el cliente Docker
+RUN apt-get update -qq && \
+    apt-get install -y --no-install-recommends apt-transport-https ca-certificates curl gnupg lsb-release && \
+    install -m 0755 -d /etc/apt/keyrings && \
+    curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc && \
+    chmod a+r /etc/apt/keyrings/docker.asc && \
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian $(. /etc/os-release && echo \"$VERSION_CODENAME\") stable" > /etc/apt/sources.list.d/docker.list && \
+    apt-get update -qq && \
+    apt-get install -y --no-install-recommends docker-ce docker-ce-cli docker-buildx-plugin  && \
+    apt-get clean && rm -rf /var/lib/apt/lists/* 
 
-# Desactivar CSP en Jenkins creando un script Groovy para configurarlo
-RUN mkdir -p /usr/share/jenkins/ref/init.groovy.d \
-    && echo 'System.setProperty("hudson.model.DirectoryBrowserSupport.CSP", "");' > /usr/share/jenkins/ref/init.groovy.d/disable-csp.groovy
+# Cambiar el grupo de Docker para que Jenkins pueda ejecutar Docker
+RUN groupmod -g ${DOCKER_GID} docker && usermod -aG docker jenkins
 
-# Instalar Docker en el contenedor de Jenkins
-RUN apt-get update -qq \
-&& apt-get install -qqy apt-transport-https ca-certificates curl gnupg2 software-properties-common
-RUN curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
-RUN add-apt-repository \
-   "deb [arch=amd64] https://download.docker.com/linux/debian \
-   $(lsb_release -cs) \
-   stable"
-RUN apt-get update  -qq \
-    && apt-get -y install docker-ce
-RUN groupmod -g 1001 docker && \
-    usermod -aG docker jenkins
+# Configuración para mostrar reportes de pruebas en Cypress
+RUN mkdir -p /usr/share/jenkins/ref/init.groovy.d && \
+    echo 'System.setProperty("hudson.model.DirectoryBrowserSupport.CSP", "");' > /usr/share/jenkins/ref/init.groovy.d/disable-csp.groovy
 
-LABEL description="Jenkins con dependencias para ejecutar pruebas en Cypress, mostrar reportes de pruebas y ejecutar Docker"
 USER jenkins
 
 
 
 
-# docker build -t jenkins-plus-cypress .
-# docker run -d -p 8080:8080 -p 50000:50000 --name cypress-jenkins-cont --mount source=cypress_jenkins_data,target=/var/jenkins_home jenkins-plus-cypress
+
+# docker build -t agilgob-jenkins-dood --no-cache .
+# docker run -d -p 8080:8080 -p 50000:50000 --name cypress-jenkins-cont -v /var/run/docker.sock:/var/run/docker.sockjenkins-plus-cypress
+# docker run -d \
+#   --name jenkins-docker \
+#   -p 8080:8080 \
+#   -p 50000:50000 \
+#   -v /var/run/docker.sock:/var/run/docker.sock \
+#   agilgob-jenkins-dood 

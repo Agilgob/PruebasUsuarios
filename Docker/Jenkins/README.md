@@ -30,22 +30,61 @@ Esta versión del proyecto permite desplegar una instancia de Jenkins dentro de 
 ### Prerrequisitos
 1. **Docker instalado:** Tener Docker configurado en el sistema anfitrión.
 2. **Permisos para el socket Docker:** El usuario (jenkins) que ejecuta el contenedor debe tener acceso al socket de Docker `/var/run/docker.sock`
+3. **Acceso a Docker sin sudo:** Para permitir que Jenkins acceda a Docker sin necesidad de usar `sudo`, agrega el usuario `jenkins` al grupo `docker` en el sistema anfitrión. Esto se puede hacer ejecutando el siguiente comando:
+
+  ```bash
+  sudo usermod -aG docker jenkins
+  ```
+
+  Después de ejecutar este comando, es posible que necesites reiniciar la sesión del usuario para que los cambios surtan efecto.
 
 
+## Como instalar
+### Instalación
 
----
+1. **Obtener el GID del grupo docker:**
+  Ejecuta el siguiente comando para obtener el GID del grupo docker en el sistema anfitrión:
+  ```bash
+  getent group docker
+  ```
 
-## Consideraciones
-- **Seguridad:** Configurar permisos adecuados y ejecutar los contenedores en un entorno controlado.
-- **Persistencia de Datos:** Utiliza volúmenes para mantener el estado de Jenkins entre reinicios.
-- **Optimización de Recursos:** Configurar límites de CPU y memoria para los contenedores Docker y evita la sobrecarga del sistema anfitrión.
+2. **Construir la imagen de Docker:**
+  Navega al directorio del proyecto y construye la imagen de Docker con el siguiente comando:
+  ```bash
+  docker build -t jenkins-plus-cypress --build-arg DOCKER_GID=137 .
+  ```
 
----
+3. **Ejecutar el contenedor de Jenkins:**
+  Inicia el contenedor de Jenkins con acceso al socket de Docker del host:
+  ```bash
+  sudo docker run -d \
+  --name jenkins-docker \
+  -p 8080:8080 \
+  -p 50000:50000 \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  agilgob-jenkins-dood:1.0
+  ```
 
-## Contribuciones
-Las contribuciones son bienvenidas. Si tienes ideas, mejoras o encuentras errores, por favor abre un issue o envía un pull request.
+### Para comprobar la instalacion y la conexion de los sockets
+1. **Entrar al contenedor de Jenkins:**
+  Para acceder al contenedor de Jenkins, ejecuta el siguiente comando:
+  ```bash
+  sudo docker exec -it jenkins-docker /bin/bash
+  ```
 
----
+2. **Ejecutar un contenedor desde Jenkins:**
+  Una vez dentro del contenedor de Jenkins, puedes ejecutar un contenedor Docker. Por ejemplo, para ejecutar un contenedor de Alpine Linux, usa el siguiente comando:
+  ```bash
+  docker run -d --name test-container alpine sleep 1000
+  ```
 
-🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀
+3. **Monitorear el contenedor desde el host:**
+  Abre una nueva terminal en el host y ejecuta el siguiente comando para ver los logs del contenedor que acabas de iniciar:
+  ```bash
+  sudo docker logs -f test-container
+  ```
 
+  También puedes verificar el estado del contenedor con:
+  ```bash
+  sudo docker ps -a
+  ```

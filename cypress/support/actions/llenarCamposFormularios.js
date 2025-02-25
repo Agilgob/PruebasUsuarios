@@ -1,28 +1,20 @@
-Cypress.Commands.add('loginCiudadano', (email, password) => {
-    cy.get('input[placeholder="Correo electrónico"]').as('email')
-    cy.get('@email').should('be.visible')
-    cy.get('@email').type(email)
-  
-    cy.get('input[placeholder="Contraseña"]').as('password')
-    cy.get('@password').should('be.visible')
-    cy.get('@password').type(password)
-  
-    cy.contains('Entrar').should('be.visible')
-    cy.contains('Entrar').click()
-  })
 
-Cypress.Commands.add('loginFuncionario', (email, password) => {
-cy.get('input[placeholder="Correo electrónico"]').as('email')
-cy.get('@email').should('be.visible')
-cy.get('@email').type(email)
+// Selecciona los valores de un campo casi tipo select en un formulario
+// de demanda inicial del ciudadano
+// campo : etiqueta del select
+// valorSeleccion : valor a seleccionar de la lista desplegable
+Cypress.Commands.add('llenarSelect', (campo, valorSeleccion) => {
+    cy.get('.col-md-12 .row').filter(`:contains("${campo}")`).first().as('currentRow');
+    cy.get('@currentRow').click().find('[class$="-menu"]').contains(valorSeleccion).click();
+    cy.get('@currentRow').find('[class$=singleValue]').should('have.text', valorSeleccion);
+});
 
-cy.get('input[placeholder="Password"]').as('password')
-cy.get('@password').should('be.visible')
-cy.get('@password').type(password)
+Cypress.Commands.add('llenarSelectModal', (campo, valorSeleccion) => {
+    cy.get('form .form-group').filter(`:contains("${campo}")`).first().as('currentRow');
+    cy.get('@currentRow').click().find('[class$="-menu"]').contains(valorSeleccion).click();
+    cy.get('@currentRow').find('[class$=singleValue]').should('have.text', valorSeleccion);
+});
 
-cy.contains('Ingresar').should('be.visible')
-cy.contains('Ingresar').click()
-})
 
 
 Cypress.Commands.add('loginErrorMessages', () => {
@@ -58,3 +50,9 @@ Cypress.Commands.add('cargarArchivoFirel', (filePath, password) => {
     cy.contains('button', 'Agregar').click();
   });
 });
+
+  
+  
+
+
+

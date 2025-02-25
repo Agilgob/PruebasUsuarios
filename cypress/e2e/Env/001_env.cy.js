@@ -1,22 +1,30 @@
 import { loadTestData, saveTestData } from '../../support/loadTestData';
 import {getNewExpedientId} from '../../support/commands';
+import {getAllExpedients} from '../../support/ciudadano/expedientes';
 
 describe('Inicia Tramite desde el portal de ciudadano', () => {
 
-
-    before(() => {
+    before(() => { 
         loadTestData();
     });
+
+    beforeEach(() => {
+        cy.session('ciudadano', () => {
+            cy.visit(environment.ciudadanoURL);
+            cy.loginCiudadano(ciudadano.email, ciudadano.password);
+            cy.wait(2000);
+            cy.getCookie('authentication_token_02').should('exist');
+        });
+    });
+
     
     
-    it('Ejemplo de uso de variables', () => {
-        cy.readFile('tmp/ciudadano_expedients_inicio.json').then((first) => {
-            cy.wrap(first).as('firstExpedients');
-            cy.readFile('tmp/ciudadano_expedients_final.json').then((second) => {
-                cy.wrap(second).as('secondExpedients');
-                testData.expediente = getNewExpedientId(first.electronicExpedients, second.electronicExpedients);
-                saveTestData();
-            });
+    it('Cambia funcionario 01', () => {
+               
+        getAllExpedients().then((expedients) => {
+            cy.log(expedients);
+            
+            cy.writeFile('tmp/ciudadano_expedients_inicio.json', expedients);
         })
     });
 

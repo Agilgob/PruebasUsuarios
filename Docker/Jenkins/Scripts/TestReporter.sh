@@ -8,12 +8,8 @@
 
 
 # Inicia y cancela tramites, luego los elimina
-rm -r tmp
-npx cypress run --spec cypress/e2e/Ciudadano/001*.cy.js 
-npx cypress run --spec cypress/e2e/SecretarioAcuerdos/001*.cy.js 
-npx cypress run --spec cypress/e2e/SecretarioAcuerdos/002*.cy.js  
+npx cypress run --spec 'cypress/e2e/SecretarioAcuerdos/501*.cy.js' --env jsonFile=true --quiet
+npx cypress run --spec 'cypress/e2e/SecretarioAcuerdos/014*.cy.js' --env jsonFile=true --quiet
 
-
-# Construye el reporte con los json generados
-# npx mochawesome-merge "tmp/reports/.jsons/*.json" > tmp/merged-report.json
-# npx marge tmp/merged-report.json --reportFilename Reporte.html --reportDir tmp 
+npx cypress run --spec 'cypress/e2e/SecretarioAcuerdos/501*.cy.js' --env jsonFile=true --quiet
+npx cypress run --spec 'cypress/e2e/SecretarioAcuerdos/014*.cy.js' --env jsonFile=true --quiet
