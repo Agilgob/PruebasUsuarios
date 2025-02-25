@@ -13,7 +13,8 @@ Cypress.Commands.add('loginFuncionario', (email, password) => {
     cy.contains('Ingresar').click()
     cy.wait('@login').then((interception) => {
         expect(interception.response.statusCode).to.eq(200)
-      })
-      cy.wait(1000)
     })
+    cy.log('Usuario loggeado ' + email)
+    cy.wait(1000)
+})
 
