@@ -1,0 +1,157 @@
+
+
+
+def runCypressTest(String testName, List specFiles, String useParams = 'jsonFile') {
+    def DOCKER_IMAGE = getDockerImageName()
+    def spec_files_str = specFiles.join(',')
+    def useParamsFlag = useParams == 'jsonFile' ? " jsonFile=true" : 
+        " ciudadano=${params.CIUDADANO},tramite=${params.TRAMITE},funcionario=${params.FUNCIONARIO}"
+    catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+        try {
+            sh """
+                docker run --rm -v ${params.REPORTS_DIR}:/home/PruebasUsuarios/tmp --name ${testName} ${DOCKER_IMAGE} \
+                npx cypress run \
+                --spec "${spec_files_str}" \
+                --env ${useParamsFlag} \
+                --reporter-options reportFilename="${testName}"
+            """
+        } catch (Exception e) {
+            echo "Error in ${testName}: ${e.message}"
+            slackSend(channel: params.SLACK_CHANNEL, color: 'danger', message: "Error in ${testName}: ${e.message}")
+            throw e // Re-lanzamos el error para que el stage se marque como fallido
+        }
+    }
+    // NOTA: No se usa (pwd) para el volumen porque se usa la direccion de ejecucion (workingdirectory) del contenedor
+    // de Jenkins, y produce carpetas en el host en donde se ejecuta el Docker de Cypress, en su lugar se usa la direccion
+    // de la carpeta en donde se almacenan los documentos y evidencias en el host
+
+}
+
+def getDockerImageName(){
+    return sh( script: 'docker images --format "{{.Repository}}:{{.Tag}}" | grep cypress-agilgob',
+        returnStdout: true
+        ).trim()
+}
+
+properties([
+    parameters([
+        string(name: "REPORTS_DIR", defaultValue: "/home/manner/cypress_reports", description: "Directory to store reports"),
+        string(name: 'SLACK_CHANNEL', defaultValue: 'D087F46G2D9', description: 'Slack channel to send notifications to'),
+        string(name: "CIUDADANO", defaultValue: "ciudadanoManuel", description: "Usuario Ciudadano"),
+        string(name: "FUNCIONARIO", defaultValue: "secretarioAcuerdos01", description: "Usuario Funcionario"),
+        string(name: "TRAMITE", defaultValue: "civiles_familiares_mercantiles_abogado_demandado", description: "Tramite Ciudadano")
+    ])
+])
+
+
+node {
+    
+
+    stage('Checkout') {
+        try {
+            checkout([$class: 'GitSCM', branches: [[name: 'SecretarioAcuerdos']],
+                userRemoteConfigs: [[url: 'https://github.com/manuel-agilgob/PruebasUsuarios.git']]])
+        } catch (Exception e) {
+            echo "Error in Checkout: ${e.message}"
+            error("Stopping pipeline due to checkout failure")
+        }
+    }
+
+    stage('Build Image') {
+        try {
+            sh '''
+                cd Docker/Cypress
+                chmod +x build_image.sh
+                ./build_image.sh
+            '''
+            def DOCKER_IMAGE = getDockerImageName()
+            
+            echo "Docker Image: ${DOCKER_IMAGE}"
+
+            if (DOCKER_IMAGE) {
+                slackSend(channel: params.SLACK_CHANNEL, color: 'good', message: "Docker image created successfully: ${DOCKER_IMAGE}")
+            }
+        } catch (Exception e) {
+            echo "Error in Build Image: ${e.message}"
+            error("Stopping pipeline due to build failure")
+            slackSend(channel: params.SLACK_CHANNEL, color: 'danger', message: "Error building Docker image: ${e.message}")
+        }
+    }
+
+    // stage('TESTS INDEPENDIENTES') {
+    //     parallel(
+
+    //         "Funcionario": {
+    //             runCypressTest("IniciaTramiteFuncionario", [
+    //                 'cypress/e2e/SecretarioAcuerdos/001_IniciarCancelaTramite.cy.js',
+    //                 'cypress/e2e/SecretarioAcuerdos/002_EliminaTramitesIniciados.cy.js',
+    //                 'cypress/e2e/SecretarioAcuerdos/003_IniciaTramite.cy.js'
+    //             ], useParams = 'otros' )
+                    
+    //         },
+
+    //         "Ciudadano": {
+    //             runCypressTest("IniciaTramiteCiudadano", [
+    //                 'cypress/e2e/Ciudadano/001_DescargaManualUsuarioTramite.cy.js',
+    //                 'cypress/e2e/Ciudadano/004_TramiteSecretarioAcuerdos.cy.js'
+    //             ], useParams = 'otros' )
+    //         }
+    //     )
+    // }
+
+    // stage('PRUEBAS SECRETARIO 1') {
+    //     parallel(
+
+    //         "Disponibilidad": {
+    //             runCypressTest("DisponibilidadSecretario01", [
+    //                 'cypress/e2e/SecretarioAcuerdos/007_ActionButtonsEnabled.cy.js',
+    //                 'cypress/e2e/SecretarioAcuerdos/008_AcuerdosNotificacionesSentenciasOficios.cy.js',
+    //                 'cypress/e2e/SecretarioAcuerdos/009_AgregarDocumentoPromocion.cy.js'
+    //             ])
+               
+    //         },
+
+    //         "Funcionalidades": {
+    //             runCypressTest("FuncionalidadesSecretario01", [
+    //                 'cypress/e2e/SecretarioAcuerdos/010_HabilitaVistaDocumentosACiudadano.cy.js',
+    //                 'cypress/e2e/SecretarioAcuerdos/011_GeneraCodigoQR.cy.js',
+    //                 'cypress/e2e/SecretarioAcuerdos/012_ListarPartes.cy.js',
+    //                 'cypress/e2e/SecretarioAcuerdos/013_DescargarExpediente.cy.js'
+    //             ])
+    //         }
+    //     )
+    // }
+
+    stage('TURNADO DE EXPEDIENTE') {
+
+        // runCypressTest("TurnadoExpediente", [
+        //     'cypress/e2e/SecretarioAcuerdos/014_TurnarExpediente.cy.js'
+        // ])
+
+        runCypressTest("RecepcionExpediente", [
+             'cypress/e2e/SecretarioAcuerdos/501_RecibirExpedienteTurnado.cy.js'
+        ])
+    }
+
+    stage('PRUEBAS SECRETARIO TURNADO') {
+        parallel(
+
+            "Disponibilidad": {
+                runCypressTest("DisponibilidadSecretarioTurnado", [
+                    'cypress/e2e/SecretarioAcuerdos/007_ActionButtonsEnabled.cy.js',
+                    'cypress/e2e/SecretarioAcuerdos/008_AcuerdosNotificacionesSentenciasOficios.cy.js',
+                    'cypress/e2e/SecretarioAcuerdos/009_AgregarDocumentoPromocion.cy.js'
+                ])
+            },
+
+            "Funcionalidades": {
+                runCypressTest("FuncionalidadesSecretarioTurnado", [
+                    'cypress/e2e/SecretarioAcuerdos/011_GeneraCodigoQR.cy.js',
+                    'cypress/e2e/SecretarioAcuerdos/012_ListarPartes.cy.js',
+                    'cypress/e2e/SecretarioAcuerdos/013_DescargarExpediente.cy.js'
+                ])
+                
+            }
+        )
+    }
+}

@@ -27,7 +27,7 @@ module.exports = defineConfig({
   },
   
   defaultCommandTimeout: 5000,
-  video: false,
+  video: true,
   videoCompression: 32,
   videosFolder: 'tmp/videos',
   screenshotsFolder: "tmp/screenshots",
