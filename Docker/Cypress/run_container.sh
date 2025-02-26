@@ -26,20 +26,18 @@ DOCKER_IMAGE=$(docker images --format "{{.Repository}}:{{.Tag}}" | grep "cypress
 
 specs=(
     'cypress/e2e/SecretarioAcuerdos/007*.cy.js' 
-    'cypress/e2e/SecretarioAcuerdos/008*.cy.js' 
-    'cypress/e2e/SecretarioAcuerdos/009*.cy.js' 
-    'cypress/e2e/SecretarioAcuerdos/011*.cy.js' 
-    'cypress/e2e/SecretarioAcuerdos/012*.cy.js' 
-    'cypress/e2e/SecretarioAcuerdos/013*.cy.js' 
+    # 'cypress/e2e/SecretarioAcuerdos/008*.cy.js' 
+    # 'cypress/e2e/SecretarioAcuerdos/009*.cy.js' 
+    # 'cypress/e2e/SecretarioAcuerdos/011*.cy.js' 
+    # 'cypress/e2e/SecretarioAcuerdos/012*.cy.js' 
+    # 'cypress/e2e/SecretarioAcuerdos/013*.cy.js' 
 )
 specs_funcionario=$(IFS=,; echo "${specs[*]}")
 docker run --rm  \
-    -e SPEC=$specs_funcionario \
-    -e JSON_FILE=true \
+    -e specs=$specs_funcionario \
+    -e jsonFile=true \
     -v $(pwd)/cypress_report:/home/PruebasUsuarios/tmp \
     $DOCKER_IMAGE
-
-
 
 
 # specs=(

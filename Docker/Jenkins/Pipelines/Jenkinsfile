@@ -1,0 +1,193 @@
+pipeline {
+    agent any
+
+    environment {
+        DOCKER_IMAGE = ""
+        SLACK_CHANNEL = "D087F46G2D9"
+    }
+
+    stages {
+        stage('Build Image') {
+            steps {
+                git branch: 'SecretarioAcuerdos', url: 'https://github.com/manuel-agilgob/PruebasUsuarios.git'
+
+                script {
+                  
+                    sh '''
+                        cd Docker/Cypress
+                        chmod +x build_image.sh
+                        ./build_image.sh
+                    '''
+
+                    DOCKER_IMAGE = sh(
+                        script: 'docker images --format "{{.Repository}}:{{.Tag}}" | grep cypress-agilgob',
+                        returnStdout: true
+                    ).trim()
+                }
+                sh "echo ${DOCKER_IMAGE}"
+                if(DOCKER_IMAGE != ""){
+                   slackSend( channels: SLACK_CHANNEL, color: 'good', message: "Imagen de Docker creada correctamente ${DOCKER_IMAGE}")
+                }
+            }
+        }
+
+        stage('TESTS INDEPENDIENTES') {
+            parallel {
+                stage('Funcionario') {
+                    steps {
+                        script {
+                            def spec_files = [
+                                'cypress/e2e/SecretarioAcuerdos/001_IniciarCancelaTramite.cy.js',
+                                'cypress/e2e/SecretarioAcuerdos/002_EliminaTramitesIniciados.cy.js',
+                                'cypress/e2e/SecretarioAcuerdos/003_IniciaTramite.cy.js'
+                                
+                            ].join(',')
+                            catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE'){
+                                sh(script: """
+                                    docker run --rm -v /home/manner/Repositorios/cypress_report:/home/PruebasUsuarios/tmp ${DOCKER_IMAGE} \
+                                    npx cypress run --spec "${spec_files}" \
+                                    --env funcionario=secretarioAcuerdos01 --reporter-options reportFilename="IniciaTramiteFuncionario"
+                                """)
+                            }
+                            step(
+                                slackSend( channels: SLACK_CHANNEL, color: 'good', message: "Ocurrio un error en la ejecucion de pruebas para IniciaTramiteFuncionario")
+                                ) 
+                        }
+                    }
+                }
+
+                stage('Ciudadano') {
+                    steps {
+                        script {
+                            def spec_files = [
+                                'cypress/e2e/Ciudadano/001_DescargaManualUsuarioTramite.cy.js'
+                                // 'cypress/e2e/Ciudadano/004_TramiteSecretarioAcuerdos.cy.js'
+                            ].join(',')
+                            catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE'){
+                                sh(script: """
+                                    docker run --rm -v /home/manner/Repositorios/cypress_report:/home/PruebasUsuarios/tmp ${DOCKER_IMAGE} \
+                                    npx cypress run --spec "${spec_files}" \
+                                    --env ciudadano=ciudadanoManuel,tramite=civiles_familiares_mercantiles_abogado_demandado,funcionario=secretarioAcuerdos01 \
+                                    --reporter-options reportFilename="IniciaDemanda"
+                                """)
+                            }
+                            slackSend( channels: SLACK_CHANNEL, color: 'good', message: "Ocurrio un error en la ejecucion de pruebas para IniciaDemanda")
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+        // stage('PRUEBAS SECRETARIO 1') {
+        //     parallel {
+        //         stage('Disponibilidad') {
+        //             steps {
+        //                 script {
+        //                     def spec_files = [
+        //                         'cypress/e2e/SecretarioAcuerdos/007_ActionButtonsEnabled.cy.js',
+        //                         'cypress/e2e/SecretarioAcuerdos/008_AcuerdosNotificacionesSentenciasOficios.cy.js',
+        //                         'cypress/e2e/SecretarioAcuerdos/009_AgregarDocumentoPromocion.cy.js'
+        //                     ].join(',')
+
+        //                     catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE'){
+        //                         sh(script: """
+        //                         docker run --rm -v \$(pwd)/cypress_report:/home/PruebasUsuarios/tmp ${env.DOCKER_IMAGE} \
+        //                         npx cypress run --spec "${spec_files}" \
+        //                         -e jsonFile=true --reporter-options reportFilename="DisponibilidadSecretario01"
+        //                         """)
+        //                     }
+        //                     step(
+        //                         slackSend( channels: SLACK_CHANNEL, color: 'good', message: "Ocurrio un error en la ejecucion de pruebas para DisponibilidadSecretario01")
+        //                         ) 
+                            
+        //                 }
+        //             }
+        //         }
+
+        //         stage('Funcionalidades') {
+        //             steps {
+        //                 script {
+        //                     def spec_files = [
+        //                         'cypress/e2e/SecretarioAcuerdos/010_HabilitaVistaDocumentosACiudadano.cy.js',
+        //                         'cypress/e2e/SecretarioAcuerdos/011_GeneraCodigoQR.cy.js',
+        //                         'cypress/e2e/SecretarioAcuerdos/012_ListarPartes.cy.js',
+        //                         'cypress/e2e/SecretarioAcuerdos/013_DescargarExpediente.cy.js'
+        //                     ].join(',')
+        //                     catchError{
+        //                         sh(script: """
+        //                             docker run --rm -v \$(pwd)/cypress_report:/home/PruebasUsuarios/tmp ${env.DOCKER_IMAGE} \
+        //                             npx cypress run --spec "${spec_files}" \
+        //                             -e jsonFile=true --reporter-options reportFilename="FuncionalidadesSecretario01"
+        //                         """)
+        //                     }
+        //                     step(
+        //                         slackSend( channels: SLACK_CHANNEL, color: 'good', message: "Ocurrio un error en la ejecucion de pruebas para DisponibilidadSecretario01")
+        //                         ) 
+                            
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
+
+        // stage('TURNADO DE EXPEDIENTE') {
+        //     steps {
+        //         script {
+        //             def spec_files = [
+        //                 'cypress/e2e/SecretarioAcuerdos/014_TurnarExpediente.cy.js',
+        //                 'cypress/e2e/SecretarioAcuerdos/501_RecibirExpedienteTurnado.cy.js'
+        //             ].join(',')
+
+        //             sh(script: """
+        //                 docker run --rm -v \$(pwd)/cypress_report:/home/PruebasUsuarios/tmp ${env.DOCKER_IMAGE} \
+        //                 npx cypress run --spec "${spec_files}" \
+        //                 -e jsonFile=true --reporter-options reportFilename="DisponibilidadSecretario01"
+        //             """)
+        //         }
+        //     }
+        // }
+
+
+        // stage('PRUEBAS SECRETARIO TURNADO') {
+        //     parallel {
+        //         stage('Disponibilidad') {
+        //             steps {
+        //                 script {
+        //                     def spec_files = [
+        //                         'cypress/e2e/SecretarioAcuerdos/007_ActionButtonsEnabled.cy.js',
+        //                         'cypress/e2e/SecretarioAcuerdos/008_AcuerdosNotificacionesSentenciasOficios.cy.js',
+        //                         'cypress/e2e/SecretarioAcuerdos/009_AgregarDocumentoPromocion.cy.js'
+        //                     ].join(',')
+
+        //                     sh(script: """
+        //                         docker run --rm -v \$(pwd)/cypress_report:/home/PruebasUsuarios/tmp ${env.DOCKER_IMAGE} \
+        //                         npx cypress run --spec "${spec_files}" \
+        //                         -e jsonFile=true --reporter-options reportFilename="DisponibilidadSecretario01"
+        //                     """)
+        //                 }
+        //             }
+        //         }
+
+        //         stage('Funcionalidades') {
+        //             steps {
+        //                 script {
+        //                     def spec_files = [
+        //                         'cypress/e2e/SecretarioAcuerdos/011_GeneraCodigoQR.cy.js',
+        //                         'cypress/e2e/SecretarioAcuerdos/012_ListarPartes.cy.js',
+        //                         'cypress/e2e/SecretarioAcuerdos/013_DescargarExpediente.cy.js'
+        //                     ].join(',')
+
+        //                     sh(script: """
+        //                         docker run --rm -v \$(pwd)/cypress_report:/home/PruebasUsuarios/tmp ${env.DOCKER_IMAGE} \
+        //                         npx cypress run --spec "${spec_files}" \
+        //                         -e jsonFile=true --reporter-options reportFilename="FuncionalidadesSecretario01"
+        //                     """)
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
+
+
+

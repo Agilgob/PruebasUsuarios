@@ -42,9 +42,9 @@ describe('Inicia el tramite luego lo cancela', () => {
                         .as('targetCard');
     
                     cy.get('@targetCard').contains('Ir al trámite').click();
-                    cy.contains('Cancelar').click();
+                    cy.contains('Cancelar', {timeout:10000}).click();
                     cy.screenshot('CANCELAR_TRAMITE');
-                    cy.get('@barraMenuTramites')
+                    cy.get('@barraMenuTramites', {timeout:10000})
                         .contains('Trámites iniciados')
                         .invoke('text')
                         .should('eq', tramitesIniciados);

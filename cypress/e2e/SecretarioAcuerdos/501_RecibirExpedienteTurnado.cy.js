@@ -62,7 +62,7 @@ describe('Recibe el expediente como segundo secretario', () => {
         cy.wait('@recibirExpediente').then((interception) => {
             expect(interception.response.statusCode).to.eq(200);
             cy.screenshot('RecibirExpediente Aceptado');
-            cy.writeFile('expedienteRecibido.json', interception.response.body);
+            cy.writeFile('tmp/expedienteRecibido.json', interception.response.body);
             cy.wait(1000)
         })
 
