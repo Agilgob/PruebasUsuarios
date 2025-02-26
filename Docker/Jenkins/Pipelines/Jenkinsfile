@@ -1,84 +1,91 @@
-pipeline {
-    agent any
+node {
+    def DOCKER_IMAGE = ""
+    def SLACK_CHANNEL = "D087F46G2D9"
 
-    environment {
-        DOCKER_IMAGE = ""
-        SLACK_CHANNEL = "D087F46G2D9"
+    stage('Checkout') {
+        try {
+            checkout([$class: 'GitSCM', branches: [[name: 'SecretarioAcuerdos']],
+                userRemoteConfigs: [[url: 'https://github.com/manuel-agilgob/PruebasUsuarios.git']]])
+        } catch (Exception e) {
+            echo "Error in Checkout: ${e.message}"
+            error("Stopping pipeline due to checkout failure")
+        }
     }
 
-    stages {
-        stage('Build Image') {
-            steps {
-                git branch: 'SecretarioAcuerdos', url: 'https://github.com/manuel-agilgob/PruebasUsuarios.git'
+    stage('Build Image') {
+        try {
+            sh '''
+                cd Docker/Cypress
+                chmod +x build_image.sh
+                ./build_image.sh
+            '''
+            DOCKER_IMAGE = sh(
+                script: 'docker images --format "{{.Repository}}:{{.Tag}}" | grep cypress-agilgob',
+                returnStdout: true
+            ).trim()
+            
+            echo "Docker Image: ${DOCKER_IMAGE}"
 
-                script {
-                  
-                    sh '''
-                        cd Docker/Cypress
-                        chmod +x build_image.sh
-                        ./build_image.sh
-                    '''
-
-                    DOCKER_IMAGE = sh(
-                        script: 'docker images --format "{{.Repository}}:{{.Tag}}" | grep cypress-agilgob',
-                        returnStdout: true
-                    ).trim()
-                }
-                sh "echo ${DOCKER_IMAGE}"
-                if(DOCKER_IMAGE != ""){
-                   slackSend( channels: SLACK_CHANNEL, color: 'good', message: "Imagen de Docker creada correctamente ${DOCKER_IMAGE}")
-                }
+            if (DOCKER_IMAGE) {
+                slackSend(channel: SLACK_CHANNEL, color: 'good', message: "Docker image created successfully: ${DOCKER_IMAGE}")
             }
+        } catch (Exception e) {
+            echo "Error in Build Image: ${e.message}"
+            error("Stopping pipeline due to build failure")
+            slackSend(channel: SLACK_CHANNEL, color: 'danger', message: "Error building Docker image: ${e.message}")
         }
+    }
 
-        stage('TESTS INDEPENDIENTES') {
-            parallel {
-                stage('Funcionario') {
-                    steps {
-                        script {
-                            def spec_files = [
-                                'cypress/e2e/SecretarioAcuerdos/001_IniciarCancelaTramite.cy.js',
-                                'cypress/e2e/SecretarioAcuerdos/002_EliminaTramitesIniciados.cy.js',
-                                'cypress/e2e/SecretarioAcuerdos/003_IniciaTramite.cy.js'
-                                
-                            ].join(',')
-                            catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE'){
-                                sh(script: """
-                                    docker run --rm -v /home/manner/Repositorios/cypress_report:/home/PruebasUsuarios/tmp ${DOCKER_IMAGE} \
-                                    npx cypress run --spec "${spec_files}" \
-                                    --env funcionario=secretarioAcuerdos01 --reporter-options reportFilename="IniciaTramiteFuncionario"
-                                """)
-                            }
-                            step(
-                                slackSend( channels: SLACK_CHANNEL, color: 'good', message: "Ocurrio un error en la ejecucion de pruebas para IniciaTramiteFuncionario")
-                                ) 
-                        }
+    stage('TESTS INDEPENDIENTES') {
+        parallel(
+            "Funcionario": {
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    try {
+                        def spec_files = [
+                            'cypress/e2e/SecretarioAcuerdos/001_IniciarCancelaTramite.cy.js',
+                            'cypress/e2e/SecretarioAcuerdos/002_EliminaTramitesIniciados.cy.js',
+                            'cypress/e2e/SecretarioAcuerdos/003_IniciaTramite.cy.js'
+                        ].join(',')
+                            sh """
+                                docker run --rm -v /home/manner/Repositorios/cypress_report:/home/PruebasUsuarios/tmp ${DOCKER_IMAGE} \
+                                npx cypress run --spec "${spec_files}" \
+                                --env funcionario=secretarioAcuerdos01 --reporter-options reportFilename="IniciaTramiteFuncionario"
+                            """
+                    
+                    } catch (Exception e) {
+                        echo "Error running tests for Funcionario: ${e.message}"
+                        slackSend(channel: SLACK_CHANNEL, color: 'danger', message: "Error in Funcionario tests: ${e.message}")
+                        throw e // Re-Lanzamos el error para que el stage se marque como fallido
+                    } 
+                }
+            },
+
+            "Ciudadano": {
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    try {
+                        def spec_files = [
+                            'cypress/e2e/Ciudadano/001_DescargaManualUsuarioTramite.cy.js'
+                            // 'cypress/e2e/Ciudadano/004_TramiteSecretarioAcuerdos.cy.js'
+                        ].join(',')
+
+                        sh """
+                            docker run --rm -v /home/manner/Repositorios/cypress_report:/home/PruebasUsuarios/tmp ${DOCKER_IMAGE} \
+                            npx cypress run --spec "${spec_files}" \
+                            --env ciudadano=ciudadanoManuel,tramite=civiles_familiares_mercantiles_abogado_demandado,funcionario=secretarioAcuerdos01 \
+                            --reporter-options reportFilename="IniciaDemanda"
+                        """
+
+                    } catch (Exception e) {
+                        echo "Error running tests for Ciudadano: ${e.message}"
+                        slackSend(channel: SLACK_CHANNEL, color: 'danger', message: "Error in Ciudadano tests: ${e.message}")
+                         throw e // Re-Lanzamos el error para que el stage se marque como fallido
                     }
                 }
-
-                stage('Ciudadano') {
-                    steps {
-                        script {
-                            def spec_files = [
-                                'cypress/e2e/Ciudadano/001_DescargaManualUsuarioTramite.cy.js'
-                                // 'cypress/e2e/Ciudadano/004_TramiteSecretarioAcuerdos.cy.js'
-                            ].join(',')
-                            catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE'){
-                                sh(script: """
-                                    docker run --rm -v /home/manner/Repositorios/cypress_report:/home/PruebasUsuarios/tmp ${DOCKER_IMAGE} \
-                                    npx cypress run --spec "${spec_files}" \
-                                    --env ciudadano=ciudadanoManuel,tramite=civiles_familiares_mercantiles_abogado_demandado,funcionario=secretarioAcuerdos01 \
-                                    --reporter-options reportFilename="IniciaDemanda"
-                                """)
-                            }
-                            slackSend( channels: SLACK_CHANNEL, color: 'good', message: "Ocurrio un error en la ejecucion de pruebas para IniciaDemanda")
-                        }
-                    }
-                }
             }
-        }
+        )
     }
 }
+
         // stage('PRUEBAS SECRETARIO 1') {
         //     parallel {
         //         stage('Disponibilidad') {
