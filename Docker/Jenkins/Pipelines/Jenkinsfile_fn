@@ -21,7 +21,7 @@ def runCypressTest(String testName, List specFiles, String useParams = 'jsonFile
                 npx cypress run \
                 --spec "${spec_files_str}" \
                 --env ${useParamsFlag} \
-                --reporter-options reportDir=tmp/${testName}"
+                --reporter-options reportDir=tmp/${testName}
             """
         } catch (Exception e) {
             echo "Error in ${testName}: ${e.message}"
