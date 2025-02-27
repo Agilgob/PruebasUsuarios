@@ -2,6 +2,14 @@
 
 
 def runCypressTest(String testName, List specFiles, String useParams = 'jsonFile') {
+
+    // NOTAS: 
+    // - No se usa (pwd) para el volumen porque se usa la direccion de ejecucion (workingdirectory) del contenedor
+    //   de Jenkins, y produce carpetas en el host en donde se ejecuta el Docker de Cypress, en su lugar se usa la direccion
+    //   de la carpeta en donde se almacenan los documentos y evidencias en el host
+    // - Asegurate de usar siempre nombres diferentes en la implementacion en el parametro testName, de lo contrario ocurren errores
+    //   en la ejecucion de los contenedores de Docker y posiblemente en la generacion de reportes
+
     def DOCKER_IMAGE = getDockerImageName()
     def spec_files_str = specFiles.join(',')
     def useParamsFlag = useParams == 'jsonFile' ? " jsonFile=true" : 
@@ -13,7 +21,7 @@ def runCypressTest(String testName, List specFiles, String useParams = 'jsonFile
                 npx cypress run \
                 --spec "${spec_files_str}" \
                 --env ${useParamsFlag} \
-                --reporter-options reportFilename="${testName}"
+                --reporter-options reportDir=tmp/${testName}"
             """
         } catch (Exception e) {
             echo "Error in ${testName}: ${e.message}"
@@ -21,10 +29,6 @@ def runCypressTest(String testName, List specFiles, String useParams = 'jsonFile
             throw e // Re-lanzamos el error para que el stage se marque como fallido
         }
     }
-    // NOTA: No se usa (pwd) para el volumen porque se usa la direccion de ejecucion (workingdirectory) del contenedor
-    // de Jenkins, y produce carpetas en el host en donde se ejecuta el Docker de Cypress, en su lugar se usa la direccion
-    // de la carpeta en donde se almacenan los documentos y evidencias en el host
-
 }
 
 def getDockerImageName(){
@@ -99,34 +103,36 @@ node {
     //     )
     // }
 
-    // stage('PRUEBAS SECRETARIO 1') {
-    //     parallel(
+    stage('PRUEBAS SECRETARIO 1') {
+        parallel(
 
-    //         "Disponibilidad": {
-    //             runCypressTest("DisponibilidadSecretario01", [
-    //                 'cypress/e2e/SecretarioAcuerdos/007_ActionButtonsEnabled.cy.js',
-    //                 'cypress/e2e/SecretarioAcuerdos/008_AcuerdosNotificacionesSentenciasOficios.cy.js',
-    //                 'cypress/e2e/SecretarioAcuerdos/009_AgregarDocumentoPromocion.cy.js'
-    //             ])
+            "Disponibilidad": {
+                runCypressTest("DisponibilidadSecretario01", [
+                    'cypress/e2e/SecretarioAcuerdos/007_ActionButtonsEnabled.cy.js',
+                    'cypress/e2e/SecretarioAcuerdos/008_AcuerdosNotificacionesSentenciasOficios.cy.js',
+                    'cypress/e2e/SecretarioAcuerdos/009_AgregarDocumentoPromocion.cy.js'
+                ])
                
-    //         },
+            },
 
-    //         "Funcionalidades": {
-    //             runCypressTest("FuncionalidadesSecretario01", [
-    //                 'cypress/e2e/SecretarioAcuerdos/010_HabilitaVistaDocumentosACiudadano.cy.js',
-    //                 'cypress/e2e/SecretarioAcuerdos/011_GeneraCodigoQR.cy.js',
-    //                 'cypress/e2e/SecretarioAcuerdos/012_ListarPartes.cy.js',
-    //                 'cypress/e2e/SecretarioAcuerdos/013_DescargarExpediente.cy.js'
-    //             ])
-    //         }
-    //     )
-    // }
+            "Funcionalidades": {
+                runCypressTest("FuncionalidadesSecretario01", [
+                    'cypress/e2e/SecretarioAcuerdos/010_HabilitaVistaDocumentosACiudadano.cy.js',
+                    'cypress/e2e/SecretarioAcuerdos/011_GeneraCodigoQR.cy.js',
+                    'cypress/e2e/SecretarioAcuerdos/012_ListarPartes.cy.js',
+                    'cypress/e2e/SecretarioAcuerdos/013_DescargarExpediente.cy.js'
+                ])
+            }
+        )
+    }
 
     stage('TURNADO DE EXPEDIENTE') {
+        // Nota: Se separan las pruebas ya que emplean el mismo nombre de la sesion, lo que genera un error
+        // Se ejetan por separado para que cada una haga un login con usuario/password distinto
 
-        // runCypressTest("TurnadoExpediente", [
-        //     'cypress/e2e/SecretarioAcuerdos/014_TurnarExpediente.cy.js'
-        // ])
+        runCypressTest("TurnadoExpediente", [
+            'cypress/e2e/SecretarioAcuerdos/014_TurnarExpediente.cy.js'
+        ])
 
         runCypressTest("RecepcionExpediente", [
              'cypress/e2e/SecretarioAcuerdos/501_RecibirExpedienteTurnado.cy.js'

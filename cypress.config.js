@@ -1,24 +1,41 @@
 const { defineConfig } = require("cypress");
 // const { beforeRunHook, afterRunHook } = require('cypress-mochawesome-reporter/lib');
+const reportDir = process.env.REPORT_DIR || 'tmp'; // Usa la variable de entorno o 'tmp' por defecto
 
 module.exports = defineConfig({
 
 
-  reporter: 'cypress-mochawesome-reporter',
-  reporterOptions: {
-    reportDir: 'tmp',
-    html: true,
-    json: true,
-    embeddedScreenshots: true,
-    ignoreVideos: false,
-    screenshotsFolder: 'tmp/screenshots',  
-    videosFolder: 'tmp/videos',
-    saveAllAttempts: true,
-    overwrite: false,
-    autoCleanReports: false,
-    reportFilename : "[status]-[name]",
-    debug: true    
-  },
+  // reporter: 'cypress-mochawesome-reporter',
+  // reporterOptions: {
+  //   reportDir: 'tmp',
+  //   html: true,
+  //   json: true,
+  //   embeddedScreenshots: true,
+  //   ignoreVideos: false,
+  //   screenshotsFolder: 'tmp/screenshots',  
+  //   videosFolder: 'tmp/videos',
+  //   saveAllAttempts: true,
+  //   overwrite: false,
+  //   autoCleanReports: false,
+  //   reportFilename : "[status]-[name]",
+  //   debug: true    
+  // },
+
+    reporter: 'cypress-mochawesome-reporter',
+    reporterOptions: {
+      reportDir: reportDir,
+      html: true,
+      json: true,
+      embeddedScreenshots: true,
+      ignoreVideos: false,
+      screenshotsFolder: `${reportDir}/screenshots`,
+      videosFolder: `${reportDir}/videos`,
+      saveAllAttempts: true,
+      overwrite: false,
+      autoCleanReports: false,
+      reportFilename: "[status]-[name]",
+      debug: true    
+    },
 
   e2e: {
     setupNodeEvents(on, config) {
@@ -26,7 +43,7 @@ module.exports = defineConfig({
     },
   },
   
-  defaultCommandTimeout: 5000,
+  defaultCommandTimeout: 10000,
   video: true,
   videoCompression: 32,
   videosFolder: 'tmp/videos',
