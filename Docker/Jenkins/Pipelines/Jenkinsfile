@@ -1,0 +1,209 @@
+node {
+    def DOCKER_IMAGE = ""
+    def SLACK_CHANNEL = "D087F46G2D9"
+
+    stage('Checkout') {
+        try {
+            checkout([$class: 'GitSCM', branches: [[name: 'SecretarioAcuerdos']],
+                userRemoteConfigs: [[url: 'https://github.com/manuel-agilgob/PruebasUsuarios.git']]])
+        } catch (Exception e) {
+            echo "Error in Checkout: ${e.message}"
+            error("Stopping pipeline due to checkout failure")
+        }
+    }
+
+    stage('Build Image') {
+        try {
+            sh '''
+                cd Docker/Cypress
+                chmod +x build_image.sh
+                ./build_image.sh
+            '''
+            DOCKER_IMAGE = sh(
+                script: 'docker images --format "{{.Repository}}:{{.Tag}}" | grep cypress-agilgob',
+                returnStdout: true
+            ).trim()
+            
+            echo "Docker Image: ${DOCKER_IMAGE}"
+
+            if (DOCKER_IMAGE) {
+                slackSend(channel: SLACK_CHANNEL, color: 'good', message: "Docker image created successfully: ${DOCKER_IMAGE}")
+            }
+        } catch (Exception e) {
+            echo "Error in Build Image: ${e.message}"
+            error("Stopping pipeline due to build failure")
+            slackSend(channel: SLACK_CHANNEL, color: 'danger', message: "Error building Docker image: ${e.message}")
+        }
+    }
+
+    stage('TESTS INDEPENDIENTES') {
+        parallel(
+            "Funcionario": {
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    try {
+                        def spec_files = [
+                            'cypress/e2e/SecretarioAcuerdos/001_IniciarCancelaTramite.cy.js',
+                            'cypress/e2e/SecretarioAcuerdos/002_EliminaTramitesIniciados.cy.js',
+                            'cypress/e2e/SecretarioAcuerdos/003_IniciaTramite.cy.js'
+                        ].join(',')
+                            sh """
+                                docker run --rm -v /home/manner/Repositorios/cypress_report:/home/PruebasUsuarios/tmp ${DOCKER_IMAGE} \
+                                npx cypress run --spec "${spec_files}" \
+                                --env funcionario=secretarioAcuerdos01 --reporter-options reportFilename="IniciaTramiteFuncionario"
+                            """
+                    
+                    } catch (Exception e) {
+                        echo "Error running tests for Funcionario: ${e.message}"
+                        slackSend(channel: SLACK_CHANNEL, color: 'danger', message: "Error in Funcionario tests: ${e.message}")
+                        throw e // Re-Lanzamos el error para que el stage se marque como fallido
+                    } 
+                }
+            },
+
+            "Ciudadano": {
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    try {
+                        def spec_files = [
+                            'cypress/e2e/Ciudadano/001_DescargaManualUsuarioTramite.cy.js',
+                            'cypress/e2e/Ciudadano/004_TramiteSecretarioAcuerdos.cy.js'
+                        ].join(',')
+
+                        sh """
+                            docker run --rm -v /home/manner/Repositorios/cypress_report:/home/PruebasUsuarios/tmp ${DOCKER_IMAGE} \
+                            npx cypress run --spec "${spec_files}" \
+                            --env ciudadano=ciudadanoManuel,tramite=civiles_familiares_mercantiles_abogado_demandado,funcionario=secretarioAcuerdos01 \
+                            --reporter-options reportFilename="IniciaDemanda"
+                        """
+
+                    } catch (Exception e) {
+                        echo "Error running tests for Ciudadano: ${e.message}"
+                        slackSend(channel: SLACK_CHANNEL, color: 'danger', message: "Error in Ciudadano tests: ${e.message}")
+                         throw e // Re-Lanzamos el error para que el stage se marque como fallido
+                    }
+                }
+            }
+        )
+    }
+
+    stage('PRUEBAS SECRETARIO 1') {
+        parallel(
+            "Disponibilidad": {
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    try {
+                        def spec_files = [
+                            'cypress/e2e/SecretarioAcuerdos/007_ActionButtonsEnabled.cy.js',
+                            'cypress/e2e/SecretarioAcuerdos/008_AcuerdosNotificacionesSentenciasOficios.cy.js',
+                            'cypress/e2e/SecretarioAcuerdos/009_AgregarDocumentoPromocion.cy.js'
+                        ].join(',')
+
+                    
+                            sh """
+                                docker run --rm -v \$(pwd)/cypress_report:/home/PruebasUsuarios/tmp ${DOCKER_IMAGE} \
+                                npx cypress run --spec "${spec_files}" \
+                                -e jsonFile=true --reporter-options reportFilename="DisponibilidadSecretario01"
+                            """
+                        
+                    } catch (Exception e) {
+                        echo "Error in Disponibilidad: ${e.message}"
+                        slackSend(channel: SLACK_CHANNEL, color: 'danger', message: "Error in Disponibilidad tests: ${e.message}")
+                        throw e // Re-Lanzamos el error para que el stage se marque como fallido
+                    }
+                }
+            },
+
+            "Funcionalidades": {
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                try {
+                    def spec_files = [
+                        'cypress/e2e/SecretarioAcuerdos/010_HabilitaVistaDocumentosACiudadano.cy.js',
+                        'cypress/e2e/SecretarioAcuerdos/011_GeneraCodigoQR.cy.js',
+                        'cypress/e2e/SecretarioAcuerdos/012_ListarPartes.cy.js',
+                        'cypress/e2e/SecretarioAcuerdos/013_DescargarExpediente.cy.js'
+                    ].join(',')
+
+                        sh """
+                            docker run --rm -v \$(pwd)/cypress_report:/home/PruebasUsuarios/tmp ${DOCKER_IMAGE} \
+                            npx cypress run --spec "${spec_files}" \
+                            -e jsonFile=true --reporter-options reportFilename="FuncionalidadesSecretario01"
+                        """
+                    
+                    } catch (Exception e) {
+                        echo "Error in Funcionalidades: ${e.message}"
+                        slackSend(channel: SLACK_CHANNEL, color: 'danger', message: "Error in Funcionalidades tests: ${e.message}")
+                        throw e // Re-Lanzamos el error para que el stage se marque como fallido
+                    }
+                }
+            }
+        )
+    }
+
+    stage('TURNADO DE EXPEDIENTE') {
+        catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+            try {
+                def spec_files = [
+                    'cypress/e2e/SecretarioAcuerdos/014_TurnarExpediente.cy.js',
+                    'cypress/e2e/SecretarioAcuerdos/501_RecibirExpedienteTurnado.cy.js'
+                ].join(',')
+
+                sh """
+                    docker run --rm -v \$(pwd)/cypress_report:/home/PruebasUsuarios/tmp ${DOCKER_IMAGE} \
+                    npx cypress run --spec "${spec_files}" \
+                    -e jsonFile=true --reporter-options reportFilename="TurnadoExpediente"
+                """
+            } catch (Exception e) {
+                echo "Error in TURNADO DE EXPEDIENTE: ${e.message}"
+                slackSend(channel: SLACK_CHANNEL, color: 'danger', message: "Error in TURNADO DE EXPEDIENTE: ${e.message}")
+                throw e // Re-Lanzamos el error para que el stage se marque como fallido
+            }
+        }
+    }
+
+    stage('PRUEBAS SECRETARIO TURNADO') {
+        parallel(
+            "Disponibilidad": {
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    try {
+                        def spec_files = [
+                            'cypress/e2e/SecretarioAcuerdos/007_ActionButtonsEnabled.cy.js',
+                            'cypress/e2e/SecretarioAcuerdos/008_AcuerdosNotificacionesSentenciasOficios.cy.js',
+                            'cypress/e2e/SecretarioAcuerdos/009_AgregarDocumentoPromocion.cy.js'
+                        ].join(',')
+
+                        sh """
+                            docker run --rm -v \$(pwd)/cypress_report:/home/PruebasUsuarios/tmp ${DOCKER_IMAGE} \
+                            npx cypress run --spec "${spec_files}" \
+                            -e jsonFile=true --reporter-options reportFilename="DisponibilidadSecretarioTurnado"
+                        """
+                    } catch (Exception e) {
+                        echo "Error in Disponibilidad (Turnado): ${e.message}"
+                        slackSend(channel: SLACK_CHANNEL, color: 'danger', message: "Error in Disponibilidad tests (Turnado): ${e.message}")
+                        throw e // Re-Lanzamos el error para que el stage se marque como fallido
+                    }
+                }
+            },
+
+            "Funcionalidades": {
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    try {
+                        def spec_files = [
+                            'cypress/e2e/SecretarioAcuerdos/011_GeneraCodigoQR.cy.js',
+                            'cypress/e2e/SecretarioAcuerdos/012_ListarPartes.cy.js',
+                            'cypress/e2e/SecretarioAcuerdos/013_DescargarExpediente.cy.js'
+                        ].join(',')
+
+                        sh """
+                            docker run --rm -v \$(pwd)/cypress_report:/home/PruebasUsuarios/tmp ${DOCKER_IMAGE} \
+                            npx cypress run --spec "${spec_files}" \
+                            -e jsonFile=true --reporter-options reportFilename="FuncionalidadesSecretarioTurnado"
+                        """
+                    } catch (Exception e) {
+                        echo "Error in Funcionalidades (Turnado): ${e.message}"
+                        slackSend(channel: SLACK_CHANNEL, color: 'danger', message: "Error in Funcionalidades tests (Turnado): ${e.message}")
+                        throw e // Re-Lanzamos el error para que el stage se marque como fallido
+                    }
+                }
+            }
+        )
+    }
+
+}

@@ -15,6 +15,20 @@ Cypress.Commands.add('loginFuncionario', (email, password) => {
         expect(interception.response.statusCode).to.eq(200)
     })
     cy.log('Usuario loggeado ' + email)
-    cy.wait(1000)
+
 })
 
+
+Cypress.Commands.add('iniciarSesionFuncionario', (email, password) => {
+    cy.clearCookies();
+    cy.clearLocalStorage();
+
+    cy.session('sesionFuncionario', () => {
+        cy.visit(environment.funcionarioURL);
+        cy.loginFuncionario(email, password);
+        cy.contains('h3', 'Tablero de contro', {timeout: 10000}).should('be.visible');
+        cy.getCookie('authentication_token_03').should('exist');
+    }, {
+        cacheAcrossSpecs: true
+    });
+});

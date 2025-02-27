@@ -42,6 +42,3 @@ describe('Descarga el manual de usuario de los tramites en la primer pantalla', 
 })
 
 
-
-cy.get('form.form-signin input[name="Password"]').as('loginForm');
-cy.get('@loginForm').find('input[name="Password"]').type(email);

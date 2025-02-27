@@ -5,17 +5,19 @@
 
 
 
-ENV_VARS=("FUNCIONARIO" "CIUDADANO" "TRAMITE" "TEST_DATA")
+ENV_VARS=("funcionario" "ciudadano" "tramite" "environment" "jsonFile")
 
-echo "FUNCIONARIO : $FUNCIONARIO"
-echo "CIUDADANO : $CIUDADANO"
-echo "TRAMITE : $TRAMITE"
-echo "JSON_FILE : $JSON_FILE"
+echo "specs : $specs"
+echo "funcionario : $funcionario"
+echo "ciudadano : $ciudadano"
+echo "tramite : $tramite"
+echo "environment : $environment"
+echo "jsonFile : $jsonFile"
 
 
 # Verificar si la variable de entorno folder_name está definida
-if [ -z "$SPEC" ]; then
-  echo "Error: La variable de entorno 'SPEC' no está definida."
+if [ -z "$specs" ]; then
+  echo "Error: La variable de entorno 'SPECS' no está definida."
   exit 1
 fi
 
@@ -30,4 +32,4 @@ done
 
 
 # Ejecutar Cypress con la variable de entorno
-npx cypress run --spec "$SPEC" $CYPRESS_ARGS 
+npx cypress run --spec "$specs" $CYPRESS_ARGS 

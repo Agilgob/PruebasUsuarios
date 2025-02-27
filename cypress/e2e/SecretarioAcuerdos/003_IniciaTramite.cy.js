@@ -7,8 +7,7 @@ describe('Es posible iniciar un tramite desde el funcionario', () => {
     });
 
     beforeEach(() => {
-        cy.visit(environment.funcionarioURL);  
-        cy.loginFuncionario(funcionario.email, funcionario.password);
+        cy.iniciarSesionFuncionario(funcionario.email, funcionario.password);
     });
 
     describe('Iniciar tramite', () => {

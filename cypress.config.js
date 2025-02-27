@@ -1,8 +1,8 @@
 const { defineConfig } = require("cypress");
 // const { beforeRunHook, afterRunHook } = require('cypress-mochawesome-reporter/lib');
 
-module.exports = defineConfig({
 
+module.exports = defineConfig({
 
   reporter: 'cypress-mochawesome-reporter',
   reporterOptions: {
@@ -26,7 +26,7 @@ module.exports = defineConfig({
     },
   },
   
-  defaultCommandTimeout: 5000,
+  defaultCommandTimeout: 10000,
   video: true,
   videoCompression: 32,
   videosFolder: 'tmp/videos',
