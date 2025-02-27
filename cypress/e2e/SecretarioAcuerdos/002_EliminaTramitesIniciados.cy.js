@@ -8,10 +8,9 @@ describe('Elimina los tramites iniciados del funcionario', () => {
 
 
     beforeEach(() => {
-        cy.visit(environment.funcionarioURL);
-        cy.loginFuncionario(funcionario.email, funcionario.password);
+        cy.iniciarSesionFuncionario(funcionario.email, funcionario.password);
     });
-
+    
     it('Permite eliminar los tramites iniciados', () =>{
 
         cy.get('.one_column .fa-align-justify').click();

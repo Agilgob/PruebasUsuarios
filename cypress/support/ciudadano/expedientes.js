@@ -74,3 +74,19 @@ export const getNewExpedientId = function (firstJson, finalJson) {
     // Buscar el objeto completo en finalJson
     return finalJson.find(exp => exp.id === newId) || null; 
 };
+
+
+export function accedeAlExpediente(expedient_number) {
+    cy.visit(environment.ciudadanoURL);
+    cy.get('.principal-nav  ul').as('menuPrincipal');
+    cy.get('@menuPrincipal').contains('Mis expedientes').click();
+
+    // Buscar el expediente
+    cy.get('input#searcher').as('buscador');
+    cy.get('@buscador').type(expedient_number);
+    cy.get('@buscador').siblings('button').click();
+
+    // Verificar que el expediente se encuentre en la lista
+    cy.get('table.table.table-bordered', {timeout: 10000}).as('expedientes');
+    cy.get('@expedientes').contains('a', expedient_number).click();
+}
