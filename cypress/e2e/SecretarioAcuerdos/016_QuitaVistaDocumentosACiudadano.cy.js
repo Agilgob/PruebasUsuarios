@@ -1,7 +1,7 @@
 import { loadTestData, saveTestData } from '../../support/loadTestData';
 
 
-describe('Habilita la vista de la demanda al ciudadano', () => {
+describe('Quita todos los permisos del expediente al ciudadano', () => {
 
 
     before(() => { 
@@ -36,7 +36,7 @@ describe('Habilita la vista de la demanda al ciudadano', () => {
     
 
   
-    it('Habilita la vista de todos los documentos al ciudadano', () => {
+    it('Quita permisos de documentos al ciudadano', () => {
 
 
         cy.visit(tramite.url, {failOnStatusCode: false});
@@ -66,29 +66,23 @@ describe('Habilita la vista de la demanda al ciudadano', () => {
             cy.get('@tablaPermisos').should('be.visible');
             cy.get('@tablaPermisos').find('.custom-control.custom-switch > input[type="checkbox"]')
                 .then((checkbox) => {
-                    if (checkbox.is(':checked')) {
-                        cy.log('El permiso ya está habilitado para ' + element.text());
+                    if (!checkbox.is(':checked')) {
+                        cy.log('El ciudadano ya no tiene permisos para ver el documento');
                         cy.contains('button', 'Cerrar').click()
                         cy.contains('button', 'Aceptar').click()
 
                     } else {
-                        cy.get('@tablaPermisos').find('.custom-control.custom-switch').click();
+                        cy.wrap(checkbox).uncheck({force: true});
                         cy.contains('button', 'Guardar').click()
                         cy.contains('button', 'Aceptar').click()
                         cy.wait('@postPermisosExpediente').then((interception) => {
                             //  Verificar que la petición se hizo correctamente
                             expect(interception.response.statusCode).to.eq(200); 
 
-                            //  Revisar el request enviado
-                            cy.log(`Méthod: ${interception.request.method}`);
-                            cy.log(`URL: ${interception.request.url}`);
-                            cy.log(`Headers: ${JSON.stringify(interception.request.headers, null, 2)}`);
-                            cy.log(`Body: ${JSON.stringify(interception.request.body, null, 2)}`);
-
                             expect(interception.request.body).to.have.property('users');
                             expect(interception.request.body.users).to.have.length.greaterThan(0);
                             expect(interception.request.body.users[0]).to.have.property('isPermissionEnabled');
-                            expect(interception.request.body.users[0].isPermissionEnabled).to.be.true;
+                            expect(interception.request.body.users[0].isPermissionEnabled).to.be.false;
                         });
                     }
                     cy.screenshot('Permiso del documento')
