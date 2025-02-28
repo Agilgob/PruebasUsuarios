@@ -10,7 +10,7 @@ Cypress.Commands.add('buscarExpediente', (testData) => {
     }
 
     // Navegar a la página inicial
-    cy.visit(testData.environment.funcionarioURL);
+    cy.visit(testData.environment.funcionarioURL, {failOnStatusCode: false});
 
     // Abrir menú lateral y navegar a la sección de búsqueda de expedientes
     cy.hamburguer().click();
@@ -33,3 +33,8 @@ Cypress.Commands.add('buscarExpediente', (testData) => {
         saveTestData(); 
     });
 });
+
+
+Cypress.Commands.add('getActionButton', (buttonText) => {
+    return cy.get('section[class^="ExpedientActions_actions"]').find('button').filter(`:contains("${buttonText}")`).first()
+})

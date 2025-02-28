@@ -38,8 +38,8 @@ describe('Action Buttons son accesibles', () => {
         cy.log(`BOTONES DE ACCION ${acciones}`)
 
         acciones.forEach((accion) => {
-            cy.get('@accionesExpediente').get('button').filter(`:contains("${accion}")`).first().as('imprimirCaratula');
-            cy.get('@imprimirCaratula')
+            cy.get('@accionesExpediente').get('button').filter(`:contains("${accion}")`).first().as('botonAccion');
+            cy.get('@botonAccion')
                 .should('be.visible')
                 .and('be.enabled')
                 .and('have.descendants', 'i');
@@ -47,3 +47,5 @@ describe('Action Buttons son accesibles', () => {
     })
 
 });
+
+

@@ -27,6 +27,7 @@
 import './funcionario/home';
 import './funcionario/expediente';
 import './funcionario/login';
+import './funcionario/modal';
 
 import './ciudadano/expedientes';
 import './ciudadano/login';

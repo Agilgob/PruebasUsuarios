@@ -118,6 +118,7 @@ node {
             "Funcionalidades": {
                 runCypressTest("FuncionalidadesSecretario01", [
                     'cypress/e2e/SecretarioAcuerdos/010_HabilitaVistaDocumentosACiudadano.cy.js',
+                    'cypress/e2e/Ciudadano/005_VerDocumentosExpediente.cy.js',
                     'cypress/e2e/SecretarioAcuerdos/011_GeneraCodigoQR.cy.js',
                     'cypress/e2e/SecretarioAcuerdos/012_ListarPartes.cy.js',
                     'cypress/e2e/SecretarioAcuerdos/013_DescargarExpediente.cy.js'
@@ -160,4 +161,15 @@ node {
             }
         )
     }
+
+    stage('INGRESO DE ACUERDOS'){
+        runCypressTest("IngresoAcuerdos", [
+            'cypress/e2e/SecretarioAcuerdos/015_IngresoAcuerdos.cy.js'
+        ])
+
+    }
+
 }
+
+// TO DO Crear el ingreso del docuemnto de acuerdos 
+// TO DO insertar en el pipeline la revision de la visibilidad de los documentos por parte del ciudadano
