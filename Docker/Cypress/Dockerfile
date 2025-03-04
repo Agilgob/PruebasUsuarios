@@ -14,21 +14,21 @@ RUN git clone --branch SecretarioAcuerdos https://github.com/manuel-agilgob/Prue
 
 WORKDIR /home/PruebasUsuarios
 
-ARG SPECS
-ENV specs=${spec}
+# ARG SPECS
+# ENV specs=${spec}
 
-ARG FUNCIONARIO 
-ENV funcionario=${FUNCIONARIO}
+# ARG FUNCIONARIO 
+# ENV funcionario=${FUNCIONARIO}
 
-ARG CIUDADANO 
-ENV ciudadano=${CIUDADANO}
+# ARG CIUDADANO 
+# ENV ciudadano=${CIUDADANO}
 
-ARG TRAMITE 
-ENV tramite=${TRAMITE}
+# ARG TRAMITE 
+# ENV tramite=${TRAMITE}
 
-ARG JSON_FILE 
-ENV jsonFile=${JSON_FILE}
+# ARG JSON_FILE 
+# ENV jsonFile=${JSON_FILE}
 
-COPY run_tests.sh .
-RUN chmod +x run_tests.sh
-CMD [ "./run_tests.sh" ]
+# COPY run_tests.sh .
+# RUN chmod +x run_tests.sh
+# CMD [ "./run_tests.sh" ]

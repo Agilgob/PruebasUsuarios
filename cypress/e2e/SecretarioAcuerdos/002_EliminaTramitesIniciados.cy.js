@@ -12,7 +12,7 @@ describe('Elimina los tramites iniciados del funcionario', () => {
     });
     
     it('Permite eliminar los tramites iniciados', () =>{
-
+        cy.visit(environment.funcionarioURL);
         cy.get('.one_column .fa-align-justify').click();
         cy.get('[title="Sección de trámites"]').click();
         cy.get('.principal-nav > .container').as('barraMenuTramites');

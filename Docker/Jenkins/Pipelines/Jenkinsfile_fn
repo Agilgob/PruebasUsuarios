@@ -17,7 +17,7 @@ def runCypressTest(String testName, List specFiles, String useParams = 'jsonFile
     catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
         try {
             sh """
-                docker run --rm -v ${params.REPORTS_DIR}:/home/PruebasUsuarios/tmp --name ${testName} ${DOCKER_IMAGE} \
+                docker run --memory=2g --cpus=2 --rm -v "\$(pwd)/reports":/home/PruebasUsuarios/tmp --name ${testName} ${DOCKER_IMAGE} \
                 npx cypress run \
                 --spec "${spec_files_str}" \
                 --env ${useParamsFlag} \
@@ -50,6 +50,15 @@ properties([
 
 node {
     
+        
+    stage('Clean Workspace') {
+        try {
+            deleteDir()
+        } catch (Exception e) {
+            echo "Error in Cleaning Workspace: ${e.message}"
+            error("Stopping pipeline due to workspace cleaning failure")
+        }
+    }
 
     stage('Checkout') {
         try {
@@ -82,26 +91,26 @@ node {
         }
     }
 
-    // stage('TESTS INDEPENDIENTES') {
-    //     parallel(
+    stage('TESTS INDEPENDIENTES') {
+        parallel(
 
-    //         "Funcionario": {
-    //             runCypressTest("IniciaTramiteFuncionario", [
-    //                 'cypress/e2e/SecretarioAcuerdos/001_IniciarCancelaTramite.cy.js',
-    //                 'cypress/e2e/SecretarioAcuerdos/002_EliminaTramitesIniciados.cy.js',
-    //                 'cypress/e2e/SecretarioAcuerdos/003_IniciaTramite.cy.js'
-    //             ], useParams = 'otros' )
+            "Funcionario": {
+                runCypressTest("IniciaTramiteFuncionario", [
+                    'cypress/e2e/SecretarioAcuerdos/001_IniciarCancelaTramite.cy.js',
+                    'cypress/e2e/SecretarioAcuerdos/002_EliminaTramitesIniciados.cy.js',
+                    'cypress/e2e/SecretarioAcuerdos/003_IniciaTramite.cy.js'
+                ], useParams = 'otros' )
                     
-    //         },
-
-    //         "Ciudadano": {
-    //             runCypressTest("IniciaTramiteCiudadano", [
-    //                 'cypress/e2e/Ciudadano/001_DescargaManualUsuarioTramite.cy.js',
-    //                 'cypress/e2e/Ciudadano/004_TramiteSecretarioAcuerdos.cy.js'
-    //             ], useParams = 'otros' )
-    //         }
-    //     )
-    // }
+             }
+            ,
+            "Ciudadano": {
+                runCypressTest("IniciaTramiteCiudadano", [
+                    'cypress/e2e/Ciudadano/001_DescargaManualUsuarioTramite.cy.js',
+                    'cypress/e2e/Ciudadano/004_TramiteSecretarioAcuerdos.cy.js'
+                ], useParams = 'otros' )
+            }
+        )
+    }
 
     stage('PRUEBAS SECRETARIO 1') {
         parallel(
@@ -118,7 +127,7 @@ node {
             "Funcionalidades": {
                 runCypressTest("FuncionalidadesSecretario01", [
                     'cypress/e2e/SecretarioAcuerdos/010_HabilitaVistaDocumentosACiudadano.cy.js',
-                    'cypress/e2e/Ciudadano/005_VerDocumentosExpediente.cy.js',
+                    'cypress/e2e/Ciudadano/005_DocumentosNoAccesibles.cy.js', // No puede verlos por reglas de negocio, acuerdos
                     'cypress/e2e/SecretarioAcuerdos/011_GeneraCodigoQR.cy.js',
                     'cypress/e2e/SecretarioAcuerdos/012_ListarPartes.cy.js',
                     'cypress/e2e/SecretarioAcuerdos/013_DescargarExpediente.cy.js'
@@ -164,9 +173,15 @@ node {
 
     stage('INGRESO DE ACUERDOS'){
         runCypressTest("IngresoAcuerdos", [
-            'cypress/e2e/SecretarioAcuerdos/015_IngresoAcuerdos.cy.js'
+            'cypress/e2e/SecretarioAcuerdos/015_IngresoAcuerdos.cy.js',
+            'cypress/e2e/Ciudadano/006_DocumentosAccesibles.cy.js'
+
         ])
 
+    }
+
+    stage('Reportes'){
+        archiveArtifacts artifacts: 'reports/', followSymlinks: false
     }
 
 }

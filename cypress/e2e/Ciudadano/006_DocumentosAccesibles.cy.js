@@ -36,6 +36,7 @@ describe('Valida que los documentos en el expediente NO esten accesibles antes d
 
         cy.intercept('GET', '**/api/v1/document_expedients/download_watermark/*/*').as('downloadView');
 
+        // Itera sobre los elementos de la tabbla que contienen los documentos
         cy.get('@table').find('tr').each(($row, index, $rows) => {
             cy.wrap($row).should('be.visible')
                 .and('not.be.hidden')
