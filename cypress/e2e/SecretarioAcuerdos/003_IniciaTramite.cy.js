@@ -12,6 +12,7 @@ describe('Es posible iniciar un tramite desde el funcionario', () => {
 
     describe('Iniciar tramite', () => {
         it('Inicia un trámite y concluye la creacion', () => {
+            cy.visit(environment.funcionarioURL);
             cy.get('.navbar-brand .fa-align-justify').click();
             cy.get('[title="Sección de trámites"]').click();
             cy.wait(2000);  
