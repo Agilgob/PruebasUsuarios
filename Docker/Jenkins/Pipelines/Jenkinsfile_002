@@ -1,26 +1,4 @@
 
-
-
-def createStage(command) {
-    return stage{
-        catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-            try {
-                sh "${command}"
-            } catch (Exception e) {
-                echo "La prueba cayo en error ${command}: ${e.message}"
-                slackSend(channel: params.SLACK_CHANNEL, color: 'danger', message: "Error in ${command}: ${e.message}")
-                throw e // Re-lanzamos el error para que el stage se marque como fallido
-            }
-        }
-    } 
-}
-
-def getDockerImageName(){
-    return sh( script: 'docker images --format "{{.Repository}}:{{.Tag}}" | grep cypress-agilgob',
-        returnStdout: true
-        ).trim()
-}
-
 properties([
     parameters([
         string(name: "REPORTS_DIR", defaultValue: "/home/manner/cypress_reports", description: "Directory to store reports"),
@@ -33,8 +11,6 @@ properties([
 
 
 node {
-    
-
     stage('Checkout') {
         try {
             sh 'rm -rf *'
@@ -48,112 +24,164 @@ node {
         }
     }
 
-    stage('Build Image') {
-        try {
-            sh '''
-                cd Docker/Cypress
-                chmod +x build_image.sh
-                ./build_image.sh
-            '''
-            def DOCKER_IMAGE = getDockerImageName()
-            
-            echo "Docker Image: ${DOCKER_IMAGE}"
+    stage('Exploratorios') {
+        def paramsStr = "--env ciudadano=${params.CIUDADANO},tramite=${params.TRAMITE},funcionario=${params.FUNCIONARIO}"
+        def pruebas = [
+            "cypress/e2e/Exploratorios/002_loginCredencialesIncorrectas.cy.js ${paramsStr}",
+            "cypress/e2e/Exploratorios/001_DatosDemandadoSeOcultan.cy.js ${paramsStr}",
+            "cypress/e2e/SecretarioAcuerdos/001_IniciarCancelaTramite.cy.js ${paramsStr}",
+            "cypress/e2e/SecretarioAcuerdos/002_EliminaTramitesIniciados.cy.js ${paramsStr}",
+            "cypress/e2e/SecretarioAcuerdos/003_IniciaTramite.cy.js ${paramsStr}",
+            "cypress/e2e/Ciudadano/001_DescargaManualUsuarioTramite.cy.js ${paramsStr}"
+        ] as List;   
+        
+        def parallelStages = [:]
+        parallelStages['Runner 1'] = newRunner("S1_DISP1", pruebas)
+        parallelStages['Runner 2'] = newRunner("S1_DISP2", pruebas)
+        parallel parallelStages;
 
-            if (DOCKER_IMAGE) {
-                slackSend(channel: params.SLACK_CHANNEL, color: 'good', message: "Docker image created successfully: ${DOCKER_IMAGE}")
+    }
+
+    // stage('Inicio Demanda') {
+    //     def paramsStr = "--env ciudadano=${params.CIUDADANO},tramite=${params.TRAMITE},funcionario=${params.FUNCIONARIO}"
+    //     runSpecFile("cypress/e2e/Ciudadano/004_TramiteSecretarioAcuerdos.cy.js ${paramsStr}")
+    // }
+
+    stage('Secretario 1') {
+        def paramsStr = "--env jsonFile=true"
+        def pruebas = [
+            "cypress/e2e/SecretarioAcuerdos/007_ActionButtonsEnabled.cy.js ${paramsStr}",
+            "cypress/e2e/SecretarioAcuerdos/008_AcuerdosNotificacionesSentenciasOficios.cy.js ${paramsStr}",
+            "cypress/e2e/SecretarioAcuerdos/009_AgregarDocumentoPromocion.cy.js ${paramsStr}",
+            "cypress/e2e/SecretarioAcuerdos/010_HabilitaVistaDocumentosACiudadano.cy.js ${paramsStr}",
+            "cypress/e2e/SecretarioAcuerdos/005_DocumentosNoAccesibles.cy.js ${paramsStr}",
+            "cypress/e2e/SecretarioAcuerdos/016_QuitaVistaDocumentosACiudadano.cy.js ${paramsStr}",
+            "cypress/e2e/SecretarioAcuerdos/009_AgregarDocumentoPromocion.cy.js ${paramsStr}",
+            "cypress/e2e/SecretarioAcuerdos/011_GeneraCodigoQR.cy.js ${paramsStr}",
+            "cypress/e2e/SecretarioAcuerdos/012_ListarPartes.cy.js ${paramsStr}",
+            "cypress/e2e/SecretarioAcuerdos/013_DescargarExpediente.cy.js ${paramsStr}"
+        ] as List;  
+        
+        def parallelStages = [:]
+        parallelStages['Runner 1'] = newRunner("S1_Runner1", pruebas)
+        parallelStages['Runner 2'] = newRunner("S1_Runner2", pruebas)
+        parallelStages['Runner 3'] = newRunner("S1_Runner3", pruebas)
+        parallel parallelStages;
+    }
+
+    stage('Turnar Expediente') {
+        def paramsStr = "--env jsonFile=true"
+        runSpecFile("cypress/e2e/SecretarioAcuerdos/014_TurnarExpediente.cy.js ${paramsStr}")
+    }
+
+    stage('Recibir Expediente Turnado') {
+        def paramsStr = "--env jsonFile=true"
+        runSpecFile("cypress/e2e/SecretarioAcuerdos/501_RecibirExpedienteTurnado.cy.js ${paramsStr}")
+    }
+
+    stage('SECRETARIO TURNADO') {
+        def paramsStr = "--env jsonFile=true"
+        def pruebas = [
+            "cypress/e2e/SecretarioAcuerdos/007_ActionButtonsEnabled.cy.js ${paramsStr}",
+            "cypress/e2e/SecretarioAcuerdos/008_AcuerdosNotificacionesSentenciasOficios.cy.js ${paramsStr}",
+            "cypress/e2e/SecretarioAcuerdos/009_AgregarDocumentoPromocion.cy.js ${paramsStr}",
+            "cypress/e2e/SecretarioAcuerdos/010_HabilitaVistaDocumentosACiudadano.cy.js ${paramsStr}",
+            "cypress/e2e/SecretarioAcuerdos/005_DocumentosNoAccesibles.cy.js ${paramsStr}",
+            "cypress/e2e/SecretarioAcuerdos/016_QuitaVistaDocumentosACiudadano.cy.js ${paramsStr}",
+            "cypress/e2e/SecretarioAcuerdos/009_AgregarDocumentoPromocion.cy.js ${paramsStr}",
+            "cypress/e2e/SecretarioAcuerdos/011_GeneraCodigoQR.cy.js ${paramsStr}",
+            "cypress/e2e/SecretarioAcuerdos/012_ListarPartes.cy.js ${paramsStr}",
+            "cypress/e2e/SecretarioAcuerdos/013_DescargarExpediente.cy.js ${paramsStr}"
+        ] as List;  
+        
+        
+        def parallelStages = [:]
+        parallelStages['Runner 1'] = newRunner("S1_Runner1", pruebas)
+        parallelStages['Runner 2'] = newRunner("S1_Runner2", pruebas)
+        parallelStages['Runner 2'] = newRunner("S1_Runner3", pruebas)
+        parallel parallelStages;
+    }
+
+       
+    stage('015_IngresoAcuerdos'){
+        def paramsStr = "--env jsonFile=true"
+        runSpecFile("cypress/e2e/SecretarioAcuerdos/015_IngresoAcuerdos.cy.js ${paramsStr}")
+    }
+
+    stage('Habilita vista de documentos a ciudadano'){
+        def paramsStr = "--env jsonFile=true"
+        runSpecFile("cypress/e2e/SecretarioAcuerdos/010_HabilitaVistaDocumentosACiudadano.cy.js ${paramsStr}")
+    }
+    
+    stage('Ciudadano valida documentos accesibles'){
+        def paramsStr = "--env jsonFile=true"
+        runSpecFile("cypress/e2e/Ciudadano/006_DocumentosAccesibles.cy.js ${paramsStr}")
+    }
+
+    stage('Reportes'){
+        archiveArtifacts artifacts: 'tmp/', followSymlinks: false
+    }
+
+
+
+}
+    
+
+/**
+* Creates a new runner closure that processes a list of test cases.
+*
+* @param prefijo The prefix to be added to the test case names.
+* @param colaPruebas The list of test cases to be processed.
+* @param sep The separator to be used between the prefix and the test case name. Default is '_'.
+* @return A closure that processes the test cases in the list.
+*
+* The returned closure iterates over the list of test cases, removing each test case from the list,
+* constructing a stage name by combining the prefix, separator, and the test case name, and then
+* executing the test case within a Jenkins stage. If the test case fails, an error message is sent
+* to a Slack channel and the error is re-thrown to mark the stage as failed.
+*/
+def newRunner(String prefijo, List colaPruebas, String sep = '_'){
+
+    return {
+        while(!colaPruebas.isEmpty()){
+            def prueba = colaPruebas.remove(0)
+            def nombre = prefijo + sep + prueba.split('/')[-1].split('\\.')[0]
+             stage(nombre) {
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    try {
+                        sh "npx cypress run --spec ${prueba} --reporter-options reportDir=tmp/${nombre}"
+                    } catch (Exception e) {
+                        echo "La prueba falló: ${nombre} - ${e.message}"
+                        slackSend(channel: params.SLACK_CHANNEL, color: 'danger', message: "Error en ${nombre}: ${e.message}")
+                        throw e // Re-lanza el error para que Jenkins marque el stage como fallido
+                    }
+                }
             }
-        } catch (Exception e) {
-            echo "Error in Build Image: ${e.message}"
-            error("Stopping pipeline due to build failure")
-            slackSend(channel: params.SLACK_CHANNEL, color: 'danger', message: "Error building Docker image: ${e.message}")
+
         }
     }
 
-    stage('TESTS INDEPENDIENTES') {
-
-        def params = "ciudadano=${params.CIUDADANO},tramite=${params.TRAMITE},funcionario=${params.FUNCIONARIO}";
-        
-        createStage("npx cypress run cypress/e2e/SecretarioAcuerdos/001_IniciarCancelaTramite.cy.js ${params}")
-        createStage("npx cypress run cypress/e2e/SecretarioAcuerdos/002_EliminaTramitesIniciados.cy.js ${params}")
-        createStage("npx cypress run cypress/e2e/SecretarioAcuerdos/003_IniciaTramite.cy.js ${params}")
-        createStage("npx cypress run cypress/e2e/Ciudadano/001_DescargaManualUsuarioTramite.cy.js --env jsonFile=true" )
-        // createStage("npx cypress run cypress/e2e/Ciudadano/004_TramiteSecretarioAcuerdos.cy.js --env jsonFile=true" )
-     
-    }
-
-    // stage('PRUEBAS SECRETARIO 1') {
-    //     parallel(
-
-    //         "Disponibilidad": {
-    //             runCypressTest("DisponibilidadSecretario01", [
-    //                 'cypress/e2e/SecretarioAcuerdos/007_ActionButtonsEnabled.cy.js',
-    //                 'cypress/e2e/SecretarioAcuerdos/008_AcuerdosNotificacionesSentenciasOficios.cy.js',
-    //                 'cypress/e2e/SecretarioAcuerdos/009_AgregarDocumentoPromocion.cy.js'
-    //             ])
-               
-    //         },
-
-    //         "Funcionalidades": {
-    //             runCypressTest("FuncionalidadesSecretario01", [
-    //                 'cypress/e2e/SecretarioAcuerdos/010_HabilitaVistaDocumentosACiudadano.cy.js',
-    //                 'cypress/e2e/Ciudadano/005_DocumentosNoAccesibles.cy.js', // No puede verlos por reglas de negocio, acuerdos
-    //                 'cypress/e2e/SecretarioAcuerdos/011_GeneraCodigoQR.cy.js',
-    //                 'cypress/e2e/SecretarioAcuerdos/012_ListarPartes.cy.js',
-    //                 'cypress/e2e/SecretarioAcuerdos/013_DescargarExpediente.cy.js'
-    //             ])
-    //         }
-    //     )
-    // }
-
-    // stage('TURNADO DE EXPEDIENTE') {
-    //     // Nota: Se separan las pruebas ya que emplean el mismo nombre de la sesion, lo que genera un error
-    //     // Se ejetan por separado para que cada una haga un login con usuario/password distinto
-
-    //     runCypressTest("TurnadoExpediente", [
-    //         'cypress/e2e/SecretarioAcuerdos/014_TurnarExpediente.cy.js'
-    //     ])
-
-    //     runCypressTest("RecepcionExpediente", [
-    //          'cypress/e2e/SecretarioAcuerdos/501_RecibirExpedienteTurnado.cy.js'
-    //     ])
-    // }
-
-    // stage('PRUEBAS SECRETARIO TURNADO') {
-    //     parallel(
-
-    //         "Disponibilidad": {
-    //             runCypressTest("DisponibilidadSecretarioTurnado", [
-    //                 'cypress/e2e/SecretarioAcuerdos/007_ActionButtonsEnabled.cy.js',
-    //                 'cypress/e2e/SecretarioAcuerdos/008_AcuerdosNotificacionesSentenciasOficios.cy.js',
-    //                 'cypress/e2e/SecretarioAcuerdos/009_AgregarDocumentoPromocion.cy.js'
-    //             ])
-    //         },
-
-    //         "Funcionalidades": {
-    //             runCypressTest("FuncionalidadesSecretarioTurnado", [
-    //                 'cypress/e2e/SecretarioAcuerdos/011_GeneraCodigoQR.cy.js',
-    //                 'cypress/e2e/SecretarioAcuerdos/012_ListarPartes.cy.js',
-    //                 'cypress/e2e/SecretarioAcuerdos/013_DescargarExpediente.cy.js'
-    //             ])
-                
-    //         }
-    //     )
-    // }
-
-    // stage('INGRESO DE ACUERDOS'){
-    //     runCypressTest("IngresoAcuerdos", [
-    //         'cypress/e2e/SecretarioAcuerdos/015_IngresoAcuerdos.cy.js',
-    //         'cypress/e2e/Ciudadano/006_DocumentosAccesibles.cy.js'
-
-    //     ])
-
-    // }
-
-    // stage('Reportes'){
-    //     archiveArtifacts artifacts: 'reports/', followSymlinks: false
-    // }
-
 }
 
-// TO DO Crear el ingreso del docuemnto de acuerdos 
-// TO DO insertar en el pipeline la revision de la visibilidad de los documentos por parte del ciudadano
+
+/**
+ * Executes a Cypress test case within a Jenkins stage.
+ *
+ * @param prueba The path to the Cypress test file to be executed.
+ * @return A closure that processes the specified test case.
+ *
+ * The returned closure constructs a stage name by combining a prefix, separator, and the test case name,
+ * and then executes the test case within a Jenkins stage. If the test case fails, an error message is sent
+ * to a Slack channel and the error is re-thrown to mark the stage as failed.
+ */
+def runSpecFile(String prueba){
+    def nombre = prueba.split('/')[-1].split('\\.')[0]
+    try {
+        sh "npx cypress run --spec ${prueba} --reporter-options reportDir=tmp/${nombre}"
+    } catch (Exception e) {
+        def msg = "La prueba falló: ${nombre} - ${e.message} y el pipeline se detiene" 
+        echo msg
+        slackSend(channel: params.SLACK_CHANNEL, color: 'danger', message: msg)
+        throw e 
+    }  
+}
