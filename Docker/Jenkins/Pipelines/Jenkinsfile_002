@@ -48,35 +48,35 @@ node {
         }
     }
 
-    stage('Build Image') {
-        try {
-            sh '''
-                cd Docker/Cypress
-                chmod +x build_image.sh
-                ./build_image.sh
-            '''
-            def DOCKER_IMAGE = getDockerImageName()
+    // stage('Build Image') {
+    //     try {
+    //         sh '''
+    //             cd Docker/Cypress
+    //             chmod +x build_image.sh
+    //             ./build_image.sh
+    //         '''
+    //         def DOCKER_IMAGE = getDockerImageName()
             
-            echo "Docker Image: ${DOCKER_IMAGE}"
+    //         echo "Docker Image: ${DOCKER_IMAGE}"
 
-            if (DOCKER_IMAGE) {
-                slackSend(channel: params.SLACK_CHANNEL, color: 'good', message: "Docker image created successfully: ${DOCKER_IMAGE}")
-            }
-        } catch (Exception e) {
-            echo "Error in Build Image: ${e.message}"
-            error("Stopping pipeline due to build failure")
-            slackSend(channel: params.SLACK_CHANNEL, color: 'danger', message: "Error building Docker image: ${e.message}")
-        }
-    }
+    //         if (DOCKER_IMAGE) {
+    //             slackSend(channel: params.SLACK_CHANNEL, color: 'good', message: "Docker image created successfully: ${DOCKER_IMAGE}")
+    //         }
+    //     } catch (Exception e) {
+    //         echo "Error in Build Image: ${e.message}"
+    //         error("Stopping pipeline due to build failure")
+    //         slackSend(channel: params.SLACK_CHANNEL, color: 'danger', message: "Error building Docker image: ${e.message}")
+    //     }
+    // }
 
     stage('TESTS INDEPENDIENTES') {
 
         def params = "ciudadano=${params.CIUDADANO},tramite=${params.TRAMITE},funcionario=${params.FUNCIONARIO}";
         
-        createStage("001_SecretarioAcuerdos", "npx cypress run cypress/e2e/SecretarioAcuerdos/001_IniciarCancelaTramite.cy.js ${params}")
-        createStage("002_SecretarioAcuerdos", "npx cypress run cypress/e2e/SecretarioAcuerdos/002_EliminaTramitesIniciados.cy.js ${params}")
-        createStage("003_SecretarioAcuerdos", "npx cypress run cypress/e2e/SecretarioAcuerdos/003_IniciaTramite.cy.js ${params}")
-        createStage("001_Ciudadano", "npx cypress run cypress/e2e/Ciudadano/001_DescargaManualUsuarioTramite.cy.js --env jsonFile=true" )
+        createStage("001_SecretarioAcuerdos", "npx cypress run --spec cypress/e2e/SecretarioAcuerdos/001_IniciarCancelaTramite.cy.js ${params}")
+        createStage("002_SecretarioAcuerdos", "npx cypress run --spec cypress/e2e/SecretarioAcuerdos/002_EliminaTramitesIniciados.cy.js ${params}")
+        createStage("003_SecretarioAcuerdos", "npx cypress run --spec cypress/e2e/SecretarioAcuerdos/003_IniciaTramite.cy.js ${params}")
+        createStage("001_Ciudadano", "npx cypress run --spec cypress/e2e/Ciudadano/001_DescargaManualUsuarioTramite.cy.js --env jsonFile=true" )
         // createStage("npx cypress run cypress/e2e/Ciudadano/004_TramiteSecretarioAcuerdos.cy.js --env jsonFile=true" )
      
     }
