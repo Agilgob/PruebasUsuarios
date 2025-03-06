@@ -63,9 +63,9 @@ node {
         ] as List;  
         
         def parallelStages = [:]
-        parallelStages['Runner 1'] = newRunner("S1_Runner1", pruebas)
-        parallelStages['Runner 2'] = newRunner("S1_Runner2", pruebas)
-        parallelStages['Runner 3'] = newRunner("S1_Runner3", pruebas)
+        parallelStages['Runner 1'] = newRunner("S1_R1", pruebas)
+        parallelStages['Runner 2'] = newRunner("S1_R2", pruebas)
+        parallelStages['Runner 3'] = newRunner("S1_R3", pruebas)
         parallel parallelStages;
     }
 
@@ -96,14 +96,14 @@ node {
         
         
         def parallelStages = [:]
-        parallelStages['Runner 1'] = newRunner("S1_Runner1", pruebas)
-        parallelStages['Runner 2'] = newRunner("S1_Runner2", pruebas)
-        parallelStages['Runner 2'] = newRunner("S1_Runner3", pruebas)
+        parallelStages['Runner 1'] = newRunner("ST_R1", pruebas)
+        parallelStages['Runner 2'] = newRunner("ST_R2", pruebas)
+        parallelStages['Runner 3'] = newRunner("ST_R3", pruebas)
         parallel parallelStages;
     }
 
        
-    stage('015_IngresoAcuerdos'){
+    stage('Ingreso Acuerdos'){
         def paramsStr = "--env jsonFile=true"
         runSpecFile("cypress/e2e/SecretarioAcuerdos/015_IngresoAcuerdos.cy.js ${paramsStr}")
     }
