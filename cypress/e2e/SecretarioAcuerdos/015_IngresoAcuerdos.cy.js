@@ -59,6 +59,7 @@ describe('Ingreso de acuerdos del funcionario', () => {
             .find('button').contains('Continuar').click();
 
         // De vuelta al modal de Nuevo Documento
+        cy.get('div.modal-dialog > div.modal-content').filter(':contains("Nuevo documento")').as('modalNuevoDocumento');
         cy.llenarSelectModal('Rubro', 'ADMITE EXCEPCIÓN')
         cy.get('textarea[aria-label="Comentarios"]').type('Cypress test automatizado, se admite excepcion, ingreso de acuerdo')
         
@@ -69,25 +70,44 @@ describe('Ingreso de acuerdos del funcionario', () => {
 
         cy.get('.form-group').filter(':contains("Respuesta a promociones:")').as('respuestaPromociones');
         cy.get('@respuestaPromociones').find('.select__value-container--is-multi .select__multi-value').as('promociones');
-        cy.get('@promociones').should('have.length.greaterThan', 0)
+        
+        cy.get('@promociones').then(($promociones) => {
+            cy.log("Cantidad de promociones: " + $promociones.length)
+            expect($promociones).to.have.length.greaterThan(0)
+        })
 
         cy.screenshot('Ingreso de acuerdo al expediente')
+        cy.intercept('POST', '**/api/v1/document_expedients/upload').as('postUploadDocumento');
+
+        cy.get('div.modal-dialog > div.modal-content').filter(':contains("Nuevo documento")')
+            .contains('button', 'Firmar').click(); 
+
+        cy.wait('@postUploadDocumento').then((interception) => {
+            expect(interception.response.statusCode).to.eq(200);
+            cy.log(`RESPONSE UPLOAD ACUERDO: ${JSON.stringify(interception.response)}`);
+           
+        })
 
         cy.get('div.modal-dialog > div.modal-content').filter(':contains("Gestionar usuarios con acceso al documento")')
             .as('modalGestionAccesos');
+        cy.get('@modalGestionAccesos').should('be.visible');
 
-        cy.get('@modalGestionAccesos').find('div [id^="custom-switch-"]').then(($checkbox) => {
-            if (!$checkbox.is(':checked')) {
-                cy.wrap($checkbox).click();
-            }
-        });
+        cy.get('.list-group.list-group-flush').as('tablaPermisos');
+        cy.get('@tablaPermisos').should('be.visible');
+        cy.get('@tablaPermisos').find('.custom-control.custom-switch > input[type="checkbox"]')
+            .then((checkbox) => {
+                if (!checkbox.is(':checked')) {
+                    cy.get('@tablaPermisos').find('.custom-control.custom-switch').click();
+                }
+            })
 
+        
         cy.get('@modalGestionAccesos').find('button').contains('Guardar').click();
 
         cy.get('div.modal-dialog > div.modal-content').filter(':contains("Atencion!")')
             .as('modalAtencion')
         cy.get('@modalAtencion').find('button').contains('Aceptar').click();
-
+        cy.wait(2000)
         
     })
 

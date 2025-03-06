@@ -82,10 +82,10 @@ describe('El expediente permite agregar documento Promocion', () => {
             .parent()
             .find(`.form-check-input#no`) // REVIEW
             .click()
-        cy.wait(10000)
+
         // cy.get('@modalAgregarDocumento').contains('button', 'Cancelar').click();
 
-        cy.intercept('POST', 'https://sandbox.nilo.cjj.gob.mx/api/v1/document_expedients/upload').as('postUploadDocumento');
+        cy.intercept('POST', '**/api/v1/document_expedients/upload').as('postUploadDocumento');
         cy.get('@modalAgregarDocumento').contains('button', 'Firmar').click(); 
         cy.wait('@postUploadDocumento').then((interception) => {
             expect(interception.response.statusCode).to.eq(200);
