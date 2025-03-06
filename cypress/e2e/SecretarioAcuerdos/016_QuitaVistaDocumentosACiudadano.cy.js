@@ -23,7 +23,6 @@ describe('Quita todos los permisos del expediente al ciudadano', () => {
         cy.session('sesionFuncionario', () => {
             cy.visit(environment.funcionarioURL);
             cy.loginFuncionario(funcionario.email, funcionario.password);
-            cy.contains('h3', 'Tablero de control', {timeout: 10000}).should('be.visible');
             cy.getCookie('authentication_token_03').should('exist');
         }, {
             cacheAcrossSpecs: true

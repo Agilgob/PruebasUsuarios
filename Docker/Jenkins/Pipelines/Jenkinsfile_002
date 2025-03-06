@@ -24,106 +24,111 @@ node {
         }
     }
 
-    stage('Exploratorios') {
-        def paramsStr = "--env ciudadano=${params.CIUDADANO},tramite=${params.TRAMITE},funcionario=${params.FUNCIONARIO}"
-        def pruebas = [
-            "cypress/e2e/Exploratorios/002_loginCredencialesIncorrectas.cy.js ${paramsStr}",
-            "cypress/e2e/Exploratorios/001_DatosDemandadoSeOcultan.cy.js ${paramsStr}",
-            "cypress/e2e/SecretarioAcuerdos/001_IniciarCancelaTramite.cy.js ${paramsStr}",
-            "cypress/e2e/SecretarioAcuerdos/002_EliminaTramitesIniciados.cy.js ${paramsStr}",
-            "cypress/e2e/SecretarioAcuerdos/003_IniciaTramite.cy.js ${paramsStr}",
-            "cypress/e2e/Ciudadano/001_DescargaManualUsuarioTramite.cy.js ${paramsStr}"
-        ] as List;   
+    try{
+
+        stage('EXPLORATORIOS') {
+            def paramsStr = "--env ciudadano=${params.CIUDADANO},tramite=${params.TRAMITE},funcionario=${params.FUNCIONARIO}"
+            def pruebas = [
+                "cypress/e2e/Exploratorios/002_loginCredencialesIncorrectas.cy.js ${paramsStr}",
+                "cypress/e2e/Exploratorios/001_DatosDemandadoSeOcultan.cy.js ${paramsStr}",
+                "cypress/e2e/SecretarioAcuerdos/001_IniciarCancelaTramite.cy.js ${paramsStr}",
+                "cypress/e2e/SecretarioAcuerdos/002_EliminaTramitesIniciados.cy.js ${paramsStr}",
+                "cypress/e2e/SecretarioAcuerdos/003_IniciaTramite.cy.js ${paramsStr}",
+                "cypress/e2e/Ciudadano/001_DescargaManualUsuarioTramite.cy.js ${paramsStr}"
+            ] as List;   
+            
+            def parallelStages = [:]
+            parallelStages['Runner 1'] = newRunner("EXP", pruebas)
+            parallelStages['Runner 2'] = newRunner("EXP", pruebas)
+            parallel parallelStages;
+        }
+
+        stage('Inicio Demanda') {
+            def paramsStr = "--env ciudadano=${params.CIUDADANO},tramite=${params.TRAMITE},funcionario=${params.FUNCIONARIO}"
+            runSpecFile("cypress/e2e/Ciudadano/004_TramiteSecretarioAcuerdos.cy.js ${paramsStr}")
+        }
+
+        stage('SECRETARIO 1') {
+            def paramsStr = "--env jsonFile=true"
+            def pruebas = [
+                "cypress/e2e/SecretarioAcuerdos/007_ActionButtonsEnabled.cy.js ${paramsStr}",
+                "cypress/e2e/SecretarioAcuerdos/008_AcuerdosNotificacionesSentenciasOficios.cy.js ${paramsStr}",
+                "cypress/e2e/SecretarioAcuerdos/009_AgregarDocumentoPromocion.cy.js ${paramsStr}",
+                "cypress/e2e/SecretarioAcuerdos/010_HabilitaVistaDocumentosACiudadano.cy.js ${paramsStr}",
+                "cypress/e2e/SecretarioAcuerdos/005_DocumentosNoAccesibles.cy.js ${paramsStr}",
+                "cypress/e2e/SecretarioAcuerdos/016_QuitaVistaDocumentosACiudadano.cy.js ${paramsStr}",
+                "cypress/e2e/SecretarioAcuerdos/009_AgregarDocumentoPromocion.cy.js ${paramsStr}",
+                "cypress/e2e/SecretarioAcuerdos/011_GeneraCodigoQR.cy.js ${paramsStr}",
+                "cypress/e2e/SecretarioAcuerdos/012_ListarPartes.cy.js ${paramsStr}",
+                "cypress/e2e/SecretarioAcuerdos/013_DescargarExpediente.cy.js ${paramsStr}"
+            ] as List;  
+            
+            def parallelStages = [:]
+            parallelStages['Runner 1'] = newRunner("S1", pruebas)
+            parallelStages['Runner 2'] = newRunner("S1", pruebas)
+            parallelStages['Runner 3'] = newRunner("S1", pruebas)
+            parallel parallelStages;
+        }
+
+        stage('Turnar Expediente') {
+            def paramsStr = "--env jsonFile=true"
+            runSpecFile("cypress/e2e/SecretarioAcuerdos/014_TurnarExpediente.cy.js ${paramsStr}")
+        }
+
+        stage('Recibir Expediente Turnado') {
+            def paramsStr = "--env jsonFile=true"
+            runSpecFile("cypress/e2e/SecretarioAcuerdos/501_RecibirExpedienteTurnado.cy.js ${paramsStr}")
+        }
+
+        stage('SECRETARIO TURNADO') {
+            def paramsStr = "--env jsonFile=true"
+            def pruebas = [
+                "cypress/e2e/SecretarioAcuerdos/007_ActionButtonsEnabled.cy.js ${paramsStr}",
+                "cypress/e2e/SecretarioAcuerdos/008_AcuerdosNotificacionesSentenciasOficios.cy.js ${paramsStr}",
+                "cypress/e2e/SecretarioAcuerdos/009_AgregarDocumentoPromocion.cy.js ${paramsStr}",
+                "cypress/e2e/SecretarioAcuerdos/010_HabilitaVistaDocumentosACiudadano.cy.js ${paramsStr}",
+                "cypress/e2e/SecretarioAcuerdos/005_DocumentosNoAccesibles.cy.js ${paramsStr}",
+                "cypress/e2e/SecretarioAcuerdos/016_QuitaVistaDocumentosACiudadano.cy.js ${paramsStr}",
+                "cypress/e2e/SecretarioAcuerdos/009_AgregarDocumentoPromocion.cy.js ${paramsStr}",
+                "cypress/e2e/SecretarioAcuerdos/011_GeneraCodigoQR.cy.js ${paramsStr}",
+                "cypress/e2e/SecretarioAcuerdos/012_ListarPartes.cy.js ${paramsStr}",
+                "cypress/e2e/SecretarioAcuerdos/013_DescargarExpediente.cy.js ${paramsStr}"
+            ] as List;  
+            
+            
+            def parallelStages = [:]
+            parallelStages['Runner 1'] = newRunner("ST", pruebas)
+            parallelStages['Runner 2'] = newRunner("ST", pruebas)
+            parallelStages['Runner 3'] = newRunner("ST", pruebas)
+            parallel parallelStages;
+        }
+
+        stage('Ingreso Acuerdos'){
+            def paramsStr = "--env jsonFile=true"
+            runSpecFile("cypress/e2e/SecretarioAcuerdos/015_IngresoAcuerdos.cy.js ${paramsStr}")
+        }
+
+        stage('Habilita vista de documentos a ciudadano'){
+            def paramsStr = "--env jsonFile=true"
+            runSpecFile("cypress/e2e/SecretarioAcuerdos/010_HabilitaVistaDocumentosACiudadano.cy.js ${paramsStr}")
+        }
         
-        def parallelStages = [:]
-        parallelStages['Runner 1'] = newRunner("S1_DISP1", pruebas)
-        parallelStages['Runner 2'] = newRunner("S1_DISP2", pruebas)
-        parallel parallelStages;
-
-    }
-
-    // stage('Inicio Demanda') {
-    //     def paramsStr = "--env ciudadano=${params.CIUDADANO},tramite=${params.TRAMITE},funcionario=${params.FUNCIONARIO}"
-    //     runSpecFile("cypress/e2e/Ciudadano/004_TramiteSecretarioAcuerdos.cy.js ${paramsStr}")
-    // }
-
-    stage('Secretario 1') {
-        def paramsStr = "--env jsonFile=true"
-        def pruebas = [
-            "cypress/e2e/SecretarioAcuerdos/007_ActionButtonsEnabled.cy.js ${paramsStr}",
-            "cypress/e2e/SecretarioAcuerdos/008_AcuerdosNotificacionesSentenciasOficios.cy.js ${paramsStr}",
-            "cypress/e2e/SecretarioAcuerdos/009_AgregarDocumentoPromocion.cy.js ${paramsStr}",
-            "cypress/e2e/SecretarioAcuerdos/010_HabilitaVistaDocumentosACiudadano.cy.js ${paramsStr}",
-            "cypress/e2e/SecretarioAcuerdos/005_DocumentosNoAccesibles.cy.js ${paramsStr}",
-            "cypress/e2e/SecretarioAcuerdos/016_QuitaVistaDocumentosACiudadano.cy.js ${paramsStr}",
-            "cypress/e2e/SecretarioAcuerdos/009_AgregarDocumentoPromocion.cy.js ${paramsStr}",
-            "cypress/e2e/SecretarioAcuerdos/011_GeneraCodigoQR.cy.js ${paramsStr}",
-            "cypress/e2e/SecretarioAcuerdos/012_ListarPartes.cy.js ${paramsStr}",
-            "cypress/e2e/SecretarioAcuerdos/013_DescargarExpediente.cy.js ${paramsStr}"
-        ] as List;  
-        
-        def parallelStages = [:]
-        parallelStages['Runner 1'] = newRunner("S1_R1", pruebas)
-        parallelStages['Runner 2'] = newRunner("S1_R2", pruebas)
-        parallelStages['Runner 3'] = newRunner("S1_R3", pruebas)
-        parallel parallelStages;
-    }
-
-    stage('Turnar Expediente') {
-        def paramsStr = "--env jsonFile=true"
-        runSpecFile("cypress/e2e/SecretarioAcuerdos/014_TurnarExpediente.cy.js ${paramsStr}")
-    }
-
-    stage('Recibir Expediente Turnado') {
-        def paramsStr = "--env jsonFile=true"
-        runSpecFile("cypress/e2e/SecretarioAcuerdos/501_RecibirExpedienteTurnado.cy.js ${paramsStr}")
-    }
-
-    stage('SECRETARIO TURNADO') {
-        def paramsStr = "--env jsonFile=true"
-        def pruebas = [
-            "cypress/e2e/SecretarioAcuerdos/007_ActionButtonsEnabled.cy.js ${paramsStr}",
-            "cypress/e2e/SecretarioAcuerdos/008_AcuerdosNotificacionesSentenciasOficios.cy.js ${paramsStr}",
-            "cypress/e2e/SecretarioAcuerdos/009_AgregarDocumentoPromocion.cy.js ${paramsStr}",
-            "cypress/e2e/SecretarioAcuerdos/010_HabilitaVistaDocumentosACiudadano.cy.js ${paramsStr}",
-            "cypress/e2e/SecretarioAcuerdos/005_DocumentosNoAccesibles.cy.js ${paramsStr}",
-            "cypress/e2e/SecretarioAcuerdos/016_QuitaVistaDocumentosACiudadano.cy.js ${paramsStr}",
-            "cypress/e2e/SecretarioAcuerdos/009_AgregarDocumentoPromocion.cy.js ${paramsStr}",
-            "cypress/e2e/SecretarioAcuerdos/011_GeneraCodigoQR.cy.js ${paramsStr}",
-            "cypress/e2e/SecretarioAcuerdos/012_ListarPartes.cy.js ${paramsStr}",
-            "cypress/e2e/SecretarioAcuerdos/013_DescargarExpediente.cy.js ${paramsStr}"
-        ] as List;  
-        
-        
-        def parallelStages = [:]
-        parallelStages['Runner 1'] = newRunner("ST_R1", pruebas)
-        parallelStages['Runner 2'] = newRunner("ST_R2", pruebas)
-        parallelStages['Runner 3'] = newRunner("ST_R3", pruebas)
-        parallel parallelStages;
-    }
-
-       
-    stage('Ingreso Acuerdos'){
-        def paramsStr = "--env jsonFile=true"
-        runSpecFile("cypress/e2e/SecretarioAcuerdos/015_IngresoAcuerdos.cy.js ${paramsStr}")
-    }
-
-    stage('Habilita vista de documentos a ciudadano'){
-        def paramsStr = "--env jsonFile=true"
-        runSpecFile("cypress/e2e/SecretarioAcuerdos/010_HabilitaVistaDocumentosACiudadano.cy.js ${paramsStr}")
-    }
+        stage('Ciudadano valida documentos accesibles'){
+            def paramsStr = "--env jsonFile=true"
+            runSpecFile("cypress/e2e/Ciudadano/006_DocumentosAccesibles.cy.js ${paramsStr}")
+        }
     
-    stage('Ciudadano valida documentos accesibles'){
-        def paramsStr = "--env jsonFile=true"
-        runSpecFile("cypress/e2e/Ciudadano/006_DocumentosAccesibles.cy.js ${paramsStr}")
+    } catch (Exception e) {
+        echo "Error en el pipeline: ${e.message}"
+        currentBuild.result = 'FAILURE'
+        throw e  // Propaga el error para que Jenkins lo registre
+
+    } finally {
+        stage('Publicar Artefactos') {
+            echo "Publicando artefactos..."
+            archiveArtifacts artifacts: 'tmp/**/*', fingerprint: true
+        }
     }
-
-    stage('Reportes'){
-        archiveArtifacts artifacts: 'tmp/', followSymlinks: false
-    }
-
-
-
 }
     
 
