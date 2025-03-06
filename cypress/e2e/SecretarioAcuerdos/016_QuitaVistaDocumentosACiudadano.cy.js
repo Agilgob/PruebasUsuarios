@@ -37,11 +37,8 @@ describe('Quita todos los permisos del expediente al ciudadano', () => {
   
     it('Quita permisos de documentos al ciudadano', () => {
 
-
-        cy.visit(tramite.url, {failOnStatusCode: false});
-
         cy.intercept('GET', '**/api/v1/document_expedients/documents/*/10?page=1').as('getDocumentos');
-
+        cy.visit(tramite.url, {failOnStatusCode: false});
 
         cy.intercept('POST', `**/api/v1/docuemnts_expedient/document_expedient_users_permissions/*`)
                 .as('postPermisosExpediente');

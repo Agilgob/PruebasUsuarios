@@ -54,19 +54,21 @@ node {
                 "cypress/e2e/SecretarioAcuerdos/007_ActionButtonsEnabled.cy.js ${paramsStr}",
                 "cypress/e2e/SecretarioAcuerdos/008_AcuerdosNotificacionesSentenciasOficios.cy.js ${paramsStr}",
                 "cypress/e2e/SecretarioAcuerdos/009_AgregarDocumentoPromocion.cy.js ${paramsStr}",
-                "cypress/e2e/SecretarioAcuerdos/010_HabilitaVistaDocumentosACiudadano.cy.js ${paramsStr}",
-                "cypress/e2e/SecretarioAcuerdos/005_DocumentosNoAccesibles.cy.js ${paramsStr}",
-                "cypress/e2e/SecretarioAcuerdos/016_QuitaVistaDocumentosACiudadano.cy.js ${paramsStr}",
-                "cypress/e2e/SecretarioAcuerdos/009_AgregarDocumentoPromocion.cy.js ${paramsStr}",
                 "cypress/e2e/SecretarioAcuerdos/011_GeneraCodigoQR.cy.js ${paramsStr}",
                 "cypress/e2e/SecretarioAcuerdos/012_ListarPartes.cy.js ${paramsStr}",
                 "cypress/e2e/SecretarioAcuerdos/013_DescargarExpediente.cy.js ${paramsStr}"
             ] as List;  
+
+            def pruebasLineales = [
+                "cypress/e2e/SecretarioAcuerdos/010_HabilitaVistaDocumentosACiudadano.cy.js ${paramsStr}",
+                "cypress/e2e/SecretarioAcuerdos/005_DocumentosNoAccesibles.cy.js ${paramsStr}",
+                "cypress/e2e/SecretarioAcuerdos/016_QuitaVistaDocumentosACiudadano.cy.js ${paramsStr}"
+            ] as List; 
             
             def parallelStages = [:]
             parallelStages['Runner 1'] = newRunner("S1", pruebas)
             parallelStages['Runner 2'] = newRunner("S1", pruebas)
-            parallelStages['Runner 3'] = newRunner("S1", pruebas)
+            parallelStages['Runner 3'] = newRunner("S1-LN", pruebasLineales)
             parallel parallelStages;
         }
 
