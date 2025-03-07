@@ -55,13 +55,13 @@
     "modeladorURL": "https://sandbox.nilo.cjj.gob.mx/"
   },
   "funcionario": {
-    "email": "secretarioacuerdos002.serotonin848@simplelogin.com",
-    "username": "mvsec.acuerdosdos",
-    "password": "mvsec.acuerdosdos",
-    "archivoFirel": "assets/Firel/COAA000405MJCRLDA6.pfx",
-    "passwordFirel": "Cordova2024",
-    "nombre": "SECRETARIO ACUERDOS MANUEL VALDEZ",
-    "turnaA": "secretarioAcuerdos01",
+    "email": "abogado_acuerdos.subfloor157@simplelogin.com",
+    "username": "manuel.valdezz",
+    "password": "12345678",
+    "archivoFirel": "assets/Firel/CICF870709HNESVR02.pfx",
+    "passwordFirel": "autlan1296",
+    "nombre": "MANUEL VALDEZ ACUERDOS",
+    "turnaA": "secretarioAcuerdos02",
     "archivoAcuerdos": "assets/ACUERDOS.pdf"
   },
   "expediente": {
@@ -102,20 +102,20 @@
   "expedientFound": true,
   "expedienteTurnado": {
     "expedient_number": "23/2025",
-    "receiver_id": "5472",
+    "receiver_id": "5469",
     "sign": null,
     "reception_date": null,
-    "sender_id": 5469,
+    "sender_id": 5472,
     "sender_observations": "Turnado a Secretario Acuerdos desde pruebas automatizadas Cypress",
     "electronic_expedient_id": 3926,
     "external": false,
     "dependence_id": null,
-    "updated_at": "2025-03-07 11:32:07",
-    "created_at": "2025-03-07 11:32:07",
-    "id": 11101,
+    "updated_at": "2025-03-07 12:16:59",
+    "created_at": "2025-03-07 12:16:59",
+    "id": 11106,
     "receiver": {
-      "label": "SECRETARIO ACUERDOS MANUEL VALDEZ - Secretario de Acuerdos",
-      "value": "5472"
+      "label": "MANUEL VALDEZ ACUERDOS - Secretario de Acuerdos",
+      "value": "5469"
     }
   }
 }
