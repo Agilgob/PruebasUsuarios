@@ -39,7 +39,7 @@ describe('Funcionario : Descargar expediente', () => {
             throw new Error("Abortada porque no se ha encontrado el expediente");
         }
         
-        cy.intercept('POST', `https://sandbox.nilo.cjj.gob.mx/api/v1/download_zip/${tramite.url.split('/').pop()}`).as('descargarExpediente');
+        cy.intercept('POST', `**/api/v1/download_zip/${tramite.url.split('/').pop()}`).as('descargarExpediente');
         cy.visit(tramite.url, {failOnStatusCode: false});
         cy.get('section[class^="ExpedientActions_actions"]').as('accionesExpediente');
         cy.get('@accionesExpediente').should('be.visible').and('have.descendants', 'button');

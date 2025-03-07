@@ -27,7 +27,7 @@ describe('Descarga el manual de usuario de los tramites en la primer pantalla', 
             cy.get('.procedure-card').as('tarjetasTramite')
             cy.get('@tarjetasTramite').should('have.length.greaterThan', 0);
 
-            cy.intercept('GET', `${environment.modeladorURL}api/v1/procedure/manual/*`).as('descargaManualUsuario');
+            cy.intercept('GET', `**/api/v1/procedure/manual/*`).as('descargaManualUsuario');
             cy.get('@tarjetasTramite').each((tarjeta) => {
                 cy.screenshot('DescargaManualUsuarioTramite')
                 cy.wrap(tarjeta).find('.secondary').click()

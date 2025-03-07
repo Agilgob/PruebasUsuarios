@@ -73,7 +73,7 @@ describe('Turnado interno de expediente', () => {
         cy.screenshot('Turnado de expediente')
         cy.get('@modalTurnarExpediente').find('.modal-footer').as('modalFooter');
 
-        cy.intercept('POST', `${environment.modeladorURL}api/v1/government_books/release`).as('turnarExpediente');
+        cy.intercept('POST', `**/api/v1/government_books/release`).as('turnarExpediente');
         cy.get('@modalTurnarExpediente').contains('button', 'Transferir').click(); 
         cy.wait('@turnarExpediente').then((interception) => {
             cy.log("014 /government_books/release RESPONSE BODY: " + JSON.stringify(interception.response.body));

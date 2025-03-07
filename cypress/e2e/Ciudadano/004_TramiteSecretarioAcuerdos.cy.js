@@ -134,14 +134,14 @@ describe('Juzgados Civiles, Familiares y Mercantiles en línea', () => {
     
             // Confirma la creacion de los expedientes validando la respuesta del servidor
             cy.contains('button', 'Siguiente', {timeout:15000}).click(); 
-            cy.intercept('POST', `${environment.modeladorURL}api/v1/execute_stage`).as('execute_stage');
+            cy.intercept('POST', `**/api/v1/execute_stage`).as('execute_stage');
             cy.wait('@execute_stage').then((interception) => {
                 expect(interception.response.statusCode).to.eq(200);
                 cy.log("RESPUESTA A POST execute_stage " + JSON.stringify(interception.response.body));
             })
             cy.screenshot("Enviar formulario")
 
-            cy.intercept('POST', 'https://sandbox.nilo.cjj.gob.mx/api/v1/finalize_stage').as('finalize_stage');
+            cy.intercept('POST', '**/api/v1/finalize_stage').as('finalize_stage');
             cy.contains('button', 'Confirmar', {timeout:15000}).click();
             cy.wait('@finalize_stage').then((interception) => {
                 expect(interception.response.statusCode).to.eq(200);

@@ -56,7 +56,7 @@ describe('Generar código QR', () => {
             .find('input')
             .click();
         
-        cy.intercept('POST', `https://sandbox.nilo.cjj.gob.mx/api/v1/electronic_expedients/${tramite.url.split('/').pop()}/qr`).as('getAllDocumentsForQR');
+        cy.intercept('POST', `**/api/v1/electronic_expedients/${tramite.url.split('/').pop()}/qr`).as('getAllDocumentsForQR');
         cy.get('@modalCodigoQR').find('.modal-footer').find('button').contains('Generar QR').click();
         cy.wait('@getAllDocumentsForQR').then((interception) => {
             expect(interception.response.statusCode).to.eq(200);

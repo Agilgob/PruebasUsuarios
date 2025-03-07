@@ -60,7 +60,7 @@ describe('Recibe el expediente como segundo secretario', () => {
         cy.get('.modal-content').contains('Recibí el expediente').siblings('input[type="checkbox"]')
             .should('be.checked')
         
-        cy.intercept('POST', `${environment.modeladorURL}api/v1/government_books/receive/*`).as('recibirExpediente');
+        cy.intercept('POST', `**/api/v1/government_books/receive/*`).as('recibirExpediente');
         cy.get('.modal-content').contains('Aceptar').click();
         cy.wait('@recibirExpediente').then((interception) => {
             expect(interception.response.statusCode).to.eq(200);
