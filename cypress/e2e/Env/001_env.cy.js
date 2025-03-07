@@ -21,11 +21,15 @@ describe('Inicia Tramite desde el portal de ciudadano', () => {
     
     it('Cambia funcionario 01', () => {
                
-        getAllExpedients().then((expedients) => {
-            cy.log(expedients);
-            
-            cy.writeFile('tmp/ciudadano_expedients_inicio.json', expedients);
+        getAllExpedients().then((expedientes) => {
+            cy.writeFile('tmp/Prueba_get_expedientes.json', expedientes);
         })
+        
+        // .then((expedientes) => {
+        //     console.log('Expedientes obtenidos', expedientes);
+            
+        // })
+
     });
 
 });
