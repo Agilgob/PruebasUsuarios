@@ -16,20 +16,13 @@ describe('Inicia Tramite desde el portal de ciudadano', () => {
             cy.getCookie('authentication_token_02').should('exist');
         });
     });
-
-    
     
     it('Cambia funcionario 01', () => {
                
         getAllExpedients().then((expedientes) => {
+            console.log(expedientes);
             cy.writeFile('tmp/Prueba_get_expedientes.json', expedientes);
         })
-        
-        // .then((expedientes) => {
-        //     console.log('Expedientes obtenidos', expedientes);
-            
-        // })
+    })
 
-    });
-
-});
+})
