@@ -14,12 +14,12 @@ node {
     stage('Checkout') {
         try {
             sh 'rm -rf *'
-            checkout([$class: 'GitSCM', branches: [[name: 'SecretarioAcuerdos']],
+            checkout([$class: 'GitSCM', branches: [[name: 'SA-Pruebas-lineales']],
                 userRemoteConfigs: [[url: 'https://github.com/manuel-agilgob/PruebasUsuarios.git']]])
             sh 'npm install'
 
         } catch (Exception e) {
-            echo "Error al configurar el ambiente de prueas: ${e.message}"
+            echo "Error al configurar el ambiente de pruebas: ${e.message}"
             error("Stopping pipeline due to checkout failure")
         }
     }
@@ -39,14 +39,14 @@ node {
             
             def parallelStages = [:]
             parallelStages['Runner 1'] = newRunner("EXP", pruebas)
-            parallelStages['Runner 2'] = newRunner("EXP", pruebas)
+            // parallelStages['Runner 2'] = newRunner("EXP", pruebas)
             parallel parallelStages;
         }
 
-        stage('Inicio Demanda') {
-            def paramsStr = "--env ciudadano=${params.CIUDADANO},tramite=${params.TRAMITE},funcionario=${params.FUNCIONARIO}"
-            runSpecFile("cypress/e2e/Ciudadano/004_TramiteSecretarioAcuerdos.cy.js ${paramsStr}")
-        }
+        // stage('Inicio Demanda') {
+        //     def paramsStr = "--env ciudadano=${params.CIUDADANO},tramite=${params.TRAMITE},funcionario=${params.FUNCIONARIO}"
+        //     runSpecFile("cypress/e2e/Ciudadano/004_TramiteSecretarioAcuerdos.cy.js ${paramsStr}")
+        // }
 
         stage('SECRETARIO 1') {
             def paramsStr = "--env jsonFile=true"
@@ -56,19 +56,17 @@ node {
                 "cypress/e2e/SecretarioAcuerdos/009_AgregarDocumentoPromocion.cy.js ${paramsStr}",
                 "cypress/e2e/SecretarioAcuerdos/011_GeneraCodigoQR.cy.js ${paramsStr}",
                 "cypress/e2e/SecretarioAcuerdos/012_ListarPartes.cy.js ${paramsStr}",
-                "cypress/e2e/SecretarioAcuerdos/013_DescargarExpediente.cy.js ${paramsStr}"
-            ] as List;  
-
-            def pruebasLineales = [
+                "cypress/e2e/SecretarioAcuerdos/013_DescargarExpediente.cy.js ${paramsStr}",
                 "cypress/e2e/SecretarioAcuerdos/010_HabilitaVistaDocumentosACiudadano.cy.js ${paramsStr}",
-                "cypress/e2e/SecretarioAcuerdos/005_DocumentosNoAccesibles.cy.js ${paramsStr}",
+                "cypress/e2e/Ciudadano/005_DocumentosNoAccesibles.cy.js ${paramsStr}",
                 "cypress/e2e/SecretarioAcuerdos/016_QuitaVistaDocumentosACiudadano.cy.js ${paramsStr}"
-            ] as List; 
+            ] as List;   
+            
             
             def parallelStages = [:]
-            parallelStages['Runner 1'] = newRunner("S1", pruebas)
-            parallelStages['Runner 2'] = newRunner("S1", pruebas)
-            parallelStages['Runner 3'] = newRunner("S1-LN", pruebasLineales)
+            parallelStages['Runner 1'] = newRunner("ST", pruebas)
+            // parallelStages['Runner 2'] = newRunner("ST", pruebas)
+            // parallelStages['Runner 3'] = newRunner("ST-LN", pruebasLineales)
             parallel parallelStages;
         }
 
@@ -88,20 +86,17 @@ node {
                 "cypress/e2e/SecretarioAcuerdos/007_ActionButtonsEnabled.cy.js ${paramsStr}",
                 "cypress/e2e/SecretarioAcuerdos/008_AcuerdosNotificacionesSentenciasOficios.cy.js ${paramsStr}",
                 "cypress/e2e/SecretarioAcuerdos/009_AgregarDocumentoPromocion.cy.js ${paramsStr}",
-                "cypress/e2e/SecretarioAcuerdos/010_HabilitaVistaDocumentosACiudadano.cy.js ${paramsStr}",
-                "cypress/e2e/SecretarioAcuerdos/005_DocumentosNoAccesibles.cy.js ${paramsStr}",
-                "cypress/e2e/SecretarioAcuerdos/016_QuitaVistaDocumentosACiudadano.cy.js ${paramsStr}",
-                "cypress/e2e/SecretarioAcuerdos/009_AgregarDocumentoPromocion.cy.js ${paramsStr}",
                 "cypress/e2e/SecretarioAcuerdos/011_GeneraCodigoQR.cy.js ${paramsStr}",
                 "cypress/e2e/SecretarioAcuerdos/012_ListarPartes.cy.js ${paramsStr}",
-                "cypress/e2e/SecretarioAcuerdos/013_DescargarExpediente.cy.js ${paramsStr}"
-            ] as List;  
+                "cypress/e2e/SecretarioAcuerdos/013_DescargarExpediente.cy.js ${paramsStr}",
+                "cypress/e2e/SecretarioAcuerdos/010_HabilitaVistaDocumentosACiudadano.cy.js ${paramsStr}",
+                "cypress/e2e/Ciudadano/005_DocumentosNoAccesibles.cy.js ${paramsStr}",
+                "cypress/e2e/SecretarioAcuerdos/016_QuitaVistaDocumentosACiudadano.cy.js ${paramsStr}"
+            ] as List;   
             
             
             def parallelStages = [:]
             parallelStages['Runner 1'] = newRunner("ST", pruebas)
-            parallelStages['Runner 2'] = newRunner("ST", pruebas)
-            parallelStages['Runner 3'] = newRunner("ST", pruebas)
             parallel parallelStages;
         }
 
@@ -159,7 +154,7 @@ def newRunner(String prefijo, List colaPruebas, String sep = '_'){
                         sh "npx cypress run --spec ${prueba} --reporter-options reportDir=tmp/${nombre}"
                     } catch (Exception e) {
                         echo "La prueba falló: ${nombre} - ${e.message}"
-                        slackSend(channel: params.SLACK_CHANNEL, color: 'danger', message: "Error en ${nombre}: ${e.message}")
+                        slackSend(channel: params.SLACK_CHANNEL, color: 'danger', message: "😩 Error en ${nombre}: ${e.message}")
                         throw e // Re-lanza el error para que Jenkins marque el stage como fallido
                     }
                 }

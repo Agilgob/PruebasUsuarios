@@ -38,3 +38,101 @@ Cypress.Commands.add('buscarExpediente', (testData) => {
 Cypress.Commands.add('getActionButton', (buttonText) => {
     return cy.get('section[class^="ExpedientActions_actions"]').find('button').filter(`:contains("${buttonText}")`).first()
 })
+
+
+Cypress.Commands.add('clickListarPartes', () => {
+    cy.get('section[class^="ExpedientActions_actions"]').as('accionesExpediente');
+    cy.get('@accionesExpediente').get('button').filter(`:contains("Listar Partes")`).first().as('listarPartesBtn');
+    cy.get('@listarPartesBtn')
+        .should('be.visible')
+        .and('be.enabled')
+        .click()
+})
+
+Cypress.Commands.add('listarPartes', () => {
+
+    cy.clickListarPartes()
+    cy.get('.modal-dialog.modal-md').filter(':contains("Listado de partes")').first().as('modalListarPartes');
+    cy.get('@modalListarPartes')
+        .should('be.visible')
+        .find('.modal-body div div.d-flex').should('have.length.at.least', 2)
+    cy.get('@modalListarPartes').contains('Actor').should('exist')
+    
+    cy.screenshot('Listado de partes')
+    cy.get('@modalListarPartes').find('.modal-footer').find('button').contains('Cerrar').click();
+
+})
+
+Cypress.Commands.add('descargarExpediente', () => {       
+    cy.intercept('POST', `**/api/v1/download_zip/${tramite.url.split('/').pop()}`).as('descargarExpediente');
+    cy.visit(tramite.url, {failOnStatusCode: false});
+    cy.get('section[class^="ExpedientActions_actions"]').as('accionesExpediente');
+    cy.get('@accionesExpediente').should('be.visible').and('have.descendants', 'button');
+    cy.get('@accionesExpediente').get('button').filter(':contains("Descarga expediente")').first().click();
+    cy.wait('@descargarExpediente').then((interception) => {
+        expect(interception.response.statusCode).to.eq(200);
+        expect(interception.response.statusMessage).to.eq('OK');
+        cy.log("DESCARGAR EXPEDIENTE RESPONSE " + JSON.stringify(interception.response));
+    })
+})
+
+
+Cypress.Commands.add('clickTurnarExpediente', () => {
+    cy.intercept('GET', '**api/v1/government_books/catalogs/dependences').as('dependences');
+    cy.get('@accionesExpediente').get('button').filter(':contains("Turnar expediente")').first().click();
+    cy.wait('@dependences').then((interception) => {
+        expect(interception.response.statusCode).to.eq(200);
+        expect(interception.response.body.status).to.eq(true);
+    })
+})
+
+Cypress.Commands.add('clickTurnadoIterno', () => {
+    cy.getModal('Expedientes').as('modalTurnarExpediente');
+    cy.getModal('Expedientes').getHeader().should('be.visible');
+    cy.getModal('Expedientes').getHeader().should('contain.text', 'Expedientes');
+    cy.getModal('Expedientes').getBody().as('modalBody');
+    cy.get('@modalBody').should('be.visible');
+    cy.get('@modalBody').find('form nav a').contains('Turnado interno').click();
+})
+
+Cypress.Commands.add('validaCamposTurnar', () => {
+    cy.get('.form-group [class*="singleValue"]').as('valoresSelect');
+    cy.get('@valoresSelect').each(($el, index, $list) => {
+        expect($el.text().length).to.be.at.least(5);
+    });
+})
+
+Cypress.Commands.add('seleccionaFuncionarioTurnar', () => {
+    cy.getModal('Expedientes').as('modalExpedientes');
+    cy.get('@modalExpedientes').contains('Da clic y elige algún usuario').click()
+
+    // REVIEW selecciona el primer secretario que aparece en el menu de turnado
+    cy.get('@modalExpedientes').find('.select-receiver__menu').children().first().click();
+    cy.get('@modalExpedientes').find('textarea[aria-label="Observaciones"]')
+        .type('Turnado a Secretario Acuerdos desde pruebas automatizadas Cypress');
+    })
+
+
+Cypress.Commands.add('transferirExpediente', () => {
+    cy.getModal('Expedientes').as('modalExpedientes');
+    cy.intercept('POST', `**/api/v1/government_books/release`).as('turnarExpediente');
+    cy.get('@modalExpedientes').contains('button', 'Transferir').click(); 
+    cy.wait('@turnarExpediente').then((interception) => {
+        cy.log("014 /government_books/release RESPONSE BODY: " + JSON.stringify(interception.response.body));
+        expect(interception.response.statusCode).to.eq(200);
+        expect(interception.response.body.status).to.eq(true);
+        expect(interception.response.body.code).to.eq(200);
+
+        cy.writeFile('tmp/expedienteTurnado.json', interception.response.body);
+
+        cy.fixture('funcionarios').then((funcionarios) => {
+            cy.log('Funcionario antes de turnar: ' + funcionario.email);
+            funcionario = funcionarios[funcionario.turnaA]
+            cy.log('Funcionario despues del turnado: ' + funcionario.email);
+
+            testData.expedienteTurnado = interception.response.body.data.governmentBook;
+            testData.expedienteTurnado.receiver = interception.request.body.receiver;
+            saveTestData();
+        })
+    })
+});

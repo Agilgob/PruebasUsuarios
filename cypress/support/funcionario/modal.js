@@ -7,6 +7,7 @@ Cypress.Commands.add('getModal', (title) => {
   return cy.get('.modal-dialog .modal-content').filter(`:contains("${title}")`).first()
 })
 
+
 /**
  * Custom command to get the footer of a modal.
  * @function getHeader
@@ -27,5 +28,3 @@ Cypress.Commands.add('getBody',{prevSubject : 'element'}, (subject) => {
 Cypress.Commands.add('getFooter',{prevSubject : 'element'}, (subject) => {
   return cy.wrap(subject).find('.modal-footer')
 })
-
-

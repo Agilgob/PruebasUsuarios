@@ -38,62 +38,18 @@ describe('Turnado interno de expediente', () => {
         cy.visit(tramite.url, {failOnStatusCode: false});
         cy.get('section[class^="ExpedientActions_actions"]').as('accionesExpediente');
         cy.get('@accionesExpediente').should('be.visible');
-
-        cy.intercept('GET', '*api/v1/government_books/catalogs/dependences').as('dependences');
-        cy.get('@accionesExpediente').get('button').filter(':contains("Turnar expediente")').first().click();
-        cy.wait('@dependences').then((interception) => {
-            expect(interception.response.statusCode).to.eq(200);
-            expect(interception.response.body.status).to.eq(true);
-        })
-
-        cy.get('.modal-dialog.modal-xl .modal-content').filter(':contains("Expedientes")').first().as('modalTurnarExpediente');
-        cy.get('@modalTurnarExpediente').find('.modal-header').should('be.visible');
-        cy.get('@modalTurnarExpediente').find('.modal-header').should('contain.text', 'Expedientes');
-
-        cy.get('@modalTurnarExpediente').find('.modal-body').as('modalBody');
-        cy.get('@modalBody').should('be.visible');
-        cy.get('@modalBody').find('form nav a').contains('Turnado interno').click();
+        cy.clickTurnarExpediente(); // support/funcionario/expediente.js
+        cy.clickTurnadoIterno(); // support/funcionario/expediente.js
 
         cy.wait(1000)
 
         // Cada uno de los campos deben tener al menos 5 caracteres
-        cy.get('.form-group [class*="singleValue"]').as('valoresSelect');
-        cy.get('@valoresSelect').each(($el, index, $list) => {
-            expect($el.text().length).to.be.at.least(5);
-        });
-
-        cy.get('@modalBody').contains('Da clic y elige algún usuario').click()
-
-        // REVIEW selecciona el primer secretario que aparece en el menu de turnado
-        cy.get('@modalBody').find('.select-receiver__menu').children().first().click();
-        cy.get('@modalBody').find('textarea[aria-label="Observaciones"]')
-            .type('Turnado a Secretario Acuerdos desde pruebas automatizadas Cypress');
-
-        
+        cy.validaCamposTurnar(); // support/funcionario/expediente.js
+        cy.seleccionaFuncionarioTurnar(); // support/funcionario/expediente.js
         cy.screenshot('Turnado de expediente')
-        cy.get('@modalTurnarExpediente').find('.modal-footer').as('modalFooter');
+        cy.transferirExpediente(); // support/funcionario/expediente.js
 
-        cy.intercept('POST', `**/api/v1/government_books/release`).as('turnarExpediente');
-        cy.get('@modalTurnarExpediente').contains('button', 'Transferir').click(); 
-        cy.wait('@turnarExpediente').then((interception) => {
-            cy.log("014 /government_books/release RESPONSE BODY: " + JSON.stringify(interception.response.body));
-            expect(interception.response.statusCode).to.eq(200);
-            expect(interception.response.body.status).to.eq(true);
-            expect(interception.response.body.code).to.eq(200);
-
-            cy.writeFile('tmp/expedienteTurnado.json', interception.response.body);
-
-            cy.fixture('funcionarios').then((funcionarios) => {
-                cy.log('Funcionario antes de turnar: ' + funcionario.email);
-                funcionario = funcionarios[funcionario.turnaA]
-                cy.log('Funcionario despues del turnado: ' + funcionario.email);
-
-                testData.expedienteTurnado = interception.response.body.data.governmentBook;
-                testData.expedienteTurnado.receiver = interception.request.body.receiver;
-                saveTestData();
-            })
-
-        });
+       
 
     })
 

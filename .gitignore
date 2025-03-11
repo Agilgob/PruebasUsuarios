@@ -6,3 +6,4 @@ cypress/downloads/
 cypress/outputs/
 tmp/
 cypress-mochawesome-reporter.log
+count.sh
