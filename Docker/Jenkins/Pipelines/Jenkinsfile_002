@@ -58,7 +58,7 @@ node {
                 "cypress/e2e/SecretarioAcuerdos/012_ListarPartes.cy.js ${paramsStr}",
                 "cypress/e2e/SecretarioAcuerdos/013_DescargarExpediente.cy.js ${paramsStr}",
                 "cypress/e2e/SecretarioAcuerdos/010_HabilitaVistaDocumentosACiudadano.cy.js ${paramsStr}",
-                "cypress/e2e/SecretarioAcuerdos/005_DocumentosNoAccesibles.cy.js ${paramsStr}",
+                "cypress/e2e/Ciudadano/005_DocumentosNoAccesibles.cy.js ${paramsStr}",
                 "cypress/e2e/SecretarioAcuerdos/016_QuitaVistaDocumentosACiudadano.cy.js ${paramsStr}"
             ] as List;   
             
@@ -90,7 +90,7 @@ node {
                 "cypress/e2e/SecretarioAcuerdos/012_ListarPartes.cy.js ${paramsStr}",
                 "cypress/e2e/SecretarioAcuerdos/013_DescargarExpediente.cy.js ${paramsStr}",
                 "cypress/e2e/SecretarioAcuerdos/010_HabilitaVistaDocumentosACiudadano.cy.js ${paramsStr}",
-                "cypress/e2e/SecretarioAcuerdos/005_DocumentosNoAccesibles.cy.js ${paramsStr}",
+                "cypress/e2e/Ciudadano/005_DocumentosNoAccesibles.cy.js ${paramsStr}",
                 "cypress/e2e/SecretarioAcuerdos/016_QuitaVistaDocumentosACiudadano.cy.js ${paramsStr}"
             ] as List;   
             
@@ -154,7 +154,7 @@ def newRunner(String prefijo, List colaPruebas, String sep = '_'){
                         sh "npx cypress run --spec ${prueba} --reporter-options reportDir=tmp/${nombre}"
                     } catch (Exception e) {
                         echo "La prueba falló: ${nombre} - ${e.message}"
-                        slackSend(channel: params.SLACK_CHANNEL, color: 'danger', message: "Error en ${nombre}: ${e.message}")
+                        slackSend(channel: params.SLACK_CHANNEL, color: 'danger', message: "😩 Error en ${nombre}: ${e.message}")
                         throw e // Re-lanza el error para que Jenkins marque el stage como fallido
                     }
                 }

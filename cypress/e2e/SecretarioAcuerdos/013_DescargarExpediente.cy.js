@@ -39,16 +39,7 @@ describe('Funcionario : Descargar expediente', () => {
             throw new Error("Abortada porque no se ha encontrado el expediente");
         }
         
-        cy.intercept('POST', `**/api/v1/download_zip/${tramite.url.split('/').pop()}`).as('descargarExpediente');
-        cy.visit(tramite.url, {failOnStatusCode: false});
-        cy.get('section[class^="ExpedientActions_actions"]').as('accionesExpediente');
-        cy.get('@accionesExpediente').should('be.visible').and('have.descendants', 'button');
-        cy.get('@accionesExpediente').get('button').filter(':contains("Descarga expediente")').first().click();
-        cy.wait('@descargarExpediente').then((interception) => {
-            expect(interception.response.statusCode).to.eq(200);
-            expect(interception.response.statusMessage).to.eq('OK');
-            cy.log("RESPUESTA A download_zip" + JSON.stringify(interception.response));
-        })
+        cy.descargarExpediente(); // support/funcionario/expediente.js
         cy.wait(1000) // Para que se registre mejor en el video
 
         	
