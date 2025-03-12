@@ -50,7 +50,7 @@ describe('Acuerdos, notificaciones, sentencias correos y oficios son accesibles'
         cy.get('[class^="Tabs_tabs"][data-rttabs="true"]').should('be.visible').as('tabsTabs');
         cy.get('@tabsTabs').should('have.descendants', 'ul');
     
-        tabs.forEach(($tab) => { // Corrected usage of forEach
+        tabs.forEach(($tab) => { 
             cy.get('@tabsTabs').contains('li', $tab).should('be.visible').click();
             cy.log(`TAB ${$tab} SELECCIONADO`);
     

@@ -34,5 +34,6 @@ import './ciudadano/login';
 
 import './overwrite'
 import './actions/llenarCamposFormularios';
+import './actions/iframe';
 
 

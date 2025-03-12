@@ -43,7 +43,7 @@
       "etiqueta": "INE",
       "rutaDocumento": "assets/INE-demo.png"
     },
-    "url": "https://sandbox.funcionario.cjj.gob.mx/expedient_details/3926"
+    "url": "https://sandbox.funcionario.cjj.gob.mx/expedient_details/3713"
   },
   "environment": {
     "filename": "localhost.json",
@@ -66,7 +66,7 @@
   },
   "expediente": {
     "id": 3926,
-    "expedient_number": "L23/2025",
+    "expedient_number": "L6/2025",
     "user_id": 5469,
     "updated_at": "2025-03-07 11:29:21",
     "created_at": "2025-03-07 11:29:21",
@@ -99,7 +99,6 @@
     "court": "Juzgado Pruebas Secretario Acuerdos",
     "judicial_party": "Partido Testing SecAcu"
   },
-  "expedientFound": true,
   "expedienteTurnado": {
     "expedient_number": "23/2025",
     "receiver_id": "5469",
@@ -117,5 +116,6 @@
       "label": "MANUEL VALDEZ ACUERDOS - Secretario de Acuerdos",
       "value": "5469"
     }
-  }
+  },
+  "expedientFound": true
 }
