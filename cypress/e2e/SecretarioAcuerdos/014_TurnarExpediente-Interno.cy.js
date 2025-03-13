@@ -19,6 +19,7 @@ describe('Turnado interno de expediente', () => {
     });
 
     beforeEach(() => {
+        
         cy.iniciarSesionFuncionario(funcionario.email, funcionario.password);
     });
 
@@ -46,11 +47,12 @@ describe('Turnado interno de expediente', () => {
         // Cada uno de los campos deben tener al menos 5 caracteres
         cy.validaCamposTurnar(); // support/funcionario/expediente.js
         cy.seleccionaFuncionarioTurnar(); // support/funcionario/expediente.js
-        cy.screenshot('Turnado de expediente')
-        cy.transferirExpediente(); // support/funcionario/expediente.js
-
-       
-
+        cy.llenaCampoObservaciones()
+        cy.screenshot('Turnado de expediente interno')
+        cy.transferirExpediente('Interno').then(interception => {
+            cy.writeFile(`tmp/expedienteTurnadoInterno.json`, interception);
+            cy.intercambiaFuncionarioJsonFile(interception)
+        }) // support/funcionario/expediente.js
     })
 
     it('Turnar, Permisos y Agregar documento estan deshabilidatos una vez turnado', () => {
