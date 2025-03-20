@@ -34,11 +34,9 @@ Cypress.Commands.add('buscarExpediente', (testData) => {
     });
 });
 
-
 Cypress.Commands.add('getActionButton', (buttonText) => {
     return cy.get('section[class^="ExpedientActions_actions"]').find('button').filter(`:contains("${buttonText}")`).first()
 })
-
 
 Cypress.Commands.add('clickListarPartes', () => {
     cy.get('section[class^="ExpedientActions_actions"]').as('accionesExpediente');
@@ -75,7 +73,6 @@ Cypress.Commands.add('descargarExpediente', () => {
         cy.log("DESCARGAR EXPEDIENTE RESPONSE " + JSON.stringify(interception.response));
     })
 })
-
 
 Cypress.Commands.add('clickTurnarExpediente', () => {
     cy.intercept('GET', '**api/v1/government_books/catalogs/dependences').as('dependences');
@@ -153,7 +150,6 @@ Cypress.Commands.add('transferirExpediente', (tipoTurnado) => {
         // cy.writeFile(`tmp/expedienteTurnado${tipoTurnado}.json`, interception);        
     })
 });
-
 
 Cypress.Commands.add('intercambiaFuncionarioJsonFile', (interception) => {
 

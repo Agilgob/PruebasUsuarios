@@ -38,13 +38,14 @@ export function getAllExpedients() {
     cy.intercept('GET', '**/api/v1/electronic_expedients/find_expedient/10?page=1').as('getExpedients');
 
     cy.get('a[href="/my-expedients"]').click();
+
+    // Obtiene los datos de la primera página con la primer consulta
     return cy.wait('@getExpedients').then((intercept) => {
         request = intercept.request;
         total = intercept.response.body.data.total;
         expedientes = { ...intercept.response.body.data, electronicExpedients: [] };
-
-        //cy.writeFile('Intercepted.json', intercept)
         return cy.wrap({ request, total, expedientes });
+
     }).then(({ request, total, expedientes }) => {
 
         const getExp = (page = 1) => {
@@ -63,7 +64,6 @@ export function getAllExpedients() {
                     getExp(page + 1);
                 }
             });
-
         };
 
         getExp();

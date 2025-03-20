@@ -14,3 +14,4 @@ Cypress.Commands.add('sidebar', (label) => {
 Cypress.Commands.add('sidebarExpedientes', (label) => {
     return cy.get('.itemsDropdownGovernmentBook').contains(label)
 })
+
