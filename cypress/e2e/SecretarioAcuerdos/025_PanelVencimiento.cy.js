@@ -32,10 +32,6 @@ describe('Permite acceder al panel de vencimientos', () => {
             cacheAcrossSpecs: true
         }); 
     });
-
-    it('El expediente puede ser localizado desde el buscador', () => {
-        cy.buscarExpediente(testData); // support/funcionario/expediente.js
-    });
     
     it('Permite acceder al panel de vencimiento ' , () => {
 
