@@ -15,6 +15,7 @@ describe('Ingreso de acuerdos del funcionario', () => {
         cy.on("uncaught:exception", (err, runnable) => {
             cy.log(err.message);
             return false;
+
         })
         cy.clearCookies();
         cy.clearLocalStorage();
@@ -26,6 +27,7 @@ describe('Ingreso de acuerdos del funcionario', () => {
         }, {
             cacheAcrossSpecs: true
         }); 
+
     });
 
     it('El expediente puede ser localizado desde el buscador', () => {
@@ -54,6 +56,7 @@ describe('Ingreso de acuerdos del funcionario', () => {
 
 
         // Multifirma
+
         const multifirma = Cypress.env('acuerdosMultifirma') ?? false;
         if(!multifirma) {
             // Deshabilita la multifirma
@@ -68,9 +71,11 @@ describe('Ingreso de acuerdos del funcionario', () => {
         cy.get('textarea[aria-label="Comentarios"]').type('Cypress test automatizado, se admite excepcion, ingreso de acuerdo')
         
         // Selecciona un archivo para el documento
+
         cy.contains('div', 'Selecciona un documento').find('input[type=file]')
             .selectFile(funcionario.archivoAcuerdos, { force: true });
         cy.get('.file-upload-wrapper').should('be.visible')
+
 
         // Verifica que haya promociones seleccionadas
         cy.get('.form-group').filter(':contains("Respuesta a promociones:")').as('respuestaPromociones');
@@ -154,3 +159,4 @@ const firmarMultifirma = ( firmar ) => {
 
     })
 }
+

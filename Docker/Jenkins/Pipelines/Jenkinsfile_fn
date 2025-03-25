@@ -127,7 +127,9 @@ node {
             "Funcionalidades": {
                 runCypressTest("FuncionalidadesSecretario01", [
                     'cypress/e2e/SecretarioAcuerdos/010_HabilitaVistaDocumentosACiudadano.cy.js',
+
                     'cypress/e2e/Ciudadano/005_DocumentosNoAccesibles.cy.js', // No puede verlos por reglas de negocio, acuerdos
+
                     'cypress/e2e/SecretarioAcuerdos/011_GeneraCodigoQR.cy.js',
                     'cypress/e2e/SecretarioAcuerdos/012_ListarPartes.cy.js',
                     'cypress/e2e/SecretarioAcuerdos/013_DescargarExpediente.cy.js'
@@ -173,6 +175,7 @@ node {
 
     stage('INGRESO DE ACUERDOS'){
         runCypressTest("IngresoAcuerdos", [
+
             'cypress/e2e/SecretarioAcuerdos/015_IngresoAcuerdos.cy.js',
             'cypress/e2e/Ciudadano/006_DocumentosAccesibles.cy.js'
 
@@ -183,6 +186,7 @@ node {
     stage('Reportes'){
         archiveArtifacts artifacts: 'reports/', followSymlinks: false
     }
+
 
 }
 

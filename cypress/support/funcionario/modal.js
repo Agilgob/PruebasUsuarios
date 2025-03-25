@@ -1,3 +1,4 @@
+
 /**
  * Custom command to get a modal by its title.
  * @param {string} title - The title of the modal to find.
@@ -28,3 +29,4 @@ Cypress.Commands.add('getBody',{prevSubject : 'element'}, (subject) => {
 Cypress.Commands.add('getFooter',{prevSubject : 'element'}, (subject) => {
   return cy.wrap(subject).find('.modal-footer')
 })
+
