@@ -23,6 +23,7 @@ describe('Quita todos los permisos del expediente al ciudadano', () => {
         cy.session('sesionFuncionario', () => {
             cy.visit(environment.funcionarioURL);
             cy.loginFuncionario(funcionario.email, funcionario.password);
+
             cy.getCookie('authentication_token_03').should('exist');
         }, {
             cacheAcrossSpecs: true
@@ -37,8 +38,10 @@ describe('Quita todos los permisos del expediente al ciudadano', () => {
   
     it('Quita permisos de documentos al ciudadano', () => {
 
+
         cy.intercept('GET', '**/api/v1/document_expedients/documents/*/10?page=1').as('getDocumentos');
         cy.visit(tramite.url, {failOnStatusCode: false});
+
 
         cy.intercept('POST', `**/api/v1/docuemnts_expedient/document_expedient_users_permissions/*`)
                 .as('postPermisosExpediente');
