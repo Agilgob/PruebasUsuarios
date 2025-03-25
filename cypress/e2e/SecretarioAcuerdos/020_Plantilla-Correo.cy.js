@@ -1,7 +1,7 @@
 import { loadTestData, saveTestData } from '../../support/loadTestData';
 
 
-describe('Agregar plantilla de notificaciones', () => {
+describe('Agregar plantilla de correos', () => {
 
 
     before(() => { 

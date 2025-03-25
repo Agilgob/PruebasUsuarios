@@ -1,7 +1,7 @@
 import { loadTestData, saveTestData } from '../../support/loadTestData';
 
 
-describe('Agregar plantilla de notificaciones', () => {
+describe('Agregar plantilla de sentencias', () => {
 
 
     before(() => { 
@@ -35,7 +35,7 @@ describe('Agregar plantilla de notificaciones', () => {
     });
     
 
-    it("Es posible agregar plantilla de notificaciones", () => {
+    it("Es posible agregar plantilla de sentencias", () => {
 
         if(!testData.expedientFound) {
             throw new Error("Abortada porque no se ha encontrado el expediente");
