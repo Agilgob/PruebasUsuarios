@@ -31,9 +31,11 @@ import './funcionario/modal';
 
 import './ciudadano/expedientes';
 import './ciudadano/login';
+import './ciudadano/home';
 
 import './overwrite'
 import './actions/llenarCamposFormularios';
 import './actions/iframe';
+import './faker'
 
 

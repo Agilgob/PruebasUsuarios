@@ -17,6 +17,26 @@ Cypress.Commands.add('llenarSelectModal', (campo, valorSeleccion) => {
 
 
 
+// Selecciona un valor de la lista desplegable de un campo tipo select de forma aleatoria
+// campo : etiqueta del select
+Cypress.Commands.add('llenarSelectRandomValue', (campo) => {
+    cy.get('.col-md-12 .row', { log: false })
+      .filter(`:contains("${campo}")`)
+      .first()
+      .as('currentRow');
+    
+    cy.get('@currentRow', { log: false }).scrollIntoView()
+    
+    cy.get('@currentRow', { log: false }).click().find('[class$="-menu"]').within(() => {
+        cy.get('div[class!="option"][id^="react-select"]').as('options');
+        cy.get('@options').its('length').then((length) => {
+            const randomOption = Math.floor(Math.random() * length);
+            cy.get('@options').eq(randomOption).click();
+        })
+    })
+})
+
+
 Cypress.Commands.add('loginErrorMessages', () => {
 
     cy.get('.notification-error div .message').as('error-message')

@@ -16,3 +16,9 @@ Cypress.Commands.add('loginCiudadano', (email, password) => {
     cy.wait(1000)
     
   })
+
+
+Cypress.Commands.add('password', ()=> {})
+
+
+cy.password().type('')
