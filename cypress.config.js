@@ -33,7 +33,8 @@ module.exports = defineConfig({
   screenshotsFolder: "tmp/screenshots",
   downloadsFolder: 'tmp/downloads',
   trashAssetsBeforeRuns: false,
-
+  redirectionLimit: 100,
+  
   env : {
     funcionario : 'secretarioAcuerdos02',
     ciudadano : 'ciudadanoManuel',

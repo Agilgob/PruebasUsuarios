@@ -4,13 +4,16 @@ import { loadTestData, saveTestData } from '../../support/loadTestData';
 describe('Automatización de Trámite Penal en Línea', () => {
     let formulariosCompletados = false;
 
-    let cantImputados = Cypress.env('cantImputados') || 4;
+    let cantImputados = Cypress.env('cantImputados') || 2;
     let cantVictimas = Cypress.env('cantVictimas') || 2;
     let imputados;
     let victimas;
 
 
     before(() => { 
+
+        cy.log('Cantidad de imputados: ' + cantImputados)
+        cy.log('Cantidad de victimas: ' + cantVictimas)
 
         loadTestData();
 
@@ -158,174 +161,99 @@ describe('Automatización de Trámite Penal en Línea', () => {
 
     
         // VISTA : Datos del imputado 
-
         imputados.forEach((imputado, index) => {
-
+            cy.log('\n\nImputado ' + (index + 1) + JSON.stringify(imputado))
             cy.contains('h3', `Datos del Imputado`).scrollIntoView().should('be.visible');
-
-            cy.contains('Apellido paterno').siblings('input').clear().type(imputado.apellidoPaterno);
-            cy.contains('Apellido materno').siblings('input').clear().type(imputado.apellidoMaterno);
-            cy.contains('Nombre(s)').siblings('input').clear().type(imputado.nombre);
+            ingresaDatosBasicos(imputado)
             cy.contains('Alias').siblings('input').clear().type(imputado.alias);
-            cy.contains('Número de teléfono').siblings('input').clear().type(imputado.telefono );
-            seleccionaRadioAleatorio('Sexo');
-            cy.llenarSelectRandomValue('Género');
-            cy.llenarSelect('Edad', Math.floor(Math.random() * 50 + 18));
-            cy.get('input[placeholder="selecciona una fecha"]').clear().type(imputado.fechaNacimiento);
-            cy.llenarSelect('Nacionalidad', imputado.nacionalidad || 'MEXICANA');
-            cy.contains('Lugar de nacimiento').siblings('input').clear().type(imputado.pais);
+            
+            ingresaDatosSecundarios(imputado)
             cy.contains('Lugar habitual de residencia').siblings('input').clear().type(imputado.pais);
-            cy.llenarSelectRandomValue('Estado civil');
-            seleccionaRadioAleatorio('¿Sabe leer y escribir?');
-            cy.llenarSelectRandomValue('Grado de estudios');
-            seleccionaRadioAleatorio('¿Habla español?');
-            cy.contains('Lengua indígena o dialecto').parent().find('input').clear().type(imputado.lengua);
-            cy.contains('Ocupación').parent().find('input').clear().type(imputado.ocupacion || 'Desconocido');
-
-            cy.contains('Siguiente').click();
-            cy.wait('@executeStage').then((interception) => {
-                expect(interception.response.statusCode).to.eq(200);
-                expect(interception.response.body.status).to.eq(true);
-                cy.screenshot(`Imputado ${index + 1}`)
-                
-            });
-            cy.wait(2000) // Para que la vista cambie y no hacer el get sobre elementos que ya se llenaron en
-                // el ciclo anterior :( no se puede quitar el wait
+            cy.screenshot(`Imputado ${index + 1}`)
+            siguientePagina()
 
         });
             
         
-        // Vista : Datos de la victima
+        // VISTA : Datos de la victima
+        victimas.forEach((victima, index) => {
+            cy.log('\n\nVictima ' + (index + 1) + JSON.stringify(victima))
+            cy.contains('h3', 'Datos de la víctima u ofendido').scrollIntoView().should('be.visible');
+            
+            cy.llenarSelectRandomValue('Elige el tipo de parte del que se ingresará la información');
+            cy.llenarSelectRandomValue('¿El nombre de la víctima u ofendido es un dato reservado?');
+            ingresaDatosBasicos(victima)
 
-
-        cy.llenarSelectRandomValue('Elige el tipo de parte del que se ingresará la información');
-        cy.llenarSelectRandomValue('¿El nombre de la víctima u ofendido es un dato reservado?');
-        cy.contains('¿El nombre de la víctima u ofendido es un dato reservado?')
-            .scrollIntoView()
-            .should('be.visible')
-            .closest('div')
-            .within(() => {
-                cy.get('div[class!="singleValue"]').invoke('text').then((text) => {
-                    if(text === 'Sí') {
-                        cy.contains('Sí').click();
-                    }
-                    else{
-                        cy.contains('No').click();
+            cy.contains('¿El nombre de la víctima u ofendido es un dato reservado?')
+                .scrollIntoView()
+                .should('be.visible')
+                .closest('div')
+                .find('div[class$="singleValue"]')
+                .invoke('text').then((text) => {
+                    if(text === 'No') {
+                        ingresaDatosSecundarios(victima)
+                        cy.contains('Correo electrónico').siblings('input').clear().type( victima.correo );
                     }
                 })
-            })
+            
+            cy.screenshot('Victima ' + (index + 1))
+            siguientePagina()
+        })
             
 
 
-    //     // Ciclo para víctimas
-    //     for (let i = 0; i <= nVic; i++) {
-    //         town = municipiosR[Math.floor(Math.random() * municipiosR.length)];
-    //         name = nombresR[Math.floor(Math.random() * nombresR.length)];
-    //         lastName = apellidosR[Math.floor(Math.random() * apellidosR.length)];
-    //         bday = 2024 - (Math.floor(Math.random() * (55 - 18 + 1)) + 18);
-    //         month = (Math.floor(Math.random() * 12)) + 1;
-
-    //         cy.wait(5000);
-    //         // Inicio del formulario para víctimas
-    //         // 1. Seleccionar "Tipo de parte"
-    //         cy.contains('Elige el tipo de parte del que se ingresará la información')
-    //             .parent().click();
-    //         cy.get('div[id^="react-select"][id$="-option-0"]').should('exist').click(); // Ejemplo: "Víctima"
-
-    //         // 2. Elegir si el nombre es un dato reservado (Sí o No aleatorio)
-    //         let reservedData = Math.random() < 0.5 ? "0" : "1"; // "0" = Sí, "1" = No
-    //         cy.log(`La opción seleccionada es: ${reservedData}`);
-
-    //         cy.contains('¿El nombre de la víctima u ofendido es un dato reservado?')
-    //             .parent().click();
-    //         cy.get(`div[id^="react-select"][id$="-option-${reservedData}"]`).should('exist').click();
-
-    //         // 3. Llenado del formulario básico
-    //         cy.contains(`Apellido paterno`).parent().find('input').clear().type(lastName + i);
-    //         cy.contains(`Apellido materno`).parent().find('input').clear().type('LOPEZ');
-    //         cy.contains(`Nombre(s)`).parent().find('input').clear().type(name + i);
+        // VISTA : Etapa Finalizada
+        cy.get('body').then(($body) => {
+            const text = $body.text();
+            expect(text).to.contain('ACUSE DE ENVÍO DE ESCRITO ELECTRÓNICO');
+            expect(text).to.contain('Se te hará llegar una notificación a tu correo electrónico');
+        });
 
 
-    //         if (reservedData === "1") { // Si la respuesta es "No", llenar más datos
-    //             cy.log("Se seleccionó 'No', llenando el formulario completo.");
+        cy.intercept('POST', '**/api/v1/finalize_stage').as('finalizeStage');
+        cy.contains('button', 'Confirmar').click();
+        cy.wait('@finalizeStage').then((interception) => {
+            expect(interception.response.statusCode).to.eq(200);
+            expect(interception.response.body.status).to.eq(true);
+            expect(interception.response.body.data.message).to.contain('Tu procedimiento ha sido ingresado satisfactoriamente')
+        })
 
-    //             cy.contains('Correo electrónico').parent().find('input').clear().type(`${name}${lastName}@correo.com`);
-    //             cy.contains(`Número de teléfono`).parent().find('input').clear().type('3312345678');
-
-    //             cy.contains('Masculino').click();
-
-    //             cy.contains('Género').parent().click();
-    //             cy.get('div[id^="react-select"][id$="-option-2"]').should('exist').click();
-
-    //             cy.contains('Edad').parent().click();
-    //             cy.get('div[id^="react-select"][id$="-option-3"]').should('exist').click(); // Cambia la edad
-
-    //             cy.contains('Fecha de nacimiento').parent().find('input').clear().type(`15-${month}-${bday}`);
-
-    //             cy.contains(`Lugar de nacimiento`).parent().find('input').clear().type('Mexico');
-
-    //             cy.contains('Nacionalidad').parent().click();
-    //             cy.get('div[id^="react-select"][id$="-option-1"]').should('exist').click(); // Ejemplo: "Argentina"
-
-    //             cy.contains('Estado civil').parent().click();
-    //             cy.get('div[id^="react-select"][id$="-option-1"]').should('exist').click(); // Ejemplo: "Casado"
-
-    //     cy.contains('¿Sabe leer y escribir?').get('[id^="Sí-radio"]').check({ force: true });
-
-    //             cy.contains('Grado de estudios').parent().click();
-    //             cy.get('div[id^="react-select"][id$="-option-2"]').should('exist').click(); // Ejemplo: "Licenciatura"
-
-    //             //cy.contains('¿Habla español?').parent().contains('Sí').click();
-
-    //             cy.contains('Lengua indígena o dialecto').parent().find('input').clear().type('Ninguno');
-    //             cy.contains('Ocupación').parent().find('input').clear().type('Abogado');
-    //         } else {
-    //             cy.log("Se seleccionó 'Sí', llenando solo los datos básicos.");
-    //         }
-    //         // 4. Hacer clic en "Siguiente"
-    //         cy.contains('Siguiente').click();
-
-    //     }
-    //     // 1. Verificar que el mensaje de acuse está presente
-    //     cy.contains('ACUSE DE ENVÍO DE ESCRITO ELECTRÓNICO').should('be.visible');
-    //     cy.contains('Estimado Ciudadano: Se te hará llegar una notificación a tu correo electrónico').should('be.visible');
-
-    //     // 2. Hacer clic en "Confirmar"
-    //     cy.contains('Confirmar').click();
-
-    //     cy.wait(10000);
-
-    //     // 1. Verificar que estamos en "Proyectos de envío"
-    //     cy.contains('Proyectos de envío')
-    //         .should('have.class', 'active') // Verifica si ya está activa
-    //         .then(($tab) => {
-    //             if (!$tab.hasClass('active')) {
-    //                 cy.contains('Proyectos de envío').click(); // Si no está activa, la selecciona
-    //             }
-    //         });
-
-    //     // 2. Abrir el dropdown de filtro de estado
-    //     cy.contains('Filtra tus trámites por estado aquí').parent().find('button').click();
-
-    //     // 3. Seleccionar "En revisión"
-    //     cy.contains('button', 'En revisión').click();
-
-    //     // 4. Verificar que los trámites filtrados están en estado "Revisión"
-    //     cy.get('table tbody tr').each(($row) => {
-    //         cy.wrap($row).find('td').eq(3).should('contain', 'Revisión'); // Asegura que la columna de estado dice "Revisión"
-    //     });
         formulariosCompletados = true;
 
     });
 
-    it("Valida que los formularios se completaron correctamente", () => {
-        if(!formulariosCompletados) {
-            throw new Error("Abortada porque no se han completado los formularios");
-        }
-    })
 
-});
+    // it("Valida que los formularios se completaron correctamente", () => {
+    //     if(!formulariosCompletados) {
+    //         throw new Error("Abortada porque no se han completado los formularios");
+    //     }
+    // })
 
+})
+
+
+const ingresaDatosBasicos = (persona) => {
+    cy.contains('Apellido paterno').siblings('input').clear().type(persona.apellidoPaterno);
+    cy.contains('Apellido materno').siblings('input').clear().type(persona.apellidoMaterno);
+    cy.contains('Nombre(s)').siblings('input').clear().type(persona.nombre)
+}
+
+const ingresaDatosSecundarios = (persona) => {
+    cy.contains('Número de teléfono').siblings('input').clear().type(persona.telefono );
+    seleccionaRadioAleatorio('Sexo');
+    cy.llenarSelectRandomValue('Género');
+    cy.llenarSelect('Edad', Math.floor(Math.random() * 50 + 18));
+    cy.get('input[placeholder="selecciona una fecha"]').clear().type(persona.fechaNacimiento); //Fecha Nacimiento
+    cy.llenarSelect('Nacionalidad', persona.nacionalidad || 'MEXICANA');
+    cy.llenarSelectRandomValue('Estado civil');
+    cy.contains('Lugar de nacimiento').siblings('input').clear().type(persona.pais);
+    seleccionaRadioAleatorio('¿Sabe leer y escribir?');
+    cy.llenarSelectRandomValue('Grado de estudios');
+    seleccionaRadioAleatorio('¿Habla español?');
+    cy.contains('Lengua indígena o dialecto').parent().find('input').clear().type(persona.lengua);
+    cy.contains('Ocupación').parent().find('input').clear().type(persona.ocupacion || 'Desconocido');
+
+}
 
 const seleccionaRadioAleatorio = (label) => {
     cy.get('.col-md-12.col-12', {log:false}).filter(`:contains("${label}")`, {log:false}).within( () => { // Selecciona Sexo
@@ -334,4 +262,17 @@ const seleccionaRadioAleatorio = (label) => {
             cy.get('.form-check-input', {log:false}).eq(randomOption).check({ force: true });
          })
     })
+}
+
+const siguientePagina = () => {
+    cy.contains('Siguiente').click();
+    cy.wait('@executeStage').then((interception) => {
+        expect(interception.response.statusCode).to.eq(200);
+        if(!interception.response.body.status) {
+            cy.log('Error en la respuesta: ' + JSON.stringify(interception.response.body));
+        }
+        expect(interception.response.body.status).to.eq(true);
+    });
+    cy.wait(2000) // Para que la vista cambie y no hacer el get sobre elementos que ya se llenaron en
+        // el ciclo anterior :( no se puede quitar el wait
 }

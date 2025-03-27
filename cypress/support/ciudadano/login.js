@@ -18,7 +18,3 @@ Cypress.Commands.add('loginCiudadano', (email, password) => {
   })
 
 
-Cypress.Commands.add('password', ()=> {})
-
-
-cy.password().type('')

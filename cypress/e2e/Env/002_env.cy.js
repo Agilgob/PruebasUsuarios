@@ -10,12 +10,11 @@ describe('Inicia Tramite desde el portal de ciudadano', () => {
 
     it('should visit the environment page', () => {
         cy.visit('https://www.google.com')
-        cy.crearPersonasFalsas(2).then((x) => {
-            console.log(x)
-        })
-
-        cy.crearUnaPersonaFalsa().then((x) => {
-            console.log(x)
+        cy.get('body').then(($body) => {
+            const text = $body.html();
+            expect(text).to.contains('Google') 
+            expect(text).to.contains('Buscar con Google')
+            expect(text).to.contains('Voy a tener suerte')
         })
     })
     
