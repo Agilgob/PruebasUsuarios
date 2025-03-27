@@ -163,6 +163,5 @@ Cypress.Commands.add('intercambiaFuncionarioJsonFile', (interception) => {
         testData.expedienteTurnado.receiver = interception.request.body.receiver;
         saveTestData();
     })
-
-
+    
 })
