@@ -67,6 +67,7 @@ describe('Funcionario : Modificar expediente ', () => {
             .type('Pruebas automatizadas cypress')
 
         cy.intercept('PUT', '**/api/v1/admin/electronic_expedients/*').as('putExpediente');
+        cy.contains('button', 'Actualizar').click();
         cy.wait('@putExpediente').then((interception) => {
             
             expect(interception.response.statusCode).to.be.equal(200);

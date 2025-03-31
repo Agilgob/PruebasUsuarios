@@ -29,6 +29,6 @@ Cypress.Commands.add('iniciarSesionFuncionario', (email, password) => {
         cy.contains('h3', 'Tablero de contro', {timeout: 10000}).should('be.visible');
         cy.getCookie('authentication_token_03').should('exist');
     }, {
-        cacheAcrossSpecs: true
+        cacheAcrossSpecs: false
     });
 });

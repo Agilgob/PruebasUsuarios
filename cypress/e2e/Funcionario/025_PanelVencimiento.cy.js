@@ -38,8 +38,8 @@ describe('Permite acceder al panel de vencimientos', () => {
         const validate = function(document){
             cy.wrap(document).contains('h4', 'con término de vencimiento').should('be.visible');
             cy.wrap(document).contains('h4', 'Expedientes').should('be.visible');
-            cy.wrap(document).contains('th', 'Tiempo de recepción del expedientes').parents('table').as('tablaExpedientes')
-            cy.get('@tablaExpedientes').find('tr').should('be.at.least', 1);
+            cy.wrap(document).contains('th', 'Tiempo de recepción del expedientes').closest('table').as('tablaExpedientes')
+            cy.get('@tablaExpedientes').find('tr').its('length').should('be.at.least', 1);
         }
 
         cy.visit(environment.funcionarioURL);
