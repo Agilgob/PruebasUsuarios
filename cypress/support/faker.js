@@ -1,4 +1,4 @@
-import { crearPersonasFalsas,  crearUnaPersonaFalsa} from '._faker.js';
+import { crearPersonasFalsas,  crearUnaPersonaFalsa} from './_faker.js';
 
 
 Cypress.Commands.add('crearUnaPersonaFalsa', () => {
