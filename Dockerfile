@@ -14,6 +14,13 @@ RUN apt-get update && apt-get install -y \
     xvfb \
     && rm -rf /var/lib/apt/lists/*
 
+# Set environment variables for Playwright
+ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=0
+ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
+
+# Set terminal for tput
+ENV TERM=xterm-256color
+
 # Set working directory
 WORKDIR /app
 
@@ -23,8 +30,9 @@ COPY package*.json ./
 # Install dependencies
 RUN npm install
 
-# Install Playwright browsers with dependencies
-RUN npx playwright install --with-deps chromium firefox webkit
+# Install Playwright browsers with dependencies and ensure correct permissions
+RUN npx playwright install --with-deps chromium firefox webkit && \
+    chmod -R 777 /ms-playwright
 
 # Copy project files
 COPY . .
