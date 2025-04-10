@@ -201,3 +201,4 @@ Al final del formulario de configuracion selecciona los siguientes valores:
 
 
 </details>
+Este es un cambio menor para probar el trigger :)

@@ -10,7 +10,7 @@ echo 'Eliminando archivos de salida...'
 rm -rf tmp
 
 echo "▶️ Ejecutando pruebas de Playwright en segundo plano"
-cantInputados=10 cantVictimas=10 ciudadano=ciudadanoJoseC2 npx playwright test playwright/tests/Penal.spec.js & 
+cantInputados=10 cantVictimas=10 ciudadano=ciudadanoJoseC2 npx playwright test playwright/tests/Penal.spec.js  
 
 
 for test in \
