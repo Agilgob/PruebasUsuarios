@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export $(cat .env | xargs)
+
 run_test() {
   local spec="$1"
   echo "▶️ Ejecutando: $spec"
@@ -96,6 +98,16 @@ if [ $? -eq 0 ]; then
 else
   echo "Hubo un error en la creacion del expediente en la prueba 004 de ciudadano"
 fi
+
+
+zip -r "$REPORT_FILENAME" tmp
+curl -F "file=@$REPORT_FILENAME" \
+    -F "initial_comment=📄 Reporte de pruebas Cypress (privado)" \
+    -F "channels=$SLACK_CHANNEL" \
+    -H "Authorization: Bearer $SLACK_TOKEN" \
+    https://slack.com/api/files.upload
+
+
 
 
 
