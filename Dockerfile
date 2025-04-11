@@ -1,44 +1,39 @@
 FROM node:18
 
-# Install dependencies required for Cypress and Playwright
+
 RUN apt-get update && apt-get install -y \
-    libgtk2.0-0 \
     libgtk-3-0 \
-    libgbm-dev \
-    libnotify-dev \
-    libgconf-2-4 \
-    libnss3 \
-    libxss1 \
-    libasound2 \
-    libxtst6 \
+    # libgtk2.0-0 \
+    # libgbm-dev \
+    # libnotify-dev \
+    # libgconf-2-4 \
+    # libnss3 \
+    # libxss1 \
+    # libasound2 \
+    # libxtst6 \
     xvfb \
+    zip \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Set environment variables for Playwright
-ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=0
-ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
+WORKDIR /home
 
-# Set terminal for tput
-ENV TERM=xterm-256color
+# ARG REPO_URL
+# ARG REPO_BRANCH
+# RUN git clone $REPO_URL --branch $REPO_BRANCH 
+# WORKDIR /home/PruebasUsuarios
 
-# Set working directory
-WORKDIR /app
-
-# Copy package files
-COPY package*.json ./
-
-# Install dependencies
-RUN npm install
-
-# Install Playwright browsers with dependencies and ensure correct permissions
-RUN npx playwright install --with-deps chromium firefox webkit && \
-    chmod -R 777 /ms-playwright
-
-# Copy project files
 COPY . .
 
-# Make script executable
-RUN chmod +x runScripts.sh
+RUN npm install
+RUN npx playwright install --with-deps chromium
 
-# Run tests and exit with proper status code
-CMD ["bash", "-c", "./runScripts.sh && exit $?"]
+RUN chmod +x runCypress.sh && \
+    chmod +x runPlaywright.sh && \
+    chmod +x runSenderReports.sh \
+    && chmod +x entrypoint.sh
+
+CMD ["bash", "-c", "./entrypoint.sh && exit $?"]
+
+
+# docker build -t test-cjj -f Dockerfile --build-arg REPO_URL=$REPO_URL --build-arg REPO_BRANCH=$REPO_BRANCH . && docker run --name test-cjj --rm test-cjj
