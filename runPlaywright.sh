@@ -1,6 +1,7 @@
 #!/bin/bash
 
 export $(cat .env | xargs)
+
 log_file="tmp/test.log" 
 
 echo "▶️ Ejecutando pruebas de Playwright en segundo plano"
