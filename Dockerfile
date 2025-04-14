@@ -26,6 +26,7 @@ WORKDIR /home
 COPY . .
 
 RUN npm install
+RUN npx cypress install
 RUN npx playwright install --with-deps chromium
 
 RUN chmod +x runCypress.sh && \
@@ -33,6 +34,7 @@ RUN chmod +x runCypress.sh && \
     chmod +x runSenderReports.sh \
     && chmod +x entrypoint.sh
 
+USER root
 CMD ["bash", "-c", "./entrypoint.sh && exit $?"]
 
 
