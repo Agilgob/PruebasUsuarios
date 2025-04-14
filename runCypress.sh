@@ -2,6 +2,17 @@
 
 export $(cat .env | xargs)
 
+
+send_message_to_slack() {
+    local message="$1"
+    curl -X POST \
+        -H "Authorization: Bearer $SLACK_TOKEN" \
+        -H "Content-Type: application/json" \
+        -d "{\"channel\":\"$SLACK_CHANNEL\",\"text\":\"$message\"}" \
+        https://slack.com/api/chat.postMessage
+}
+
+
 run_test() {
   local spec="$1"
   local env_value="$2"
@@ -11,15 +22,21 @@ run_test() {
   npx cypress run --spec "$spec" --env "$env_value" --quiet
   local exit_code=$?
 
+  local result
   if [ $exit_code -eq 0 ]; then
-    echo "✅ $spec terminado correctamente con env: $env_value" >> "$log_file"
+    result="✅ $spec terminado correctamente con env: $env_value"
   else
-    echo "❌ $spec falló con env: $env_value" >> "$log_file"
+    result="❌ $spec falló con env: $env_value"
   fi
+  echo "$result"
+  send_message_to_slack "$result"
+  echo "$result" >> "$log_file"
 
   return $exit_code
 }
 
+
+send_message_to_slack "▶️ Iniciando pruebas de Cypress"
 
 
 run_test cypress/e2e/Exploratorios/001_DatosDemandadoSeOcultan.cy.js funcionario=secretarioAcuerdos01
