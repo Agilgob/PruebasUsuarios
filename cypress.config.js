@@ -27,7 +27,7 @@ module.exports = defineConfig({
   },
   
   defaultCommandTimeout: 10000,
-  video: false,
+  video: true,
   videoCompression: 32,
   videosFolder: 'tmp/videos',
   screenshotsFolder: "tmp/screenshots",
@@ -36,9 +36,9 @@ module.exports = defineConfig({
   redirectionLimit: 100,
   
   env : {
-    funcionario : 'secretarioAcuerdos02',
+    funcionario : 'secretarioAcuerdos01',
     ciudadano : 'ciudadanoManuel',
-    tramite : "promocion_demanda_fam_merc",
+    tramite : "civiles_familiares_mercantiles_abogado_demandado",
     environment : 'sandbox'
   }
 
