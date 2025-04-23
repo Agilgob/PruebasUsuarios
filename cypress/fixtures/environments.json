@@ -14,7 +14,16 @@
     "modeladorURL" : "https://sandbox.nilo.cjj.gob.mx/"
   },
 
-  "productivo" : {}
+  "productivo" : {
+    "filename" : "localhost.json",
+    "documentoPDF" : "assets/documento.pdf",
+    "imagenPNG" : "assets/imagen.png",
+
+    "funcionarioURL" : "https://funcionario.cjj.gob.mx/",
+    "ciudadanoURL" : "https://ciudadano.cjj.gob.mx/", 
+    "superadminURL" : "https://superadmin.cjj.gob.mx/", 
+    "modeladorURL" : "https://nilo.cjj.gob.mx/"
+  }
 
 }
 
