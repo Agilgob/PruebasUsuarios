@@ -39,7 +39,7 @@ module.exports = defineConfig({
     funcionario : 'secretarioAcuerdos01',
     ciudadano : 'ciudadanoManuel',
     tramite : "civiles_familiares_mercantiles_abogado_demandado",
-    environment : 'sandbox'
+    environment : 'productivo'
   }
 
 });
