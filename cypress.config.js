@@ -1,11 +1,11 @@
 const { defineConfig } = require("cypress");
-require('dotenv').config({ path: './.env' });
+require('dotenv').config({ path: './.env.prod' });
 // const { beforeRunHook, afterRunHook } = require('cypress-mochawesome-reporter/lib');
 
 
-const environment = JSON.parse(process.env.ENVIRONMENT);
-const functionary1 = JSON.parse(process.env.FUNCTIONARY1);  
-const functionary2 = JSON.parse(process.env.FUNCTIONARY2);
+// const environment = JSON.parse(process.env.ENVIRONMENT);
+// const functionary1 = JSON.parse(process.env.FUNCTIONARY1);  
+// const functionary2 = JSON.parse(process.env.FUNCTIONARY2);
 
 
 
@@ -40,17 +40,17 @@ module.exports = defineConfig({
   screenshotsFolder: "tmp/screenshots",
   downloadsFolder: 'tmp/downloads',
   trashAssetsBeforeRuns: false,
-  redirectionLimit: 100,
+  redirectionLimit: 100
   
-  env : {
-    funcionario : 'secretarioAcuerdos01',
-    ciudadano : 'ciudadanoManuel',
-    tramite : "civiles_familiares_mercantiles_abogado_demandado",
-    // environment : 'productivo',
+  // env : {
+  //   funcionario : 'secretarioAcuerdos01',
+  //   ciudadano : 'ciudadanoManuel',
+  //   tramite : "civiles_familiares_mercantiles_abogado_demandado",
+  //   // environment : 'productivo',
 
-    functionary1 : functionary1,
-    functionary2 : functionary2,
-    environment : environment
-  }
+  //   functionary1 : functionary1,
+  //   functionary2 : functionary2,
+  //   environment : environment
+  // }
 
 });

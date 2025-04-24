@@ -9,8 +9,8 @@ const path = require('path');
 let cantImputados = process.env.cantImputados || 10;
 let cantVictimas = process.env.cantVictimas || 10;
 
-let ciudadanoKey = process.env.ciudadano || 'ciudadanoManuel';
-let enviromentKey = process.env.enviroment || 'sandbox';
+let ciudadanoKey = process.env.ciudadano || 'ciud_prod_manuel_01';
+let enviromentKey = process.env.enviroment || 'productivo';
 
 let contadorTiempo;
 
@@ -178,7 +178,7 @@ test.describe('Automatización de Trámite Penal en Línea', () => {
             await siguientePagina(page);
 
         }
-        return 
+        // return 
         //  Finalizar
         await expect(page.locator('body')).toContainText('ACUSE DE ENVÍO DE ESCRITO ELECTRÓNICO');
         const [finalize] = await Promise.all([

@@ -39,12 +39,12 @@ run_test() {
 send_message_to_slack "▶️ Iniciando pruebas de Cypress"
 
 
-run_test cypress/e2e/Exploratorios/001_DatosDemandadoSeOcultan.cy.js funcionario=secretarioAcuerdos01
-run_test cypress/e2e/Exploratorios/002_loginCredencialesIncorrectas.cy.js funcionario=secretarioAcuerdos01
-run_test cypress/e2e/Exploratorios/003_BuscadorExpedienteAdmiteCharEspeciales.cy.js funcionario=secretarioAcuerdos01
-run_test cypress/e2e/Ciudadano/001_DescargaManualUsuarioTramite.cy.js funcionario=secretarioAcuerdos01
-run_test cypress/e2e/Ciudadano/007_EliminaProyectosEnvio.cy.js ciudadano=ciudadanoJoseC2
-run_test cypress/e2e/Ciudadano/004_TramiteSecretarioAcuerdos.cy.js funcionario=secretarioAcuerdos01,ciudadano=ciudadanoJoseC2,tramite=civiles_familiares_mercantiles_abogado_demandado
+run_test cypress/e2e/Exploratorios/001_DatosDemandadoSeOcultan.cy.js funcionario=sec_oficialia_prod_01
+run_test cypress/e2e/Exploratorios/002_loginCredencialesIncorrectas.cy.js funcionario=sec_oficialia_prod_01
+run_test cypress/e2e/Exploratorios/003_BuscadorExpedienteAdmiteCharEspeciales.cy.js funcionario=sec_oficialia_prod_01
+run_test cypress/e2e/Ciudadano/001_DescargaManualUsuarioTramite.cy.js funcionario=sec_oficialia_prod_01
+run_test cypress/e2e/Ciudadano/007_EliminaProyectosEnvio.cy.js ciudadano=ciud_prod_manuel_01
+run_test cypress/e2e/Ciudadano/004_TramiteSecretarioAcuerdos.cy.js funcionario=sec_oficialia_prod_01,ciudadano=ciud_prod_manuel_01,tramite=civiles_familiares_mercantiles_abogado_demandado
 
 if [ $? -eq 0 ]; then
 

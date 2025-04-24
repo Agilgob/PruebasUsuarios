@@ -27,6 +27,17 @@
         "archivoAcuerdos" : "assets/ACUERDOS.pdf"
     },
 
+    "sec_oficialia_prod_01": {
+        "email": "m.familiar_oficialia@prueba.com", 
+        "username":"", 
+        "password":"12345678",
+        "archivoFirel" : "assets/Firel/CICF870709HNESVR02.pfx",
+        "passwordFirel" : "autlan1296",
+        "nombre" : "MANUEL VALDEZ ACUERDOS",
+        "turnaA" : "secretarioAcuerdos02",
+        "archivoAcuerdos" : "assets/ACUERDOS.pdf"
+    },
+
     "secretarioAcuerdos02" : {
         "email" : "secretarioacuerdos002.serotonin848@simplelogin.com",
         "username" : "mvsec.acuerdosdos",
