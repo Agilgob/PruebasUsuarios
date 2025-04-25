@@ -5,11 +5,16 @@ import { accedeAlExpediente } from "../../support/ciudadano/expedientes";
 
 describe('Valida que los documentos en el expediente NO esten accesibles antes de tener un acuerdo', () => {
 
+    const environment = Cypress.env('environment');
+    let testData, ciudadano, tramite = null;
+
     before(() => { 
-        if(!Cypress.env('jsonFile')) {
-            throw new Error('Requiere cargar datos de prueba para ejecutar esta prueba');
-        }
-        loadTestData();
+        cy.readFile('tmp/testData.json', { log: false, timeout: 500 }).then((data) => {
+            testData = data;
+            tramite = testData.tramite;
+            ciudadano = testData.ciudadano;
+        })
+  
     });
 
     beforeEach(() => {
@@ -21,10 +26,9 @@ describe('Valida que los documentos en el expediente NO esten accesibles antes d
         });
     });
 
-
     it('El ciudadano NO puede ver los documentos', () => {
         
-        accedeAlExpediente(testData.expediente.expedient_number);
+        accedeAlExpediente(testData.expediente.expedient_number, environment);
         cy.get('section.procedures-table-container').as('procedures');
         cy.get('@procedures').should('exist')
             .and('not.be.visible')

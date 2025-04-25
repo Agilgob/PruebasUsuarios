@@ -1,7 +1,8 @@
 import { loadTestData, saveTestData } from '../../support/loadTestData';
 
 
-
+const environment = Cypress.env('environment');
+const ciudadano = Cypress.env('ciudadano');
 
 describe('Login CIUDADANO con credenciales falsas', () => {
 
@@ -33,12 +34,6 @@ describe('Login CIUDADANO con credenciales falsas', () => {
         'usuario@@dominio.com',     // doble arroba
     ];
     
-
-
-    before(() => { 
-        loadTestData();
-    });
-
     beforeEach(() => {
         cy.visit(environment.ciudadanoURL);
         cy.get('input[placeholder="Contraseña"]').as('password')
@@ -90,31 +85,6 @@ describe('Login CIUDADANO con credenciales falsas', () => {
         });
 
     });
-
-
-    
-        
-        
-    // passwords.forEach((password) => {
-    //     emails.forEach((email) => {
-    //         it(`Debería manejar login inválido para email: "${email}" y password: "${password}"`, () => {
-                
-    //             cy.get('@email').invoke('attr', 'type', 'text');
-    //             cy.get('@email').clear().type(email); 
-    //             cy.get('@password').clear().type(password);
-    //             cy.get('@btnLogin').click();
-    //             cy.wait('@loginPost', { timeout: 3000 }).then((interception) => {
-    //                 if (interception) {
-    //                     expect(interception.response.statusCode).to.eq(200);
-    //                     expect(interception.response.body.data.code).to.eq(401);
-    //                     expect(interception.response.body.status).to.eq(false);
-    //                 }
-    //             })
-    //         })
-            
-    //     })
-    // })
-    
 
 });
 

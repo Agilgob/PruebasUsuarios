@@ -44,13 +44,15 @@ run_test cypress/e2e/Exploratorios/002_loginCredencialesIncorrectas.cy.js funcio
 run_test cypress/e2e/Exploratorios/003_BuscadorExpedienteAdmiteCharEspeciales.cy.js funcionario=sec_oficialia_prod_01
 run_test cypress/e2e/Ciudadano/001_DescargaManualUsuarioTramite.cy.js funcionario=sec_oficialia_prod_01
 run_test cypress/e2e/Ciudadano/007_EliminaProyectosEnvio.cy.js ciudadano=ciud_prod_manuel_01
-run_test cypress/e2e/Ciudadano/004_TramiteSecretarioAcuerdos.cy.js funcionario=sec_oficialia_prod_01,ciudadano=ciud_prod_manuel_01,tramite=civiles_familiares_mercantiles_abogado_demandado
 
+run_test cypress/e2e/Funcionario/001_IniciarCancelaTramite.cy.js jsonFile=true
+run_test cypress/e2e/Funcionario/002_EliminaTramitesIniciados.cy.js jsonFile=true
+run_test cypress/e2e/Funcionario/003_IniciaTramite.cy.js jsonFile=true
+
+run_test cypress/e2e/Ciudadano/004_TramiteSecretarioAcuerdos.cy.js funcionario=sec_oficialia_prod_01,ciudadano=ciud_prod_manuel_01,tramite=civiles_familiares_mercantiles_abogado_demandado
 if [ $? -eq 0 ]; then
 
-    run_test cypress/e2e/Funcionario/001_IniciarCancelaTramite.cy.js jsonFile=true
-    run_test cypress/e2e/Funcionario/002_EliminaTramitesIniciados.cy.js jsonFile=true
-    run_test cypress/e2e/Funcionario/003_IniciaTramite.cy.js jsonFile=true
+
     run_test cypress/e2e/Funcionario/007_ActionButtonsEnabled.cy.js jsonFile=true
     run_test cypress/e2e/Funcionario/008_AcuerdosNotificacionesSentenciasOficios.cy.js jsonFile=true
 

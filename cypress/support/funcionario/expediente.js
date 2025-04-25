@@ -29,8 +29,8 @@ Cypress.Commands.add('buscarExpediente', (testData) => {
     cy.url().should('include', '/expedient_details/').then((currentUrl) => {
         cy.log(currentUrl); // Muestra la URL en los logs de Cypress
         testData.tramite.url = currentUrl; // Guarda la URL en la variable `tramite`
-        testData.expedientFound = true;
-        saveTestData(); 
+        testData.expedientFound = true; 
+        cy.writeFile('tmp/testData.json', testData, { log: false }); 
     });
 });
 
@@ -62,7 +62,7 @@ Cypress.Commands.add('listarPartes', () => {
 
 })
 
-Cypress.Commands.add('descargarExpediente', () => {       
+Cypress.Commands.add('descargarExpediente', (tramite) => {       
     cy.intercept('POST', `**/api/v1/download_zip/${tramite.url.split('/').pop()}`).as('descargarExpediente');
     cy.visit(tramite.url, {failOnStatusCode: false});
     cy.get('section[class^="ExpedientActions_actions"]').as('accionesExpediente');

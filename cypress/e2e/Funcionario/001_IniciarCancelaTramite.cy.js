@@ -1,14 +1,10 @@
-import { loadTestData, saveTestData } from '../../support/loadTestData';
+const environment = Cypress.env('environment');
+const funcionario = Cypress.env('funcionario');
 
 describe('Inicia el tramite luego lo cancela', () => {
     
-    before(() => { 
-        loadTestData();
-    });
-
-
     beforeEach(() => {
-        cy.iniciarSesionFuncionario(funcionario.email, funcionario.password);
+        cy.iniciarSesionFuncionario(funcionario.email, funcionario.password, environment);
     });
 
     describe('Iniciar y cancelar trámites', () => {

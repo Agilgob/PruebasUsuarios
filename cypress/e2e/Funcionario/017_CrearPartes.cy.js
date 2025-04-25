@@ -9,12 +9,18 @@ const findInputInModal = function (modalName, label){
 describe('Funcionario : Listar partes ', () => {
 
 
-    before(() => { 
-        loadTestData();
-        if(!testData.expedientFound) { // si es undefined o false
-            testData.expedientFound = false;
-        }
-    });
+    let testData, tramite = null;
+    const funcionario = Cypress.env('funcionario');
+    const environment = Cypress.env('environment');
+    
+    before(() => {
+        
+        cy.readFile('tmp/testData.json', { log: false, timeout: 500 }).then((data) => {
+          testData = data;
+          tramite = testData.tramite;
+        })
+
+      });
 
 
     beforeEach(() => {
@@ -28,6 +34,7 @@ describe('Funcionario : Listar partes ', () => {
         cy.session('sesionFuncionario', () => {
             cy.visit(environment.funcionarioURL);
             cy.loginFuncionario(funcionario.email, funcionario.password);
+          
             cy.getCookie('authentication_token_03').should('exist');
         }, {
             cacheAcrossSpecs: true
@@ -207,3 +214,6 @@ describe('Funcionario : Listar partes ', () => {
 
 
 });
+
+// TODO Revisar porque termina bien la primer prueba pero no se muestra la parte en el listado
+// por lo tanto el resto de las pruebas no se logran ejecutar (agregar una condicion para que lance un error mas claro)

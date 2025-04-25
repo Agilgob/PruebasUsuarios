@@ -1,11 +1,15 @@
 import { loadTestData, saveTestData } from '../../support/loadTestData';
 
+
+
 describe('Descarga el manual de usuario de los tramites en la primer pantalla', () => {
 
+    const environment = Cypress.env('environment');
+    const ciudadano = Cypress.env('ciudadano');
 
-    before(() => { 
-        loadTestData();
-    });
+    // before(() => { 
+    //     loadTestData();
+    // });
 
     beforeEach(() => {
         cy.session('ciudadano', () => {

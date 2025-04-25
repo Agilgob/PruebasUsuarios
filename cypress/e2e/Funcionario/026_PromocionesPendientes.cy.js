@@ -11,13 +11,15 @@ const findInputInModal = function (modalName, label){
 
 describe('Permite acceder al panel de vencimientos', () => {
 
+    const funcionario = Cypress.env('funcionario');
+    const environment = Cypress.env('environment');
 
-    before(() => { 
-        loadTestData();
-        if(!testData.expedientFound) { // si es undefined o false
-            testData.expedientFound = false;
-        }
-    });
+    // before(() => { 
+    //     loadTestData();
+    //     if(!testData.expedientFound) { // si es undefined o false
+    //         testData.expedientFound = false;
+    //     }
+    // });
 
     beforeEach(() => {
         cy.on("uncaught:exception", (err, runnable) => {

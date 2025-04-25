@@ -1,12 +1,28 @@
 const { defineConfig } = require("cypress");
-require('dotenv').config({ path: './.env.prod' });
-// const { beforeRunHook, afterRunHook } = require('cypress-mochawesome-reporter/lib');
+const dotenv = require("dotenv");
+const fs = require("fs");
 
 
-// const environment = JSON.parse(process.env.ENVIRONMENT);
-// const functionary1 = JSON.parse(process.env.FUNCTIONARY1);  
-// const functionary2 = JSON.parse(process.env.FUNCTIONARY2);
+const envFile = `.env.${process.env.ENV || 'sandbox'}`;
 
+if (fs.existsSync(envFile)) {
+    dotenv.config({ path: envFile });
+} else {
+    throw new Error(`Archivo de entorno ${envFile} no encontrado`);
+}
+
+const FUNCTIONARY_KEY = process.env.FUNCTIONARY || 'SECRETARIO_ACUERDOS_01';
+const functionaryRaw = process.env[FUNCTIONARY_KEY];
+
+const CITIZEN_KEY = process.env.CITIZEN || "CIUDADANO_MANUEL";
+const citizenRaw = process.env[CITIZEN_KEY];
+
+const environmentRaw = process.env.ENVIRONMENT;
+
+if (!functionaryRaw || !citizenRaw || !environmentRaw) {
+    const error = `functionaryRaw: ${functionaryRaw}, citizenRaw: ${citizenRaw}, environmentRaw: ${environmentRaw}`;
+  throw new Error(error);
+}
 
 
 module.exports = defineConfig({
@@ -40,17 +56,13 @@ module.exports = defineConfig({
   screenshotsFolder: "tmp/screenshots",
   downloadsFolder: 'tmp/downloads',
   trashAssetsBeforeRuns: false,
-  redirectionLimit: 100
+  redirectionLimit: 100,
   
-  // env : {
-  //   funcionario : 'secretarioAcuerdos01',
-  //   ciudadano : 'ciudadanoManuel',
-  //   tramite : "civiles_familiares_mercantiles_abogado_demandado",
-  //   // environment : 'productivo',
-
-  //   functionary1 : functionary1,
-  //   functionary2 : functionary2,
-  //   environment : environment
-  // }
+  env : {
+    funcionario: JSON.parse(functionaryRaw),
+    ciudadano: JSON.parse(citizenRaw),
+    environment: JSON.parse(environmentRaw),
+    tramite: "civiles_familiares_mercantiles_abogado_demandado"
+  }
 
 });

@@ -13,7 +13,7 @@ export const getNewExpedientId = function (firstJson, finalJson) {
 };
 
 
-export function accedeAlExpediente(expedient_number) {
+export function accedeAlExpediente(expedient_number, environment) {
     cy.visit(environment.ciudadanoURL);
     cy.get('.principal-nav  ul').as('menuPrincipal');
     cy.get('@menuPrincipal').contains('Mis expedientes').click();
@@ -29,7 +29,7 @@ export function accedeAlExpediente(expedient_number) {
 }
 
 
-export function getAllExpedients() {
+export function getAllExpedients(environment) {
     let request = null;
     let total = 0; // Número total de expedientes
     let expedientes = { "electronicExpedients": [] };

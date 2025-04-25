@@ -9,3 +9,4 @@ cypress-mochawesome-reporter.log
 count.sh
 test-results/
 .env
+.env.*

@@ -4,12 +4,18 @@ import { loadTestData, saveTestData } from '../../support/loadTestData';
 describe('Agregar plantilla de notificaciones', () => {
 
 
-    before(() => { 
-        loadTestData();
-        if(!testData.expedientFound) { // si es undefined o false
-            testData.expedientFound = false;
-        }
-    });
+    let testData, tramite = null;
+    const funcionario = Cypress.env('funcionario');
+    const environment = Cypress.env('environment');
+    
+    before(() => {
+        
+        cy.readFile('tmp/testData.json', { log: false, timeout: 500 }).then((data) => {
+          testData = data;
+          tramite = testData.tramite;
+        })
+
+      });
 
 
     beforeEach(() => {
@@ -23,6 +29,7 @@ describe('Agregar plantilla de notificaciones', () => {
         cy.session('sesionFuncionario', () => {
             cy.visit(environment.funcionarioURL);
             cy.loginFuncionario(funcionario.email, funcionario.password);
+          
             cy.getCookie('authentication_token_03').should('exist');
         }, {
             cacheAcrossSpecs: true

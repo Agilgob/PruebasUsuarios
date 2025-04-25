@@ -7,16 +7,23 @@ const findInputInModal = function (modalName, label){
 }
 
 
-describe('Funcionario : Modificar expediente ', () => {
+describe('Permite acceder al panel de vencimientos', () => {
 
+    const funcionario = Cypress.env('funcionario');
+    const environment = Cypress.env('environment');
     let req;
 
-    before(() => { 
-        loadTestData();
-        if(!testData.expedientFound) { // si es undefined o false
-            testData.expedientFound = false;
-        }
-    });
+
+// describe('Funcionario : Modificar expediente ', () => {
+
+    
+
+//     before(() => { 
+//         loadTestData();
+//         if(!testData.expedientFound) { // si es undefined o false
+//             testData.expedientFound = false;
+//         }
+//     });
 
     beforeEach(() => {
         cy.on("uncaught:exception", (err, runnable) => {
@@ -169,3 +176,4 @@ describe('Funcionario : Modificar expediente ', () => {
 
 
 
+// TODO esta marcando errores posiblemente falsos positivos (muy probable)

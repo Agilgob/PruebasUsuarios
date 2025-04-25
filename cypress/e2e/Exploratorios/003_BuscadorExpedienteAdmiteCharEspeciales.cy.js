@@ -8,13 +8,8 @@ const findInputInModal = function (modalName, label){
 
 describe('Funcionario : Listar partes ', () => {
 
-
-    before(() => { 
-        loadTestData();
-        if(!testData.expedientFound) { // si es undefined o false
-            testData.expedientFound = false;
-        }
-    });
+    const environment = Cypress.env('environment');
+    const funcionario = Cypress.env('funcionario');
 
     beforeEach(() => {
         cy.on("uncaught:exception", (err, runnable) => {

@@ -1,9 +1,16 @@
 import { loadTestData, saveTestData } from '../../support/loadTestData';
 
+
+const environment = Cypress.env('environment');
+const ciudadano = Cypress.env('ciudadano');
+let tramite = null;
+
 describe('Descarga el manual de usuario de los tramites en la primer pantalla', () => {
 
     before(() => { 
-        loadTestData();
+        cy.fixture('tramites.json').then((tramites) => {
+            tramite = tramites["civiles_familiares_mercantiles_abogado_demandado"];
+        })
     });
 
     beforeEach(() => {

@@ -1,13 +1,14 @@
 import { loadTestData, saveTestData } from '../../support/loadTestData';
 
+
+const environment = Cypress.env('environment');
+const funcionario = Cypress.env('funcionario');
+
 describe('Es posible iniciar un tramite desde el funcionario', () => {
 
-    before(() => { 
-        loadTestData();
-    });
 
     beforeEach(() => {
-        cy.iniciarSesionFuncionario(funcionario.email, funcionario.password);
+        cy.iniciarSesionFuncionario(funcionario.email, funcionario.password, environment);
     });
 
     describe('Iniciar tramite', () => {

@@ -19,7 +19,7 @@ Cypress.Commands.add('loginFuncionario', (email, password) => {
 })
 
 
-Cypress.Commands.add('iniciarSesionFuncionario', (email, password) => {
+Cypress.Commands.add('iniciarSesionFuncionario', (email, password, environment) => {
     cy.clearCookies();
     cy.clearLocalStorage();
 

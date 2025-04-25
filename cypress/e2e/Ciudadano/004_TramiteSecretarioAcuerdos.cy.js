@@ -1,3 +1,4 @@
+import { en } from '@faker-js/faker';
 import {getNewExpedientId, getAllExpedients} from '../../support/ciudadano/expedientes';
 import { saveTestData, loadTestData } from '../../support/loadTestData';
 
@@ -5,10 +6,17 @@ import { saveTestData, loadTestData } from '../../support/loadTestData';
 
 describe('Juzgados Civiles, Familiares y Mercantiles en línea', () => {
     
-    before(() => { 
-        loadTestData();
-        testData.expedientCreated = false;
-    });
+    const environment = Cypress.env('environment');
+    const ciudadano = Cypress.env('ciudadano');
+    let tramite = null;
+    let testData = {'expedientCreated': false};
+
+    before(() => {
+        cy.fixture('tramites.json').then((tramites) => {
+            tramite = tramites['civiles_familiares_mercantiles_abogado_demandado']
+            expect(tramite).to.exist;
+        })
+    })
 
     beforeEach(() => {
         cy.session('ciudadano', () => {
@@ -24,7 +32,7 @@ describe('Juzgados Civiles, Familiares y Mercantiles en línea', () => {
     context('Ingresa datos al tramite y concluye su creacion', () => {
 
         it('captura expedientes del ciudadano antes de inciar', () => {
-            getAllExpedients().then((expedientes) => {
+            getAllExpedients(environment).then((expedientes) => {
                 cy.writeFile('tmp/ciudadano_expedients_inicio.json', expedientes);
             })
         })
@@ -163,14 +171,20 @@ describe('Juzgados Civiles, Familiares y Mercantiles en línea', () => {
 
             // Guardamos la primera captura de expedientes con cy.wrap()
             cy.readFile('tmp/ciudadano_expedients_inicio.json').then((expedientesInicio) => {
-                getAllExpedients().then((expedientesFinal) => {
+                getAllExpedients(environment).then((expedientesFinal) => {
                     cy.writeFile('tmp/ciudadano_expedients_final.json', expedientesFinal)
                     const newExpedient = getNewExpedientId(expedientesInicio.electronicExpedients, expedientesFinal.electronicExpedients);
                     cy.log('Nuevo expediente creado: ' + JSON.stringify(newExpedient));
+                    
                     testData.expediente = newExpedient;
-                    saveTestData();
+                    testData.ciudadano = ciudadano;
+                    testData.tramite = tramite;
+                    testData.environment = environment;
+                    cy.writeFile('tmp/testData.json', testData);
                 })
             })
+
         })
+
     })
 })

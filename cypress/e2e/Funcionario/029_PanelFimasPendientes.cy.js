@@ -10,16 +10,17 @@ const findInputInModal = function (modalName, label){
 
 describe('Permite acceder al panel de firmas pendientes ', () => {
 
-
+    const funcionario = Cypress.env('funcionario');
+    const environment = Cypress.env('environment');
     let hayFirmasPendientes = false;
     let documents = [];
 
-    before(() => { 
-        loadTestData();
-        if(!testData.expedientFound) { // si es undefined o false
-            testData.expedientFound = false;
-        }
-    });
+    // before(() => { 
+    //     loadTestData();
+    //     if(!testData.expedientFound) { // si es undefined o false
+    //         testData.expedientFound = false;
+    //     }
+    // });
 
     beforeEach(() => {
         cy.on("uncaught:exception", (err, runnable) => {
@@ -37,7 +38,7 @@ describe('Permite acceder al panel de firmas pendientes ', () => {
             cacheAcrossSpecs: true
         }); 
 
-        capturaFirmasPendientes();
+        capturaFirmasPendientes(environment);
 
     });
     
@@ -149,7 +150,7 @@ describe('Permite acceder al panel de firmas pendientes ', () => {
     })
 
 
-    function capturaFirmasPendientes() {
+    function capturaFirmasPendientes(environment) {
         cy.visit(environment.funcionarioURL);
         cy.wait(2000);
         cy.hamburguer().click();
@@ -210,3 +211,4 @@ function validaFirmasPendientes(hayFirmasPendientes){
 }
 
 // TODO Revisar los resultados ya que al eliminar y firmar generar errores 
+// FIXME

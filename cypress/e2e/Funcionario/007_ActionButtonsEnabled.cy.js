@@ -1,15 +1,21 @@
 import { loadTestData, saveTestData } from '../../support/loadTestData';
+import fs from 'fs';
 
 
 describe('Action Buttons son accesibles', () => {
 
+    let testData, tramite = null;
+    const funcionario = Cypress.env('funcionario');
+    const environment = Cypress.env('environment');
+    
+    before(() => {
+        
+        cy.readFile('tmp/testData.json', { log: false, timeout: 500 }).then((data) => {
+          testData = data;
+          tramite = testData.tramite;
+        })
 
-    before(() => { 
-        loadTestData();
-        if(!testData.expedientFound) { // si es undefined o false
-            testData.expedientFound = false;
-        }
-    });
+      });
 
 
     beforeEach(() => {

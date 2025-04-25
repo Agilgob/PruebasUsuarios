@@ -1,14 +1,14 @@
 import { loadTestData, saveTestData } from '../../support/loadTestData';
 
+const environment = Cypress.env('environment');
+const funcionario = Cypress.env('funcionario');
+
 describe('Elimina los tramites iniciados del funcionario', () => {
 
-    before(() => { 
-        loadTestData();
-    });
 
 
     beforeEach(() => {
-        cy.iniciarSesionFuncionario(funcionario.email, funcionario.password);
+        cy.iniciarSesionFuncionario(funcionario.email, funcionario.password, environment);
     });
     
     it('Permite eliminar los tramites iniciados', () =>{

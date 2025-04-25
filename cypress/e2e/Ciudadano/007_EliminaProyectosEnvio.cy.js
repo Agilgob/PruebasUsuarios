@@ -1,18 +1,20 @@
 import { loadTestData } from "../../support/loadTestData"
 import { getAllExpedients } from "../../support/ciudadano/expedientes";
 
+// let environment = null; Cypress.env('environment');
+// let ciudadano = null; Cypress.env('ciudadano');
+
 
 describe('Elimina Proyectos Envio', () => {
 
-    let expedientes;
+  const environment = Cypress.env('environment');
+  const ciudadano = Cypress.env('ciudadano');
+  let expedientes;
 
-    before(() => { 
-
-        loadTestData();
-
-        
-
-    });
+    // before(() => { 
+    //     environment = Cypress.env('environment');
+    //     ciudadano = Cypress.env('ciudadano');
+    // });
 
     beforeEach(() => {
         cy.session('ciudadano', () => {
@@ -20,7 +22,7 @@ describe('Elimina Proyectos Envio', () => {
             cy.loginCiudadano(ciudadano.email, ciudadano.password);
             cy.wait(2000);
             cy.getCookie('authentication_token_02').should('exist');
-            getAllExpedients().then((response) => {
+            getAllExpedients(environment).then((response) => {
                 expedientes = response;
             })
         });
