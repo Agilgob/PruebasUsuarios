@@ -14,6 +14,7 @@ RUN apt-get update && apt-get install -y \
     xvfb \
     zip \
     curl \
+    tree \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /home
