@@ -3,13 +3,13 @@ const dotenv = require("dotenv");
 const fs = require("fs");
 
 
-// const envFile = `.env.${process.env.ENV || 'sandbox'}`;
+const envFile = `.env.${process.env.ENV || 'sandbox'}`;
 
-// if (fs.existsSync(envFile)) {
-//     dotenv.config({ path: envFile });
-// } else {
-//     throw new Error(`Archivo de entorno ${envFile} no encontrado`);
-// }
+if (fs.existsSync(envFile)) {
+    dotenv.config({ path: envFile });
+} else {
+    throw new Error(`Archivo de entorno ${envFile} no encontrado`);
+}
 
 const FUNCTIONARY_KEY = process.env.FUNCTIONARY || 'SECRETARIO_ACUERDOS_01';
 const functionaryRaw = process.env[FUNCTIONARY_KEY];

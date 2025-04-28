@@ -8,5 +8,6 @@ tmp/
 cypress-mochawesome-reporter.log
 count.sh
 test-results/
+cypress/e2e/Funcionario/000_logins.cy.js
 .env
 .env*

@@ -26,7 +26,6 @@ test.describe('Automatización de Trámite Penal en Línea', () => {
         console.log('Cantidad de imputados: ' + cantImputados);
         console.log('Cantidad de victimas: ' + cantVictimas);
 
-
         const ciudadanosData = JSON.parse(fs.readFileSync('./cypress/fixtures/ciudadanos.json', 'utf8'));
         ciudadano = ciudadanosData[ciudadanoKey];
 
