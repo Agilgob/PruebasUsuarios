@@ -123,7 +123,21 @@ function functionaryValidatePermissions(documents = Object, permissions = Object
     cy.log('Numero de permisos: ' + Object.keys(permissions).length);
     cy.log('Iniciando revision de cada uno de los permisos desde el funcionario')
 
-    documents.forEach((doc) => {
+    const docs = Object.keys(documents);
+
+    execute(documents, permissions, ciudadano.email, docs, 0);
+
+    function execute(documents, permissions, citizenEmail, docs = Array, index = 0 ) {
+        if (index >= docs.length) {
+            return;
+        }
+
+        const docId = docs[index];
+        const document = documents[docId];
+        const documentPermissions = permissions.users.filter(
+            (user) => user.email === citizenEmail
+        )
+        
         cy.get('section.document-expedient-table tbody').get('tr').filter(`contains("${doc.alias}")`)
             .filter(`contains("${doc.filename}")`).first().scrollIntoView().should('exist').and('be.visible')
             .as('documentRow')
@@ -138,11 +152,16 @@ function functionaryValidatePermissions(documents = Object, permissions = Object
         cy.get('@tablaPermisos').find('.custom-control.custom-switch > input[type="checkbox"]')
             .then((checkbox) => {
 
-                expect(checkbox.is(':checked')).to.eq(permissions[n].isPermissionEnabled)
+                expect(checkbox.is(':checked')).to.eq(documentPermissions.isPermissionEnabled)
                 cy.contains('button', 'Cerrar', {timeout:10000}).click()
                 cy.contains('button', 'Aceptar', {timeout:10000}).click()
             })
-    })
+
+        execute(documents, permissions, citizenEmail, docs, index + 1); 
+    }
+
+
+
 }
 
 
