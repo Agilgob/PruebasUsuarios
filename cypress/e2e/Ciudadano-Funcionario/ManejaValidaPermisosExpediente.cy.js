@@ -56,7 +56,7 @@ describe('Manejar sesiones funcionario y ciudadano', () => {
                 return acc;
               }, {});
             
-            cy.writeFile('tmp/Documents.json', { documents }, { log: false });
+            cy.writeFile('tmp/Documents.json', documents , { log: false });
             expedientNumber = expedientNumber.replace(/\D/g, '-');
             const headers = interception.request.headers; // Defínelo aquí
 
@@ -64,14 +64,10 @@ describe('Manejar sesiones funcionario y ciudadano', () => {
 
             fetchDocumentPermissions(documents, Object.keys(documents), 0, {}, headers).then((_permissions) => {
                 permissions = _permissions;
-                cy.writeFile('tmp/Permissions.json', { permissions }, { log: false });
-
-            // fetchDocumentPermissions(documents, 0, {}, headers).then((_permissions) => {
-            //     permissions = _permissions;
-            //     cy.writeFile('tmp/Permissions.json', { permissions }, { log: false });
-                console.log(permissions)
-                console.log(documents)
-            //     // functionaryValidatePermissions(documents, permissions);
+                cy.writeFile('tmp/Permissions.json', permissions, { log: false });
+                // console.log(permissions)
+                // console.log(documents)
+                functionaryValidatePermissions(documents, permissions, 0, ciudadano.email);
             })
         });
 
@@ -117,55 +113,55 @@ function fetchDocumentPermissions(documentsDict = {}, keys = Object.keys(documen
 
 
 
-// Validations for the permissions
-function functionaryValidatePermissions(documents = Object, permissions = Object) {
-    cy.log('Numero de documentos: ' + Object.keys(documents).length);
-    cy.log('Numero de permisos: ' + Object.keys(permissions).length);
-    cy.log('Iniciando revision de cada uno de los permisos desde el funcionario')
-
-    const docs = Object.keys(documents);
-
-    execute(documents, permissions, ciudadano.email, docs, 0);
-
-    function execute(documents, permissions, citizenEmail, docs = Array, index = 0 ) {
-        if (index >= docs.length) {
-            return;
-        }
-
-        const docId = docs[index];
-        const document = documents[docId];
-        const documentPermissions = permissions.users.filter(
-            (user) => user.email === citizenEmail
-        )
-        
-        cy.get('section.document-expedient-table tbody').get('tr').filter(`contains("${doc.alias}")`)
-            .filter(`contains("${doc.filename}")`).first().scrollIntoView().should('exist').and('be.visible')
-            .as('documentRow')
-        
-        cy.get('@documentRow').find('[title="Descargar / Visualizar"]').should('exist').should('be.visible')
-        
-        cy.get('@documentRow').find('[title="Gestionar permisos"]').should('exist').should('be.visible')
-            .should('have.descendants', 'i').click()
-       
-        cy.get('.list-group.list-group-flush').as('tablaPermisos');
-        cy.get('@tablaPermisos').should('be.visible');
-        cy.get('@tablaPermisos').find('.custom-control.custom-switch > input[type="checkbox"]')
-            .then((checkbox) => {
-
-                expect(checkbox.is(':checked')).to.eq(documentPermissions.isPermissionEnabled)
-                cy.contains('button', 'Cerrar', {timeout:10000}).click()
-                cy.contains('button', 'Aceptar', {timeout:10000}).click()
-            })
-
-        execute(documents, permissions, citizenEmail, docs, index + 1); 
+function functionaryValidatePermissions(documents = Object, permissions = Object, index = 0, citizenEmail = String) {
+    if (index >= Object.keys(documents).length) {
+        return;
     }
 
+    const document = documents[Object.keys(documents)[index]]
+    cy.log('document', document)
+    const documentPermissions = filterPermission(document, permissions, citizenEmail);
+    if(!documentPermissions) {
+        throw new Error('No se encontraron permisos para el documento para el ciudadano ' + citizenEmail + ' revisa las variables de entorno');
+    }
+    console.log('documentPermissions', documentPermissions)
+    
+    // Check if the document is in the list
+    cy.get('section.document-expedient-table tbody').get('tr').filter(`:contains("${document.alias}")`)
+        .filter(`:contains("${document.filename}")`).first().scrollIntoView().should('exist').and('be.visible')
+        .as('documentRow')
+    
+    // Check if the document has the button to download/view
+    cy.get('@documentRow').find('[title="Descargar / Visualizar"]').should('exist').should('be.visible')
+    
+    // Check if the document has the button to manage permissions and click it
+    cy.get('@documentRow').find('[title="Gestionar permisos"]').should('exist').should('be.visible')
+        .should('have.descendants', 'i').click()
+    
+    // Check if the modal is visible
+    cy.get('.list-group.list-group-flush').as('tablaPermisos');
+    cy.get('@tablaPermisos').should('be.visible');
+    cy.get('@tablaPermisos').find('.custom-control.custom-switch > input[type="checkbox"]')
+        .then((checkbox) => {
+            expect(checkbox.is(':checked')).to.eq(documentPermissions.isPermissionEnabled) // Validate if the checkbox is checked or not
+            cy.contains('button', 'Cerrar', {timeout:10000}).click()
+            cy.contains('button', 'Aceptar', {timeout:10000}).click()
+        })
 
-
+    functionaryValidatePermissions(documents, permissions, index + 1, citizenEmail); // Recursive call to check the next document
 }
 
 
-      
+function filterPermission(document = Object, permissions = Object, citizenEmail = String) {
+    console.log('document', document)
+    console.log('permissions', permissions)
+    const permissionObj = permissions[document.id];
+    
+    return permissionObj.users.find(
+        (user) => user.email === citizenEmail
+    );
+}
+
     // https://sandbox.nilo.cjj.gob.mx/api/v1/docuemnts_expedient/get_user_permissions/24206
     // https://sandbox.funcionario.cjj.gob.mx/api/v1/docuemnts_expedient/get_user_permissions/24206
 
@@ -186,6 +182,5 @@ function functionaryValidatePermissions(documents = Object, permissions = Object
 
 
 
-  
   
   
