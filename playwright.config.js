@@ -6,7 +6,8 @@ export default defineConfig({
     baseURL: 'http://localhost:3000', // cambia esto según tu entorno
     trace: 'on-first-retry',
   },
-  reporter: [['html', { outputFolder: 'tmp/playwright-report' }]],
+  
+  reporter: [['html', { outputFolder: 'tmp/playwright-report', open: 'never' }]],
   outputDir: 'tmp/screenshots/', // << Ruta donde Playwright guardará automáticamente los screenshots
 
 });
