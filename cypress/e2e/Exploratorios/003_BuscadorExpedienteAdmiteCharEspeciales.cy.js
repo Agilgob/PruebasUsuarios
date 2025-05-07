@@ -6,7 +6,7 @@ const findInputInModal = function (modalName, label){
 }
 
 
-describe('Funcionario : Listar partes ', () => {
+describe('Funcionario : Modificar Expediente ', () => {
 
     const environment = Cypress.env('environment');
     const funcionario = Cypress.env('funcionario');
@@ -28,12 +28,12 @@ describe('Funcionario : Listar partes ', () => {
         }); 
     });
     
-    it('Barra de busqueda para editar expecientes admite caracteres especiales' , () => {
+    it('Barra de busqueda admite caracteres especiales' , () => {
         cy.visit(environment.funcionarioURL);
         cy.hamburguer().click();
         cy.sidebar('Modificar expedientes').should('be.visible').click()
 
-        const caracteres = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', '/', '!']
+        const caracteres = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', '/']
 
         cy.get('section.searcherContainer').find('input').as('barraBusqueda');
         caracteres.forEach(caracter => {

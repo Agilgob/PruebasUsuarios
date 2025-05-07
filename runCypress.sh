@@ -39,15 +39,9 @@
 # send_message_to_slack "▶️ Iniciando pruebas de Cypress"
 
 
-# run_test cypress/e2e/Exploratorios/001_DatosDemandadoSeOcultan.cy.js funcionario=sec_oficialia_prod_01
-# run_test cypress/e2e/Exploratorios/002_loginCredencialesIncorrectas.cy.js funcionario=sec_oficialia_prod_01
-# run_test cypress/e2e/Exploratorios/003_BuscadorExpedienteAdmiteCharEspeciales.cy.js funcionario=sec_oficialia_prod_01
-# run_test cypress/e2e/Ciudadano/001_DescargaManualUsuarioTramite.cy.js funcionario=sec_oficialia_prod_01
-# run_test cypress/e2e/Ciudadano/007_EliminaProyectosEnvio.cy.js ciudadano=ciud_prod_manuel_01
 
-# run_test cypress/e2e/Funcionario/001_IniciarCancelaTramite.cy.js jsonFile=true
-# run_test cypress/e2e/Funcionario/002_EliminaTramitesIniciados.cy.js jsonFile=true
-# run_test cypress/e2e/Funcionario/003_IniciaTramite.cy.js jsonFile=true
+
+
 
 # run_test cypress/e2e/Ciudadano/004_TramiteSecretarioAcuerdos.cy.js funcionario=sec_oficialia_prod_01,ciudadano=ciud_prod_manuel_01,tramite=civiles_familiares_mercantiles_abogado_demandado
 # if [ $? -eq 0 ]; then
@@ -121,9 +115,21 @@
 #   echo "Hubo un error en la creacion del expediente en la prueba 004 de ciudadano"
 # fi
 
-npx cypress run --spec cypress/e2e/Ciudadano/001_DescargaManualUsuarioTramite.cy.js 
-npx cypress run --spec cypress/e2e/Funcionario/001_IniciarCancelaTramite.cy.js
 
+
+$env:FUNCTIONARY=FUNC_LABORAL_ACUERDOS_01; npx cypress run --spec ./cypress/e2e/Exploratorios/001_DatosDemandadoSeOcultan.cy.js 
+$env:FUNCTIONARY=FUNC_LABORAL_ACUERDOS_01; npx cypress run --spec ./cypress/e2e/Exploratorios/002_loginCredencialesIncorrectas.cy.js 
+$env:FUNCTIONARY=FUNC_LABORAL_ACUERDOS_01; npx cypress run --spec ./cypress/e2e/Exploratorios/003_BuscadorExpedienteAdmiteCharEspeciales.cy.js 
+$env:CITIZEN=CIUDADANO_MANUEL; npx cypress run --spec ./cypress/e2e/Ciudadano/001_DescargaManualUsuarioTramite.cy.js 
+$env:CITIZEN=CIUDADANO_MANUEL; npx cypress run --spec ./cypress/e2e/Ciudadano/007_EliminaProyectosEnvio.cy.js 
+$env:CITIZEN=CIUDADANO_MANUEL; npx cypress run --spec ./cypress/e2e/Ciudadano/001_DescargaManualUsuarioTramite.cy.js 
+$env:FUNCTIONARY=FUNC_LABORAL_ACUERDOS_01; npx cypress run --spec ./cypress/e2e/Funcionario/001_IniciarCancelaTramite.cy.js
+
+
+$env:FUNCTIONARY=FUNC_LABORAL_ACUERDOS_01; npx cypress run --spec ./cypress/e2e/Funcionario/002_EliminaTramitesIniciados.cy.js
+$env:FUNCTIONARY=FUNC_LABORAL_ACUERDOS_01; npx cypress run --spec ./cypress/e2e/Funcionario/003_IniciaTramite.cy.js
+
+$env:CITIZEN=CIUDADANO_MANUEL; $env:FUNCTIONARY=FUNC_LABORAL_ACUERDOS_01; npx cypress run --spec ./cypress/e2e/Ciudadano/004_TramiteSecretarioAcuerdos.cy.js 
 
 
 

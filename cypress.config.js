@@ -44,7 +44,7 @@ module.exports = defineConfig({
   redirectionLimit: 100,
   
   env: {
-    funcionario: parseFunctionary(process.env.FUNCTIONARY || 'FUNC_LABORAL_ACUERDOS_02'),
+    funcionario: parseFunctionary(process.env.FUNCTIONARY || 'FUNC_LABORAL_ACUERDOS_01'),
     ciudadano: parseCitizen(process.env.CITIZEN || 'CIUDADANO_MANUEL'),
     environment: parseEnvironment(),
     tramite: 'civiles_familiares_mercantiles_abogado_demandado',
