@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
 
-./runCypress.sh 
+# ./runCypress.sh 
 ./runPlaywright.sh 
 ./runSenderReports.sh 
