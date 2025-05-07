@@ -29,7 +29,7 @@ run_test() {
     result="❌ $spec falló con env: $env_value"
   fi
   echo "$result"
-  send_message_to_slack "$result"
+  # send_message_to_slack "$result"
   echo "$result" >> "$log_file"
 
   return $exit_code
