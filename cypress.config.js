@@ -48,5 +48,6 @@ module.exports = defineConfig({
     ciudadano: parseCitizen(process.env.CITIZEN || 'CIUDADANO_MANUEL'),
     environment: parseEnvironment(),
     tramite: 'civiles_familiares_mercantiles_abogado_demandado',
+    allVars : process.env
   },
 });

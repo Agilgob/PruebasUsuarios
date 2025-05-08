@@ -44,6 +44,24 @@ describe('Turnado interno de expediente', () => {
 
     it('Turnar el expediente a funcionario interno', () => {
 
+        const validateField = (label) => {
+            cy.contains('b', label, {log: false})
+              .closest('div', {log: false})
+              .find('[class!="singleValue"]',  {log: false})
+              .as('field');
+          
+            cy.get('@field', {log: false})
+              .invoke('text')
+              .then((text) => {
+                const trimmed = text.trim();
+                if (trimmed.length === 0) {
+                  throw new Error(`El campo "${label}" se encuentra vacío.`);
+                } else {
+                  cy.log(`Campo "${label}" contiene: ${trimmed}`);
+                }
+              });
+          };
+
         if(!testData.expedientFound) {
             throw new Error("Abortada porque no se ha encontrado el expediente");
         }
@@ -58,7 +76,15 @@ describe('Turnado interno de expediente', () => {
         cy.wait(1000)
 
         // Cada uno de los campos deben tener al menos 5 caracteres
-        cy.validaCamposTurnar(); // support/funcionario/expediente.js
+        // cy.validaCamposTurnar(); // support/funcionario/expediente.js
+
+        const labels = ['Número de expediente','Tipo de Juicio:', 'Vía:', 'Materia:' ]; 
+        labels.forEach((label) => {
+            validateField(label);
+        })
+
+
+
         cy.seleccionaFuncionarioTurnar(); // support/funcionario/expediente.js
         cy.llenaCampoObservaciones()
         cy.screenshot('Turnado de expediente interno')
@@ -72,7 +98,7 @@ describe('Turnado interno de expediente', () => {
         }) // support/funcionario/expediente.js
     })
 
-    it('Turnar, Permisos y Agregar documento estan deshabilidatos una vez turnado', () => {
+    it('"Turnar", "Permisos" y "Agregar documento" estan deshabilidatos una vez turnado', () => {
         if(!testData.expedientFound) {
             throw new Error("Abortada porque no se ha encontrado el expediente");
         }

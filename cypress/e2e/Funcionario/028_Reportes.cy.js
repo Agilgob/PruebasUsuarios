@@ -40,10 +40,12 @@ describe('Permite acceder al panel de vencimientos', () => {
         }, {
             cacheAcrossSpecs: true
         }); 
+
     });
     
     it('Permite descargar reportes 1 Mes' , () => {
-        
+        // De aqui se toman los headers para las siguientes peticiones que se hacen por API
+
         cy.visit(environment.funcionarioURL);
         cy.hamburguer().click();
         cy.sidebar('Reportes').should('be.visible').click()
@@ -55,7 +57,7 @@ describe('Permite acceder al panel de vencimientos', () => {
 
         cy.contains('label', '*Fecha Inicial').siblings('input').as('fechaInicial');
         cy.contains('label', '*Fecha Final').siblings('input').as('fechaFinal');
-        
+
         const today = new Date();
         const lastMonth = new Date(today);
         lastMonth.setMonth(today.getMonth() - 1); // Restar un mes
@@ -121,13 +123,13 @@ describe('Permite acceder al panel de vencimientos', () => {
     it('EXP 05 falta la fecha final', () => {
         const initialDate = '2025-03-01'
         const query = `&initial_date=${initialDate}`
-        performRequest(query)
+        performRequest(query, true)
     })
 
     it('EXP 06 falta la fecha inicial', () => {
         const finalDate = '2025-03-01'
         const query = `&final_date=${finalDate}`
-        performRequest(query)
+        performRequest(query, true)
     })
 
     it('EXP 07 formato de fecha inválido', () => {
@@ -141,10 +143,10 @@ describe('Permite acceder al panel de vencimientos', () => {
         const initialDate = '2025-03-01T12:00:00Z' // ISO con hora
         const finalDate = '2025-03-01T12:01:00Z'   // Un minuto después
         const query = `&initial_date=${initialDate}&final_date=${finalDate}`
-        performRequest(query)
+        performRequest(query, true)
     })
 
-    const performRequest = (query) => {
+    const performRequest = (query, mustFail=false) => {
         let request = { ...req }
         request.url = request.url.split('&')[0]
         request.url = request.url + query
@@ -153,6 +155,7 @@ describe('Permite acceder al panel de vencimientos', () => {
             url: request.url,
             headers: request.headers,
         }).then((response) => {
+            cy.writeFile('tmp/response-courts_reports.json', response)
             cy.log('\n\n' + Cypress.currentTest.title )
             cy.log('QUERY: ' + query)
             cy.log('CODE: ' + response.body.code)
@@ -161,12 +164,12 @@ describe('Permite acceder al panel de vencimientos', () => {
             cy.log('IS OK STATUS CODE: ' + response.isOkStatusCode)
             if(response.body.data){
                 cy.log('MESSAGE: ' + JSON.stringify(response.body.data.message))
-                if(response.body.data.error){
+                if(response.body.data.error && !mustFail){
                     cy.log('ERRORS: ' + JSON.stringify(response.body.data.error))
                     throw new Error(response.body.data.message)
                 }
             }
-            cy.writeFile('tmp/response-courts_reports.json', response)
+           
            
         })
     }

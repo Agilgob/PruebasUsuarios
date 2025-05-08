@@ -30,9 +30,9 @@ RUN npm install
 RUN npx cypress install
 RUN npx playwright install --with-deps chromium
 
-RUN chmod +x runCypress.sh && \
-    chmod +x runPlaywright.sh && \
-    chmod +x runSenderReports.sh \
+RUN chmod +x entrypoint/runCypress.sh && \
+    chmod +x entrypoint/runPlaywright.sh && \
+    chmod +x entrypoint/runSenderReports.sh \
     && chmod +x entrypoint.sh
 
 USER root
