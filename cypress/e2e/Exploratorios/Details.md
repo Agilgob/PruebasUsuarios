@@ -2,6 +2,13 @@
 
 ### Aqui se hace una breve descripcion de que hace cada prueba y en algunos casos, como es que se penso la forma de ejecutarse. 
 
+Al igual que el resto de las pruebas para cambiar el ambiente es necesario cambiar las variables de entorno de ejecicion, no del entorno de cypress: en windows $env:Env="prod" p "sandbox" por ejemplo
+
+<details>
+    <summary><b>001_DatosDemandadoSeOcultan.cy.js</b></summary>
+    <p>Valida que, al iniciar un trámite desde el portal del ciudadano correspondiente al proceso "Juzgados Civiles, Familiares y Mercantiles en línea", los campos de información del demandado (ya sea persona física o moral) se oculten correctamente cuando el usuario indica que no desea agregar un demandado, garantizando que los formularios asociados no estén visibles ni presentes en el DOM;</p>
+</details>
+
 
 
 <details>
