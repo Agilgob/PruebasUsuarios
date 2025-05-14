@@ -1,0 +1,41 @@
+{
+    "ciudadanoManuel" : {
+        "descripcion" : "Ciudadano para generar tramites para secretario de acuerdos y turnados internos y externos",
+        "email" : "manuel@agilgob.com",
+        "password" : "1cafeArabica",
+        "archivoFirel" : "assets/Firel/CICF870709HNESVR02.pfx",
+        "passwordFirel" : "autlan1296",
+        "documentoIdentificacion" : "assets/INE-demo.png"
+    },
+
+    "ciudadanoJoseC2" : {
+        "descripcion" : "Ciudadano para generar tramites para secretario de acuerdos y turnados internos y externos",
+        "email" : "ciudadano.bulldog640@simplelogin.com",
+        "password" : "12345678",
+        "archivoFirel" : "assets/Firel/CICF870709HNESVR02.pfx",
+        "passwordFirel" : "autlan1296",
+        "documentoIdentificacion" : "assets/INE-demo.png"
+    }, 
+    
+    "ciudadanoKari1" : {
+        "descripcion" : "Ciudadano para generar tramites para secretario de acuerdos y turnados internos y externos",
+        "email" : "ciudadano.bulldog640@simplelogin.com",
+        "password" : "12345678",
+        "archivoFirel" : "assets/Firel/CICF870709HNESVR02.pfx",
+        "passwordFirel" : "autlan1296",
+        "documentoIdentificacion" : "assets/INE-demo.png"
+    },
+
+    "ciud_prod_manuel_01" : {
+        "descripcion" : "Ciudadano para generar tramites para secretario de acuerdos y turnados internos y externos",
+        "email" : "manuel@agilgob.com",
+        "password" : "12345678",
+        "archivoFirel" : "assets/Firel/CICF870709HNESVR02.pfx",
+        "passwordFirel" : "autlan1296",
+        "documentoIdentificacion" : "assets/INE-demo.png"
+    }
+
+
+}
+
+

@@ -1,0 +1,280 @@
+{
+
+    "civiles_familiares_mercantiles" : {
+      "nombre" : "Juzgados Civiles, Familiares y Mercantiles en línea",
+      "partidoJudicial" : "Partido Testing SecAcu",
+      "materia" : "Familiar",
+      "claveTipoJuicio" : "Dependencia económica",
+      "tipoVia" : "Juicio Civil Sumario",
+      "regimenActor" : "Fisica",
+      "representanteLegal" : "No",
+      "abogadoPatrono" : "No",
+      "agregarDemandado" : "No",
+      "subirAnexo" : false
+    },
+
+    "civiles_familiares_mercantiles_abogado":{
+        "nombre" : "Juzgados Civiles, Familiares y Mercantiles en línea",
+        "partidoJudicial" : "Partido Testing SecAcu",
+        "materia" : "Familiar",
+        "claveTipoJuicio" : "Dependencia económica",
+        "tipoVia" : "Juicio Civil Sumario",
+        "regimenActor" : "Fisica",
+        "representanteLegal" : "No",
+        "abogadoPatrono" : "Si",
+        "abogado" : {
+            "apellidoPaterno" : "Gonzalez",
+            "apellidoMaterno" : "Perez",
+            "nombre" : "Abraham",
+            "email" : "abogado_acuerdos.subfloor157@simplelogin.com"
+        },
+        "agregarDemandado" : "No",
+        "subirAnexo" : false
+    },
+
+    "di-rep-abog-demandado-anexo" : {
+        "nombre" : "Juzgados Civiles, Familiares y Mercantiles en línea",
+        "partidoJudicial" : "Partido Testing SecAcu",
+        "materia" : "Familiar",
+        "claveTipoJuicio" : "Dependencia económica",
+        "tipoVia" : "Juicio Civil Sumario",
+        "regimenActor" : "Fisica",
+
+        "representanteLegal" : "Si",
+        "representante" : {
+            "apellidoPaterno" : "Representante",
+            "apellidoMaterno" : "Representante",
+            "nombre" : "Representante Uno",
+            "email" : "abogado_acuerdos.subfloor157@simplelogin.com"
+        },
+
+
+        "abogadoPatrono" : "Si",
+        "abogado" : {
+            "apellidoPaterno" : "Abogado",
+            "apellidoMaterno" : "Abogado",
+            "nombre" : "Abogado Uno",
+            "email" : "abogado_acuerdos.subfloor157@simplelogin.com"
+        },
+
+        "agregarDemandado" : "Si",
+        "demandado" : {
+            "regimen" : "Fisica",
+            "apellidoPaterno" : "Demandado",
+            "apellidoMaterno" : "Demandado",
+            "nombre" : "Demandado Uno",
+            "email" : "demandado01.purple815@aleeas.com"
+        },
+
+        "subirAnexo" : true,
+        "anexos" : {
+            "tipoDocumento" : "Copia simple",
+            "etiqueta" : "INE",
+            "rutaDocumento" : "assets/INE-demo.png"
+        }
+    },
+
+    "konami4-actor" : {
+        "descripcion" : "Enrique Luna Konami4",
+        "nombre" : "Juzgados Civiles, Familiares y Mercantiles en línea",
+        "partidoJudicial" : "Konami 4",
+        "materia" : "Civil",
+        "tipoVia" : "Juicio Civil Ejecutivo",
+        "claveTipoJuicio" : "Expedientes registrados excusa o incompetencia",
+
+        "regimenActor" : "Moral",
+        "razonSocial" : "COCA COLA COMPANY S.A. DE C.V.",
+        "apoderado" : {
+            "primerApellido" : "Valdez",
+            "segundoApellido" : "Valdez",
+            "nombre" : "Manuel"
+        },
+        "representanteLegal" : "Si",
+        "representante" : {
+            "apellidoPaterno" : "Representante",
+            "apellidoMaterno" : "Representante",
+            "nombre" : "Representante Uno",
+            "email" : "abogado_acuerdos.subfloor157@simplelogin.com"
+        },
+        "abogadoPatrono" : "Si",
+        "abogado" : {
+            "apellidoPaterno" : "Abogado",
+            "apellidoMaterno" : "Abogado",
+            "nombre" : "Abogado Uno",
+            "email" : "abogado_acuerdos.subfloor157@simplelogin.com"
+        },
+
+        "agregarDemandado" : "Si",
+        "demandado" : {
+            "regimen" : "Fisica",
+            "apellidoPaterno" : "Demandado",
+            "apellidoMaterno" : "Demandado",
+            "nombre" : "Demandado Uno",
+            "email" : "demandado01.purple815@aleeas.com"
+        },
+
+        "subirAnexo" : true,
+        "anexos" : {
+            "tipoDocumento" : "Copia simple",
+            "etiqueta" : "INE",
+            "rutaDocumento" : "assets/INE-demo.png"
+        }
+    },
+
+    "konami4-demandado" : {
+        "descripcion" : "Enrique Luna Konami4",
+        "nombre" : "Juzgados Civiles, Familiares y Mercantiles en línea",
+        "partidoJudicial" : "Konami 4",
+        "materia" : "Civil",
+        "tipoVia" : "Juicio Civil Ejecutivo",
+        "claveTipoJuicio" : "Expedientes registrados excusa o incompetencia",
+
+        "regimenActor" : "Moral",
+        "razonSocial" : "Perosna que demanda",
+        "apoderado" : {
+            "primerApellido" : "Valdez",
+            "segundoApellido" : "Valdez",
+            "nombre" : "Manuel"
+        },
+        "representanteLegal" : "Si",
+        "representante" : {
+            "apellidoPaterno" : "Representante",
+            "apellidoMaterno" : "Representante",
+            "nombre" : "Representante Uno",
+            "email" : "abogado_acuerdos.subfloor157@simplelogin.com"
+        },
+        "abogadoPatrono" : "Si",
+        "abogado" : {
+            "apellidoPaterno" : "Abogado",
+            "apellidoMaterno" : "Abogado",
+            "nombre" : "Abogado Uno",
+            "email" : "abogado_acuerdos.subfloor157@simplelogin.com"
+        },
+
+        "agregarDemandado" : "Si",
+        "demandado" : {
+            "regimen" : "Fisica",
+            "apellidoPaterno" : "S.A. DE C.V.",
+            "apellidoMaterno" : "Demandado",
+            "nombre" : "COCA COLA COMPANY",
+            "email" : "demandado01.purple815@aleeas.com"
+        },
+
+        "subirAnexo" : true,
+        "anexos" : {
+            "tipoDocumento" : "Copia simple",
+            "etiqueta" : "INE",
+            "rutaDocumento" : "assets/INE-demo.png"
+        }
+    },
+
+    "konami5-actor" : {
+        "descripcion" : "Enrique Luna Konami5",
+        "nombre" : "Juzgados Civiles, Familiares y Mercantiles en línea",
+        "partidoJudicial" : "Konami 5",
+        "materia" : "Civil",
+        "tipoVia" : "Juicio Civil Ejecutivo",
+        "claveTipoJuicio" : "Expedientes registrados excusa o incompetencia",
+
+        "regimenActor" : "Moral",
+        "razonSocial" : "ENRIQUE LUNA",
+        "apoderado" : {
+            "primerApellido" : "Valdez",
+            "segundoApellido" : "Valdez",
+            "nombre" : "Manuel"
+        },
+        "representanteLegal" : "Si",
+        "representante" : {
+            "apellidoPaterno" : "Representante",
+            "apellidoMaterno" : "Representante",
+            "nombre" : "Representante Uno",
+            "email" : "abogado_acuerdos.subfloor157@simplelogin.com"
+        },
+
+        "abogadoPatrono" : "Si",
+        "abogado" : {
+            "apellidoPaterno" : "Abogado",
+            "apellidoMaterno" : "Abogado",
+            "nombre" : "Abogado Uno",
+            "email" : "abogado_acuerdos.subfloor157@simplelogin.com"
+        },
+
+        "agregarDemandado" : "Si",
+        "demandado" : {
+            "regimen" : "Fisica",
+            "apellidoPaterno" : "demandada",
+            "apellidoMaterno" : "demandada",
+            "nombre" : "Persona",
+            "email" : "demandado01.purple815@aleeas.com"
+        },
+
+        "subirAnexo" : true,
+        "anexos" : {
+            "tipoDocumento" : "Copia simple",
+            "etiqueta" : "INE",
+            "rutaDocumento" : "assets/INE-demo.png"
+        }
+    },
+
+
+    "konami5-demandado" : {
+        "descripcion" : "Enrique Luna Konami5",
+        "nombre" : "Juzgados Civiles, Familiares y Mercantiles en línea",
+        "partidoJudicial" : "Konami 5",
+        "materia" : "Civil",
+        "tipoVia" : "Juicio Civil Ejecutivo",
+        "claveTipoJuicio" : "Expedientes registrados excusa o incompetencia",
+
+        "regimenActor" : "Moral",
+        "razonSocial" : "Manuel Valdez Demandante",
+        "apoderado" : {
+            "primerApellido" : "Valdez",
+            "segundoApellido" : "Valdez",
+            "nombre" : "Manuel"
+        },
+        "representanteLegal" : "Si",
+        "representante" : {
+            "apellidoPaterno" : "Representante",
+            "apellidoMaterno" : "Representante",
+            "nombre" : "Representante Uno",
+            "email" : "abogado_acuerdos.subfloor157@simplelogin.com"
+        },
+
+        "abogadoPatrono" : "Si",
+        "abogado" : {
+            "apellidoPaterno" : "Abogado",
+            "apellidoMaterno" : "Abogado",
+            "nombre" : "Abogado Uno",
+            "email" : "abogado_acuerdos.subfloor157@simplelogin.com"
+        },
+
+        "agregarDemandado" : "Si",
+        "demandado" : {
+            "regimen" : "Fisica",
+            "apellidoPaterno" : "LUNA",
+            "apellidoMaterno" : "LUNA",
+            "nombre" : "ENRIQUE",
+            "email" : "demandado01.purple815@aleeas.com"
+        },
+
+        "subirAnexo" : true,
+        "anexos" : {
+            "tipoDocumento" : "Copia simple",
+            "etiqueta" : "INE",
+            "rutaDocumento" : "assets/INE-demo.png"
+        }
+    },
+
+
+    "promocion_demanda_fam_merc" : {
+        "descripcion" : "recepcion del expediente desde el ciudadano, promocion de la demanda y turnado",
+        "nombre" : "P",
+        "expediente" : "L2/2025",
+        "identificadorDocumento" : "INE",
+        "comentarioDocumento" : "Prueba automatizada de carga de documento",
+        "agregarAnexos" : "si"
+
+    }
+
+
+}

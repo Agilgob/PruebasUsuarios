@@ -1,0 +1,189 @@
+
+properties([
+    parameters([
+        string(name: "REPORTS_DIR", defaultValue: "/home/manner/cypress_reports", description: "Directory to store reports"),
+        string(name: 'SLACK_CHANNEL', defaultValue: 'D087F46G2D9', description: 'Slack channel to send notifications to'),
+        string(name: "CIUDADANO", defaultValue: "ciudadanoManuel", description: "Usuario Ciudadano"),
+        string(name: "FUNCIONARIO", defaultValue: "secretarioAcuerdos01", description: "Usuario Funcionario"),
+        string(name: "TRAMITE", defaultValue: "civiles_familiares_mercantiles_abogado_demandado", description: "Tramite Ciudadano")
+    ])
+])
+
+
+node {
+    stage('Checkout') {
+        try {
+            sh 'rm -rf *'
+            checkout([$class: 'GitSCM', branches: [[name: 'SA-Pruebas-lineales']],
+                userRemoteConfigs: [[url: 'https://github.com/manuel-agilgob/PruebasUsuarios.git']]])
+            sh 'npm install'
+
+        } catch (Exception e) {
+            echo "Error al configurar el ambiente de pruebas: ${e.message}"
+            error("Stopping pipeline due to checkout failure")
+        }
+    }
+
+    try{
+
+        stage('EXPLORATORIOS') {
+            def paramsStr = "--env ciudadano=${params.CIUDADANO},tramite=${params.TRAMITE},funcionario=${params.FUNCIONARIO}"
+            def pruebas = [
+                "cypress/e2e/Exploratorios/002_loginCredencialesIncorrectas.cy.js ${paramsStr}",
+                "cypress/e2e/Exploratorios/001_DatosDemandadoSeOcultan.cy.js ${paramsStr}",
+                "cypress/e2e/SecretarioAcuerdos/001_IniciarCancelaTramite.cy.js ${paramsStr}",
+                "cypress/e2e/SecretarioAcuerdos/002_EliminaTramitesIniciados.cy.js ${paramsStr}",
+                "cypress/e2e/SecretarioAcuerdos/003_IniciaTramite.cy.js ${paramsStr}",
+                "cypress/e2e/Ciudadano/001_DescargaManualUsuarioTramite.cy.js ${paramsStr}"
+            ] as List;   
+            
+            def parallelStages = [:]
+            parallelStages['Runner 1'] = newRunner("EXP", pruebas)
+            // parallelStages['Runner 2'] = newRunner("EXP", pruebas)
+            parallel parallelStages;
+        }
+
+        // stage('Inicio Demanda') {
+        //     def paramsStr = "--env ciudadano=${params.CIUDADANO},tramite=${params.TRAMITE},funcionario=${params.FUNCIONARIO}"
+        //     runSpecFile("cypress/e2e/Ciudadano/004_TramiteSecretarioAcuerdos.cy.js ${paramsStr}")
+        // }
+
+        stage('SECRETARIO 1') {
+            def paramsStr = "--env jsonFile=true"
+            def pruebas = [
+                "cypress/e2e/SecretarioAcuerdos/007_ActionButtonsEnabled.cy.js ${paramsStr}",
+                "cypress/e2e/SecretarioAcuerdos/008_AcuerdosNotificacionesSentenciasOficios.cy.js ${paramsStr}",
+                "cypress/e2e/SecretarioAcuerdos/009_AgregarDocumentoPromocion.cy.js ${paramsStr}",
+                "cypress/e2e/SecretarioAcuerdos/011_GeneraCodigoQR.cy.js ${paramsStr}",
+                "cypress/e2e/SecretarioAcuerdos/012_ListarPartes.cy.js ${paramsStr}",
+                "cypress/e2e/SecretarioAcuerdos/013_DescargarExpediente.cy.js ${paramsStr}",
+                "cypress/e2e/SecretarioAcuerdos/010_HabilitaVistaDocumentosACiudadano.cy.js ${paramsStr}",
+                "cypress/e2e/Ciudadano/005_DocumentosNoAccesibles.cy.js ${paramsStr}",
+                "cypress/e2e/SecretarioAcuerdos/016_QuitaVistaDocumentosACiudadano.cy.js ${paramsStr}"
+            ] as List;   
+            
+            
+            def parallelStages = [:]
+            parallelStages['Runner 1'] = newRunner("ST", pruebas)
+            // parallelStages['Runner 2'] = newRunner("ST", pruebas)
+            // parallelStages['Runner 3'] = newRunner("ST-LN", pruebasLineales)
+            parallel parallelStages;
+        }
+
+        stage('Turnar Expediente') {
+            def paramsStr = "--env jsonFile=true"
+            runSpecFile("cypress/e2e/SecretarioAcuerdos/014_TurnarExpediente.cy.js ${paramsStr}")
+        }
+
+        stage('Recibir Expediente Turnado') {
+            def paramsStr = "--env jsonFile=true"
+            runSpecFile("cypress/e2e/SecretarioAcuerdos/501_RecibirExpedienteTurnado.cy.js ${paramsStr}")
+        }
+
+        stage('SECRETARIO TURNADO') {
+            def paramsStr = "--env jsonFile=true"
+            def pruebas = [
+                "cypress/e2e/SecretarioAcuerdos/007_ActionButtonsEnabled.cy.js ${paramsStr}",
+                "cypress/e2e/SecretarioAcuerdos/008_AcuerdosNotificacionesSentenciasOficios.cy.js ${paramsStr}",
+                "cypress/e2e/SecretarioAcuerdos/009_AgregarDocumentoPromocion.cy.js ${paramsStr}",
+                "cypress/e2e/SecretarioAcuerdos/011_GeneraCodigoQR.cy.js ${paramsStr}",
+                "cypress/e2e/SecretarioAcuerdos/012_ListarPartes.cy.js ${paramsStr}",
+                "cypress/e2e/SecretarioAcuerdos/013_DescargarExpediente.cy.js ${paramsStr}",
+                "cypress/e2e/SecretarioAcuerdos/010_HabilitaVistaDocumentosACiudadano.cy.js ${paramsStr}",
+                "cypress/e2e/Ciudadano/005_DocumentosNoAccesibles.cy.js ${paramsStr}",
+                "cypress/e2e/SecretarioAcuerdos/016_QuitaVistaDocumentosACiudadano.cy.js ${paramsStr}"
+            ] as List;   
+            
+            
+            def parallelStages = [:]
+            parallelStages['Runner 1'] = newRunner("ST", pruebas)
+            parallel parallelStages;
+        }
+
+        stage('Ingreso Acuerdos'){
+            def paramsStr = "--env jsonFile=true"
+            runSpecFile("cypress/e2e/SecretarioAcuerdos/015_IngresoAcuerdos.cy.js ${paramsStr}")
+        }
+
+        stage('Habilita vista de documentos a ciudadano'){
+            def paramsStr = "--env jsonFile=true"
+            runSpecFile("cypress/e2e/SecretarioAcuerdos/010_HabilitaVistaDocumentosACiudadano.cy.js ${paramsStr}")
+        }
+        
+        stage('Ciudadano valida documentos accesibles'){
+            def paramsStr = "--env jsonFile=true"
+            runSpecFile("cypress/e2e/Ciudadano/006_DocumentosAccesibles.cy.js ${paramsStr}")
+        }
+    
+    } catch (Exception e) {
+        echo "Error en el pipeline: ${e.message}"
+        currentBuild.result = 'FAILURE'
+        throw e  // Propaga el error para que Jenkins lo registre
+
+    } finally {
+        stage('Publicar Artefactos') {
+            echo "Publicando artefactos..."
+            archiveArtifacts artifacts: 'tmp/**/*', fingerprint: true
+        }
+    }
+}
+    
+
+/**
+* Creates a new runner closure that processes a list of test cases.
+*
+* @param prefijo The prefix to be added to the test case names.
+* @param colaPruebas The list of test cases to be processed.
+* @param sep The separator to be used between the prefix and the test case name. Default is '_'.
+* @return A closure that processes the test cases in the list.
+*
+* The returned closure iterates over the list of test cases, removing each test case from the list,
+* constructing a stage name by combining the prefix, separator, and the test case name, and then
+* executing the test case within a Jenkins stage. If the test case fails, an error message is sent
+* to a Slack channel and the error is re-thrown to mark the stage as failed.
+*/
+def newRunner(String prefijo, List colaPruebas, String sep = '_'){
+
+    return {
+        while(!colaPruebas.isEmpty()){
+            def prueba = colaPruebas.remove(0)
+            def nombre = prefijo + sep + prueba.split('/')[-1].split('\\.')[0]
+             stage(nombre) {
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    try {
+                        sh "npx cypress run --spec ${prueba} --reporter-options reportDir=tmp/${nombre}"
+                    } catch (Exception e) {
+                        echo "La prueba falló: ${nombre} - ${e.message}"
+                        slackSend(channel: params.SLACK_CHANNEL, color: 'danger', message: "😩 Error en ${nombre}: ${e.message}")
+                        throw e // Re-lanza el error para que Jenkins marque el stage como fallido
+                    }
+                }
+            }
+
+        }
+    }
+
+}
+
+
+/**
+ * Executes a Cypress test case within a Jenkins stage.
+ *
+ * @param prueba The path to the Cypress test file to be executed.
+ * @return A closure that processes the specified test case.
+ *
+ * The returned closure constructs a stage name by combining a prefix, separator, and the test case name,
+ * and then executes the test case within a Jenkins stage. If the test case fails, an error message is sent
+ * to a Slack channel and the error is re-thrown to mark the stage as failed.
+ */
+def runSpecFile(String prueba){
+    def nombre = prueba.split('/')[-1].split('\\.')[0]
+    try {
+        sh "npx cypress run --spec ${prueba} --reporter-options reportDir=tmp/${nombre}"
+    } catch (Exception e) {
+        def msg = "La prueba falló: ${nombre} - ${e.message} y el pipeline se detiene" 
+        echo msg
+        slackSend(channel: params.SLACK_CHANNEL, color: 'danger', message: msg)
+        throw e 
+    }  
+}

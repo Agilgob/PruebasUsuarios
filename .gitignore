@@ -1,0 +1,13 @@
+node_modules/
+force.sh
+cypress/screenshots/
+cypress/videos/
+cypress/downloads/
+cypress/outputs/
+tmp/
+cypress-mochawesome-reporter.log
+count.sh
+test-results/
+cypress/e2e/Funcionario/000_logins.cy.js
+.env
+.env*
