@@ -1,26 +1,28 @@
-FROM cypress-cjj-base
+FROM node:18-slim
 
-# RUN apt-get update && apt-get install -y \
-#     libgtk-3-0 \
-#     xvfb \
-#     zip \
-#     curl \
-#     tree \
-#     && rm -rf /var/lib/apt/lists/*
+# Establece el directorio de trabajo
+WORKDIR /home
 
-WORKDIR /home/PruebasUsuarios
+# Instala dependencias de sistema
+RUN apt-get update && apt-get install -y \
+    libgtk-3-0 \
+    xvfb \
+    zip \
+    curl \
+    tree \
+    && rm -rf /var/lib/apt/lists/*
 
+
+# Copia los archivos de configuración
 COPY . .
 
-# RUN npm install
-# RUN npx cypress install
-# RUN npx playwright install --with-deps chromium
+# Instala dependencias de Node.js
+RUN npm install && \
+    npx cypress install && \
+    npx playwright install --with-deps chromium
 
-RUN chmod +x entrypoint/demanda-inicial.sh && \
-    chmod +x entrypoint/exploratorios.sh && \
-    chmod +x entrypoint/konami.sh && \
-    chmod +x entrypoint/penal.sh && \
-    chmod +x entrypoint/sendReport.sh && \
+# habilita modo de ejecucion a todos los scripts
+RUN find entrypoint/ -type f -exec chmod +x {} \; && \
     chmod +x entrypoint.sh
 
 USER root
