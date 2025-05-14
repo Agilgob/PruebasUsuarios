@@ -21,7 +21,7 @@ for escenario in "${scenarios_array[@]}"; do
         ./entrypoint/penal.sh
         ;;
         *)
-        echo "Escenario desconocido: $escenario"
+        echo "Escenario desconocido: $escenario"a
         ;;
     esac
 done
