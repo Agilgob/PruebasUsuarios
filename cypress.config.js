@@ -3,17 +3,9 @@ import dotenv from 'dotenv';
 import fs from 'fs';
 import { parseFunctionary, parseCitizen, parseEnvironment } from './cypress/utilities/config.js';
 
-// const envFile = `.env.${process.env.ENV || 'sandbox'}`;
-
-// if (fs.existsSync(envFile)) {
-//   dotenv.config({ path: envFile });
-// } else {
-//   throw new Error(`Archivo de entorno ${envFile} no encontrado`);
-// }
-
-if (!process.env.ENVIRONMENT) throw new Error('ENVIRONMENT no está definida');
-if (!process.env.FUNCTIONARY) throw new Error('La variable de entorno FUNCTIONARY no está definida');
-if (!process.env.CITIZEN) throw new Error('La variable de entorno CITIZEN no está definida');
+if (!process.env.ENVIRONMENT) throw new Error('La variable ENVIRONMENT no está definida !!!!!!!!!!!!!!!!!!!!');
+if (!process.env.FUNCTIONARY) throw new Error('La variable FUNCTIONARY no está definida !!!!!!!!!!!!!!!!!!!!');
+if (!process.env.CITIZEN) throw new Error(' La variable CITIZEN no está definida !!!!!!!!!!!!!!!!!!!!');
 
 export default defineConfig({
   reporter: 'cypress-mochawesome-reporter',
@@ -35,7 +27,7 @@ export default defineConfig({
   e2e: {},
 
   defaultCommandTimeout: 10000,
-  video: true,
+  video: false,
   videoCompression: 32,
   videosFolder: 'tmp/videos',
   screenshotsFolder: 'tmp/screenshots',

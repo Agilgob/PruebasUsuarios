@@ -1,0 +1,10 @@
+node_modules
+.git
+.env
+.env.*
+tmp
+cypress/videos
+cypress/screenshots
+Dockerfile
+docker-compose.yml
+README.md

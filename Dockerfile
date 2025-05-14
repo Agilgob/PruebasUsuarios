@@ -1,20 +1,20 @@
-FROM node:18
+FROM cypress-cjj-base
 
-RUN apt-get update && apt-get install -y \
-    libgtk-3-0 \
-    xvfb \
-    zip \
-    curl \
-    tree \
-    && rm -rf /var/lib/apt/lists/*
+# RUN apt-get update && apt-get install -y \
+#     libgtk-3-0 \
+#     xvfb \
+#     zip \
+#     curl \
+#     tree \
+#     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /home/PruebasUsuarios
 
 COPY . .
 
-RUN npm install
-RUN npx cypress install
-RUN npx playwright install --with-deps chromium
+# RUN npm install
+# RUN npx cypress install
+# RUN npx playwright install --with-deps chromium
 
 RUN chmod +x entrypoint/demanda-inicial.sh && \
     chmod +x entrypoint/exploratorios.sh && \

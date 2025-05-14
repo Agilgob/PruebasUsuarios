@@ -11,3 +11,4 @@ test-results/
 cypress/e2e/Funcionario/000_logins.cy.js
 .env
 .env*
+Dockerfile-base
