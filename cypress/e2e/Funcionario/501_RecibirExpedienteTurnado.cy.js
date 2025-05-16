@@ -46,12 +46,12 @@ describe('Recibe el expediente como segundo secretario', () => {
         cy.sidebar('Expedientes').click();
         cy.sidebarExpedientes('Expedientes por recibir').click();
 
-        cy.get('input.inputSearcher').type(testData.expediente.expedient_number)
+        cy.get('input.inputSearcher').type(testData.expedient.expedient_number)
         cy.contains('button', 'Buscar').click();
 
 
-        cy.log(`:contains("${testData.expediente.expedient_number}")`)
-        cy.get('table tbody tr').filter(`:contains("${testData.expediente.expedient_number}")`).first().as('expedienteRow');
+        cy.log(`:contains("${testData.expedient.expedient_number}")`)
+        cy.get('table tbody tr').filter(`:contains("${testData.expedient.expedient_number}")`).first().as('expedienteRow');
         cy.get('@expedienteRow').find('input[type="checkbox"]')
             .should('not.be.checked')
 

@@ -17,10 +17,10 @@ describe('Satisface la precondicion cuando el testData no se encuentra en tmp', 
     it('captura los datos del expediente', () => {
         cy.visit(environment.funcionarioURL);
         getExpedientData(Cypress.env('expedientNumber')).then((expedientData) => {
-            expedientData['expedientFound'] = true;
-            expedientData['expedientCreated'] = true
             cy.url().then((url) => {
                 expedientData['tramite'] = { url };
+                expedientData['expedientFound'] = true;
+                expedientData['expedientCreated'] = true
                 console.log(expedientData); 
                 cy.writeFile('tmp/testData.json', expedientData, { log: false });
             });

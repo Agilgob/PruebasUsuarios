@@ -52,9 +52,9 @@ describe('Funcionario : Modificar expediente ', () => {
         cy.visit(environment.funcionarioURL);
         cy.hamburguer().click();
         cy.sidebar('Modificar expedientes').should('be.visible').click()
-        cy.get('section.searcherContainer').find('input').type(`${testData.expediente.expedient_number}{enter}`);
+        cy.get('section.searcherContainer').find('input').type(`${testData.expedient.expedient_number}{enter}`);
 
-        cy.get('section.procedures-table-container').find('tr').filter(`:contains("${testData.expediente.expedient_number}")`).as('expedienteRow');
+        cy.get('section.procedures-table-container').find('tr').filter(`:contains("${testData.expedient.expedient_number}")`).as('expedienteRow');
         cy.get('@expedienteRow')
             .then(($row) => {
                 expect($row.length).to.be.equal(1);
@@ -93,9 +93,9 @@ describe('Funcionario : Modificar expediente ', () => {
         cy.visit(environment.funcionarioURL);
         cy.hamburguer().click();
         cy.sidebar('Modificar expedientes').should('be.visible').click()
-        cy.get('section.searcherContainer').find('input').type(`${testData.expediente.expedient_number}{enter}`);
+        cy.get('section.searcherContainer').find('input').type(`${testData.expedient.expedient_number}{enter}`);
 
-        cy.get('section.procedures-table-container').find('tr').filter(`:contains("${testData.expediente.expedient_number}")`).as('expedienteRow');
+        cy.get('section.procedures-table-container').find('tr').filter(`:contains("${testData.expedient.expedient_number}")`).as('expedienteRow');
         cy.get('@expedienteRow')
             .then(($row) => {
                 expect($row.length).to.be.equal(1);
@@ -173,9 +173,9 @@ describe('Funcionario : Modificar expediente ', () => {
         cy.visit(environment.funcionarioURL);
         cy.hamburguer().click();
         cy.sidebar('Modificar expedientes').should('be.visible').click()
-        cy.get('section.searcherContainer').find('input').type(`${testData.expediente.expedient_number}{enter}`);
+        cy.get('section.searcherContainer').find('input').type(`${testData.expedient.expedient_number}{enter}`);
 
-        cy.get('section.procedures-table-container').find('tr').filter(`:contains("${testData.expediente.expedient_number}")`).as('expedienteRow');
+        cy.get('section.procedures-table-container').find('tr').filter(`:contains("${testData.expedient.expedient_number}")`).as('expedienteRow');
         cy.get('@expedienteRow')
             .then(($row) => {
                 expect($row.length).to.be.equal(1);

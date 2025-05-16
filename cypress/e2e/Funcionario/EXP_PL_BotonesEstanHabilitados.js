@@ -1,7 +1,7 @@
 import { loadTestData, saveTestData } from '../../support/loadTestData';
 
 
-describe('Acuerdos, notificaciones, sentencias correos y oficios son accesibles', () => {
+describe('Botones de las plantillas estan disponibles yse muestran correctamente', () => {
 
 
     let testData, tramite = null;
@@ -38,7 +38,7 @@ describe('Acuerdos, notificaciones, sentencias correos y oficios son accesibles'
 
 
 
-    it("Acuerdos, notificaciones, sentencias correos y oficios son accesibles", () => {
+    it("Botones de Acuerdos, notificaciones, sentencias correos y oficios son accesibles", () => {
 
         if(!testData.expedientFound) {
             throw new Error("Abortada porque no se ha encontrado el expediente");

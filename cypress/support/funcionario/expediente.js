@@ -16,10 +16,10 @@ Cypress.Commands.add('buscarExpediente', (testData) => {
     cy.sidebarExpedientes('Buscar expediente').click();
 
     // Buscar expediente
-    cy.get('.searcherContainer .inputSearcher').type(testData.expediente.expedient_number);
+    cy.get('.searcherContainer .inputSearcher').type(testData.expedient.expedient_number);
     cy.contains('.buttonsSearch button', "Buscar").click();
 
-    cy.contains('tr td a', testData.expediente.expedient_number).parent().parent().as('expedienteEncontrado');
+    cy.contains('tr td a', testData.expedient.expedient_number).parent().parent().as('expedienteEncontrado');
 
     cy.get('@expedienteEncontrado').find('td a').click();
 

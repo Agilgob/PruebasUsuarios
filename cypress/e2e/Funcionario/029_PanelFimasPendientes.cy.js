@@ -164,7 +164,8 @@ describe('Permite acceder al panel de firmas pendientes ', () => {
             cy.log('Documentos pendientes de firma: ', documents.length);
         });
     
-        validaBarraTabs();
+        cy.contains('li a', 'Pendiente de firma').scrollIntoView().should('be.visible').as('pendFirma');
+        cy.get('@pendFirma').should('have.attr', 'class').and('include', 'active');
     
         cy.document().then((doc) => {
             cy.get('div.mt-2 h4.text-center').scrollIntoView().should('be.visible')
@@ -186,10 +187,6 @@ describe('Permite acceder al panel de firmas pendientes ', () => {
 
 
 
-const validaBarraTabs = function(){
-    cy.contains('li a', 'Pendiente de firma').scrollIntoView().should('be.visible').as('pendFirma');
-    cy.get('@pendFirma').should('have.attr', 'class').and('include', 'active');
-}
 
 const capturaDocumentosPendientes = (desencadenador) => {
     cy.intercept('GET', '**/api/v1/signature_documents/get_documents_pending_signature_by_user/**').as('getDocuments');

@@ -28,7 +28,7 @@ describe('Valida que los documentos en el expediente NO esten accesibles antes d
 
     it('El ciudadano NO puede ver los documentos', () => {
         
-        accedeAlExpediente(testData.expediente.expedient_number, environment);
+        accedeAlExpediente(testData.expedient.expedient_number, environment);
         cy.get('section.procedures-table-container').as('procedures');
         cy.get('@procedures').should('exist')
             .and('not.be.visible')

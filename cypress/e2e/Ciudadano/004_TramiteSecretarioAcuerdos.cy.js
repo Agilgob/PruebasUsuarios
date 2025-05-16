@@ -186,12 +186,12 @@ describe('Juzgados Civiles, Familiares y Mercantiles en línea', () => {
                     const newExpedient = getNewExpedientId(expedientesInicio.electronicExpedients, expedientesFinal.electronicExpedients);
                     cy.log('Nuevo expediente creado: ' + JSON.stringify(newExpedient));
                     
-                    testData.expediente = newExpedient;
+                    testData.expedient = newExpedient;
                     testData.ciudadano = ciudadano;
                     testData.tramite = tramite;
                     testData.environment = environment;
 
-                    const name =  testData.expediente.expedient_number.replace(/\//g, '-') + ".json"
+                    const name =  testData.expedient.expedient_number.replace(/\//g, '-') + ".json"
                     cy.writeFile('tmp/testData.json', testData)
                     cy.writeFile('tmp/' + name, testData)
 
