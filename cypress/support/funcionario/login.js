@@ -14,7 +14,9 @@ Cypress.Commands.add('loginFuncionario', (email, password) => {
     cy.wait('@login').then((interception) => {
         expect(interception.response.statusCode).to.eq(200)
     })
-    // cy.log('Usuario loggeado ' + email)
+    cy.then(() => {
+        cy.getCookie('authentication_token_03').should('exist')
+    })
 
 })
 

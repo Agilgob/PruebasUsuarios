@@ -2,9 +2,10 @@ export function parseFunctionary(_functionary) {
     let functionary = {"key" : _functionary};
     functionary["email"] = process.env[`${_functionary}_EMAIL`];
     functionary["password"] = process.env[`${_functionary}_PASSWORD`];
+    functionary['nombre'] = process.env[`${_functionary}_NOMBRE`];
     functionary["username"] = process.env[`${_functionary}_USERNAME`];
-    functionary["archivofirel"] = process.env[`${_functionary}_ARCHIVOFIREL`];
-    functionary["passwordfirel"] = process.env[`${_functionary}_PASSWORDFIREL`];
+    functionary["archivoFirel"] = process.env[`${_functionary}_ARCHIVOFIREL`];
+    functionary["passwordFirel"] = process.env[`${_functionary}_PASSWORDFIREL`];
     functionary["turnaA"] = process.env[`${_functionary}_TURNAA`];
     functionary["archivoAcuerdos"] = process.env[`${_functionary}_ARCHIVOACUERDOS`];
 

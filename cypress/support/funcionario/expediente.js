@@ -4,8 +4,6 @@ import { saveTestData } from "../loadTestData";
 Cypress.Commands.add('buscarExpediente', (testData) => {
     if (testData.expedientFound && testData.tramite.url) {
         cy.log('Escapando captura de ID ya que se encontró en testData.json');
-        cy.log("TEST_DATA :" + JSON.stringify(testData.tramite));
-        cy.log("TRAMITE_URL :" + JSON.stringify(testData.tramite.url));
         return;
     }
 
@@ -165,3 +163,25 @@ Cypress.Commands.add('intercambiaFuncionarioJsonFile', (interception) => {
     })
     
 })
+
+
+export function getExpedientData(expedientNumber = ""){
+
+    cy.hamburguer().click();
+    cy.sidebar('Expedientes').should('be.visible').click()
+    cy.sidebarExpedientes('Mis expedientes').click();
+
+    cy.get('input.inputSearcher').as('searcher');
+    cy.get('@searcher').type(expedientNumber);
+    cy.contains('button', 'Buscar').click();
+    cy.get('.procedures-table-container table tbody tr').as('tr')
+    cy.get('@tr').should('have.length', 1);
+    cy.get('@tr').should('contain', expedientNumber);
+
+    cy.intercept('GET', '**/api/v1/document_expedients/documents/*/10?page=1').as('expedientData');
+    cy.get('@tr').find('td a[href*="expedient_details"]').click();
+    return cy.wait('@expedientData').then((interception) => {
+        return cy.wrap(interception.response.body.data)
+    })
+
+}   
