@@ -24,7 +24,13 @@ export default defineConfig({
     debug: true,
   },
 
-  e2e: {},
+  e2e: {
+    async setupNodeEvents(on, config) {
+      const mochawesome = await import('cypress-mochawesome-reporter/plugin.js');
+      mochawesome.default(on); 
+      return config;
+    }
+  },
 
   defaultCommandTimeout: 10000,
   video: false,

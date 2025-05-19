@@ -11,7 +11,7 @@ describe('Elimina los tramites iniciados del funcionario', () => {
         cy.iniciarSesionFuncionario(funcionario.email, funcionario.password, environment);
     });
     
-    it('Permite eliminar los tramites iniciados', () =>{
+    it('Permite eliminar TODOS los tramites iniciados', () =>{
         cy.visit(environment.funcionarioURL);
         cy.get('.one_column .fa-align-justify').click();
         cy.get('[title="Sección de trámites"]').click();
