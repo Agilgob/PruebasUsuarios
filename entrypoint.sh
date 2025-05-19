@@ -1,8 +1,6 @@
 #!/bin/bash
 
 
-# ./entrypoint/exploratorios.sh
-# ./entrypoint/penal.sh
 
 IFS=',' read -r -a scenarios_array <<< "$TEST_SCENARIOS"
 

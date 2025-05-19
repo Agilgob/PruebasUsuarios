@@ -1,7 +1,6 @@
 #!/bin/bash
 
 echo "Desde el archivo .sh de exploratorios"
-env
 
 # Ir al directorio raíz del proyecto
 cd "$(dirname "$0")/.."
