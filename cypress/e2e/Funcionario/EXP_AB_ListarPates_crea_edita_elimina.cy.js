@@ -86,7 +86,7 @@ describe('Funcionario : Listar partes ', () => {
         cy.getModal('Listado de partes').should('be.visible');
         cy.getModal('Listado de partes').contains('p', 'Partes').parent().find('button').click()
 
-        cy.llenarSelectModal('Tipo de parte', 'Tercero Interesado')
+        cy.llenarSelectModal('Tipo de parte', 'Tercero interesado')
         cy.get('div[aria-label="Button Parties Form"]').as('pestanasDatosPartes')
 
         // DATOS PERSONALES
@@ -163,7 +163,7 @@ describe('Funcionario : Listar partes ', () => {
         cy.visit(tramite.url, {failOnStatusCode: false});
         cy.clickListarPartes(); // support/funcionario/expediente
         cy.getModal('Listado de partes').should('be.visible');
-        cy.getModal('Listado de partes').find('.modal-body >  div > div ').filter(':contains("Tercero Interesado")').first().click();
+        cy.getModal('Listado de partes').find('.modal-body >  div > div ').filter(':contains("Tercero interesado")').first().click();
         cy.get('div[aria-label="Button Parties Form"]').as('pestanasDatosPartes')
 
         // DATOS DE CONTACTO
@@ -200,7 +200,7 @@ describe('Funcionario : Listar partes ', () => {
         cy.visit(tramite.url, {failOnStatusCode: false});
         cy.clickListarPartes(); // support/funcionario/expediente
         cy.getModal('Listado de partes').should('be.visible');
-        cy.getModal('Listado de partes').find('.modal-body >  div > div ').filter(':contains("Tercero Interesado")').first().as('parte');
+        cy.getModal('Listado de partes').find('.modal-body >  div > div ').filter(':contains("Tercero interesado")').first().as('parte');
         cy.get('@parte').find('span[class="ti-trash"]').click();
         cy.contains('h5', '¿Estás seguro de eliminar la parte?').should('be.visible');
 

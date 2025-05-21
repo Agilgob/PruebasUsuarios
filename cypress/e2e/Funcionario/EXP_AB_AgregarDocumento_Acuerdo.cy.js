@@ -29,7 +29,7 @@ describe('Ingreso de acuerdos del funcionario', () => {
         cy.session('sesionFuncionario', () => {
             cy.visit(environment.funcionarioURL);
             cy.loginFuncionario(funcionario.email, funcionario.password);
-          
+            cy.wait(2000);
             cy.getCookie('authentication_token_03').should('exist');
         }, {
             cacheAcrossSpecs: true
