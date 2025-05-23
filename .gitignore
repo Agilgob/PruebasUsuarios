@@ -9,6 +9,10 @@ cypress-mochawesome-reporter.log
 count.sh
 test-results/
 cypress/e2e/Funcionario/000_logins.cy.js
+
+Dockerfile-base
+
+# variables de entorno y datos sensibles
 .env
 .env*
-Dockerfile-base
+k6/users*.json
