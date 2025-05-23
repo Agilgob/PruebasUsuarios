@@ -1,0 +1,16 @@
+export $(grep -v '^#' .env.sandbox | xargs)
+
+
+Es necesario instalar K6 por fuera de node 
+
+sudo dnf install -y https://dl.k6.io/rpm/repo.rpm
+sudo dnf install -y k6
+
+Es necesario instalar el reporter 
+npm install -g k6-reporter
+
+
+Para ejecutar las pruebas y generar el reporte HTML ejecutar el siguiente comando :
+* Tomar en consideracion que se necesita una cantidad suficiente de datos para que el reporte 
+    se pueda poblar de informacion, de lo contrario el reporte no sera generado.
+K6_WEB_DASHBOARD=true K6_WEB_DASHBOARD_EXPORT=html-report.html k6 run k6/FUN_login.js 

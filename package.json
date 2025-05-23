@@ -2,6 +2,7 @@
     "dependencies": {
         "cypress": "^14.0.1",
         "cypress-localstorage-commands": "^2.2.7",
+        "k6": "^0.0.0",
         "playwright": "^1.51.1"
     },
     "devDependencies": {
