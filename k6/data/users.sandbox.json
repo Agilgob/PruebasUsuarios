@@ -1,5 +1,7 @@
 {
     "authorization" : "YWxwaGEx",
+
+
     "users" : [
         {"email": "secretarioacuerdosmerca02.octane601@simplelogin.com", "password":"samerca.mvaldez02", "app_id" : 3 },
         {"email": "secretarioacuerdosmerca01.require753@simplelogin.com", "password":"sacuerdos.mvaldez01", "app_id" : 3 },
@@ -8,4 +10,5 @@
         {"email": "indicadoresacu1@correo.com", "password":"12345678", "app_id" : 3 }
     ]
 
+    
 }

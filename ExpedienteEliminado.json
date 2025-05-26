@@ -1,0 +1,68 @@
+{
+  "id": "interceptedRequest543",
+  "browserRequestId": "12207.931",
+  "routeId": "1748291387848-34",
+  "request": {
+    "headers": {
+      "host": "sandbox.nilo.cjj.gob.mx",
+      "connection": "keep-alive",
+      "content-length": "2",
+      "sec-ch-ua-platform": "\"Linux\"",
+      "authorization": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjp7ImlkIjo1NDQ1LCJlbWFpbCI6Im1hbnVlbEBhZ2lsZ29iLmNvbSIsInVzZXJuYW1lIjoibWFudWVsX2FnaWxnb2IuY29tIiwibmFtZXMiOiJKT1NFIE1BTlVFTCIsInBhdGVybmFsX3N1cm5hbWUiOiJWQUxERVoiLCJtYXRlcm5hbF9zdXJuYW1lIjoiVkVSRFVaQ08iLCJhY2NvdW50X2lkIjpudWxsLCJhcHBfaWQiOjIsInJlZ2ltZSI6MSwiY3VycCI6IlZBVk05MDAyMDFISkNMUk4wOCIsInJvbGVzIjpbXSwibW9kdWxlcyI6W10sImdyb3VwcyI6W10sImF2YXRhciI6bnVsbCwic3BlY2lhbF9wZXJtaXNzaW9ucyI6W119LCJ1aWQiOlsibWFudWVsQGFnaWxnb2IuY29tIl0sImFjY2Vzcy10b2tlbiI6WyJIdkxzajhFRG9TNUV3clJuaVo2cVRnIl0sImNsaWVudCI6WyJxbzF4WWNlemx4dGJ6d0E5cUpEeW1BIl0sImlhdCI6MTc0ODI5MTM3NywiZXhwIjoxNzQ5MTkxMzc3fQ.oMjGT_81-5Pq23f-59cajgENFlB8VJNpnrtNyeUfECo",
+      "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Cypress/14.3.0 Chrome/130.0.6723.137 Electron/33.2.1 Safari/537.36",
+      "accept": "application/json, text/plain, */*",
+      "sec-ch-ua": "\"Not?A_Brand\";v=\"99\", \"Chromium\";v=\"130\"",
+      "content-type": "application/json;charset=UTF-8",
+      "sec-ch-ua-mobile": "?0",
+      "origin": "https://sandbox.ciudadano.cjj.gob.mx",
+      "sec-fetch-site": "same-site",
+      "sec-fetch-mode": "cors",
+      "sec-fetch-dest": "empty",
+      "referer": "https://sandbox.ciudadano.cjj.gob.mx/",
+      "accept-encoding": "gzip, deflate, br, zstd",
+      "accept-language": "en-US"
+    },
+    "url": "https://sandbox.nilo.cjj.gob.mx/api/v1/procedure/delete/5445/7327?token=alpha1",
+    "method": "DELETE",
+    "httpVersion": "1.1",
+    "resourceType": "xhr",
+    "query": {
+      "token": "alpha1"
+    },
+    "body": {},
+    "responseTimeout": 30000,
+    "alias": "deleteExpedient"
+  },
+  "state": "Complete",
+  "requestWaited": true,
+  "responseWaited": true,
+  "subscriptions": [],
+  "response": {
+    "headers": {
+      "date": "Mon, 26 May 2025 20:29:54 GMT",
+      "content-type": "application/json",
+      "transfer-encoding": "chunked",
+      "connection": "keep-alive",
+      "host": "sandbox.nilo.cjj.gob.mx",
+      "x-powered-by": "PHP/7.2.34",
+      "cache-control": "no-cache, private",
+      "access-control-allow-origin": "https://sandbox.ciudadano.cjj.gob.mx",
+      "vary": "Origin",
+      "x-ratelimit-limit": "1024",
+      "x-ratelimit-remaining": "984"
+    },
+    "url": "https://sandbox.nilo.cjj.gob.mx/api/v1/procedure/delete/5445/7327?token=alpha1",
+    "method": null,
+    "httpVersion": "1.1",
+    "statusCode": 200,
+    "statusMessage": "OK",
+    "body": {
+      "status": true,
+      "code": 200,
+      "data": {
+        "error": false,
+        "message": "El procedimiento se ha eliminado correctamente"
+      }
+    }
+  }
+}

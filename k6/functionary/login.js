@@ -1,7 +1,7 @@
 import http from 'k6/http';
 import { check } from 'k6';
 import { SharedArray } from 'k6/data';
-import { testLogin, testExpedients, testPushNotifications, testPendingSignatures } from './functionary.js';
+import { testLogin, testExpedients, testPushNotifications, testPendingSignatures } from './services/functionary.js';
 
 
 export const options = {

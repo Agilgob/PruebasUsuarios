@@ -171,7 +171,7 @@ describe('Permite acceder al panel de firmas pendientes ', () => {
             cy.get('div.mt-2 h4.text-center').scrollIntoView().should('be.visible')
                 .invoke('text').then((text) => {
                     if (text.includes('No se encontraron documentos')) {
-                        cy.log('No se encontraron documentos pendientes de firma');
+                        throw Error("No se encontraron documentos pendientes de firma")
                     } else {
                         cy.get('section.procedures-table-container', { log: false }).as('sectionProcedures');
                         cy.get('@sectionProcedures').find('tbody tr').should('have.length', documents.length);
