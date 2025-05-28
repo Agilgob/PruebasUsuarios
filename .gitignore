@@ -15,4 +15,4 @@ Dockerfile-base
 # variables de entorno y datos sensibles
 .env
 .env*
-k6/users*.json
+*users*.json

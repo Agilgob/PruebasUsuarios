@@ -1,0 +1,35 @@
+{
+
+    "production" : {
+        "citizen" : {
+            "stages" : [
+                { "duration" : "10m", "target" : 500}
+            ]
+        },
+
+
+        "functionary" : {
+            "stages" : [
+                { "duration" : "10m", "target" : 500}
+            ]
+        }
+    }, 
+
+
+    "sandbox" : {
+        "citizen" : {
+            "stages" : [
+                { "duration" : "10m", "target" : 500}
+            ]
+        },
+
+
+        "functionary" : {
+            "stages" : [
+                { "duration" : "10m", "target" : 500}
+            ]
+        }
+    }
+
+    
+}

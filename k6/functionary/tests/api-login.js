@@ -1,26 +1,29 @@
 import http from 'k6/http';
 import { check } from 'k6';
-import { SharedArray } from 'k6/data';
-import { testLogin, testExpedients, testPushNotifications, testPendingSignatures } from './services/functionary.js';
+
+import { testLogin, testExpedients, testPushNotifications, testPendingSignatures } from '../services/functionary.js';
+import { loadOptions, loadTestData } from '../../utilities/setup.js';
 
 
-export const options = {
-    stages: [
-        { duration: '30s', target: 3},
-        { duration: '30s', target: 5},
-        { duration: '2m', target: 5},
-        { duration: '30s', target: 0 },
-    ]
-};
 
-const data = new SharedArray('datos', () => [JSON.parse(open('./users.sandbox.json'))])[0]; 
-export const AUTH_HEADER = data.authorization;
-export const users = data.users;
+
+const testStrategy = __ENV.STRATEGY || 'smoke';
+const environment = __ENV.ENVIRONMENT || 'sandbox';
+const application = __ENV.APPLICATION || 'functionary';
+
+
+export const options = loadOptions(testStrategy, environment, application);
+export const data = loadTestData(environment, 3, application); 
+
+const authorization = data.appData.authorization;
+const users = data.users;
+const baseUrl = data.appData.apiBaseUrl;
+
 
 const headersBase = {
     "Content-Type": "application/json",
     "Accept": "application/json, text/plain, */*",
-    "Authorization": AUTH_HEADER,
+    "Authorization": authorization,
 };
 
 
@@ -28,8 +31,7 @@ export default function () {
 
     const user = users[__VU - 1];
     // const user = users[__VU % users.length];
-    const baseUrl = 'https://sandbox.nilo.cjj.gob.mx';
-
+   
     const jwt = testLogin(baseUrl, headersBase, user);
 
     if(!jwt) {
@@ -42,6 +44,3 @@ export default function () {
         testPendingSignatures(baseUrl, headersBase, jwt);
     }
 }
-
-
-

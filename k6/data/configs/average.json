@@ -1,0 +1,43 @@
+{
+
+    "production" : {
+        "citizen" : {
+            "stages" : [
+                { "duration" : "2m", "target" : 100},
+                { "duration" : "10m", "target" : 100},
+                { "duration" : "90s", "target" : 0}
+            ]
+        },
+
+
+        "functionary" : {
+            "stages" : [
+                { "duration" : "2m", "target" : 50},
+                { "duration" : "10m", "target" : 50},
+                { "duration" : "90s", "target" : 0}
+            ]
+        }
+    }, 
+
+
+    "sandbox" : {
+        "citizen" : {
+            "stages" : [
+                { "duration" : "2m", "target" : 8},
+                { "duration" : "3m", "target" : 8},
+                { "duration" : "90s", "target" : 0}
+            ]
+        },
+
+
+        "functionary" : {
+            "stages" : [
+                { "duration" : "2m", "target" : 8},
+                { "duration" : "10m", "target" : 8},
+                { "duration" : "90s", "target" : 0}
+            ]
+        }
+    }
+
+    
+}
