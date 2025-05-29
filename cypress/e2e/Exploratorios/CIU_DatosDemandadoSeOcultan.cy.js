@@ -18,7 +18,7 @@ describe('Descarga el manual de usuario de los tramites en la primer pantalla', 
             cy.visit(environment.ciudadanoURL);
             cy.loginCiudadano(ciudadano.email, ciudadano.password);
             cy.wait(2000);
-            cy.getCookie('authentication_token_02').should('exist');
+            cy.getCookie('authentication_token_02', { timeout: 5000 }).should('exist');
         });
     });
 

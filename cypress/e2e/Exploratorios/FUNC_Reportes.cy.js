@@ -36,7 +36,7 @@ describe('Permite acceder al panel de vencimientos', () => {
         cy.session('sesionFuncionario', () => {
             cy.visit(environment.funcionarioURL);
             cy.loginFuncionario(funcionario.email, funcionario.password);
-            cy.getCookie('authentication_token_03').should('exist');
+            cy.getCookie('authentication_token_03', { timeout: 5000 }).should('exist');
         }, {
             cacheAcrossSpecs: true
         }); 

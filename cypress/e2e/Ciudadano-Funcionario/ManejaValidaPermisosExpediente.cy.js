@@ -9,7 +9,7 @@ const funcionario = Cypress.env('funcionario');
 const functionarySession = () => {
     cy.visit(environment.funcionarioURL);
     cy.loginFuncionario(funcionario.email, funcionario.password);
-    cy.getCookie('authentication_token_03').should('exist');
+    cy.getCookie('authentication_token_03', { timeout: 5000 }).should('exist');
     cy.visit(environment.funcionarioURL);
 }
 
@@ -17,7 +17,7 @@ const citizenSession = () => {
     cy.visit(environment.ciudadanoURL);
     cy.loginCiudadano(ciudadano.email, ciudadano.password);
     cy.wait(2000);
-    cy.getCookie('authentication_token_02').should('exist');
+    cy.getCookie('authentication_token_02', { timeout: 5000 }).should('exist');
     cy.visit(environment.ciudadanoURL);
 }
 

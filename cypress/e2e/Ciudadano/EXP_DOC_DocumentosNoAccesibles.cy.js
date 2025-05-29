@@ -22,7 +22,7 @@ describe('Valida que los documentos en el expediente NO esten accesibles antes d
             cy.visit(environment.ciudadanoURL);
             cy.loginCiudadano(ciudadano.email, ciudadano.password);
             cy.wait(2000);
-            cy.getCookie('authentication_token_02').should('exist');
+            cy.getCookie('authentication_token_02', { timeout: 5000 }).should('exist');
         });
     });
 

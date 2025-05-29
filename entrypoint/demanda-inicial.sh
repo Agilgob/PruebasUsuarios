@@ -64,6 +64,13 @@ if [ "$EXPEDIENT_CREATED" -eq 0 ]; then
                         export FUNCTIONARY=FUNC_LABORAL_ACUERDOS_01
                         npx cypress run --spec cypress/e2e/Funcionario/EXPxREC_RecibirExpedienteTurnado.cy.js
 
+                        MULTIFIRMA_RECIBIDO=$?
+                        if [ "$MULTIFIRMA_RECIBIDO" -eq 0 ]; then
+                           npx cypress run --spec cypress/e2e/Funcionario/CP_PSP_PanelFimasPendientes.cy.js
+                        else
+                            echo "Se omitio la ejecucion de la prueba EXP_AB_AgregarDocumento_Acuerdo_Multifirma_Validar.cy.js por error en el recibo del expediente multifirma"
+                        fi
+
                     else
                         echo "Se omitio ya que fallo el ingreso de acuerdo multifirma"
                     fi
