@@ -5,7 +5,8 @@ set -e
 # Ir al directorio raíz del proyecto
 cd "$(dirname "$0")/.."
 
-npx cypress run --spec "cypress/e2e/Ciudadano/TR_DemandaInicial.cy.js" --env tramite="di-rep-abog-demandado-anexo"
+# npx cypress run --spec "cypress/e2e/Ciudadano/TR_DemandaInicial.cy.js" --env tramite="di-rep-abog-demandado-anexo"
+ls
 EXPEDIENT_CREATED=$?
 
 if [ "$EXPEDIENT_CREATED" -eq 0 ]; then

@@ -55,12 +55,10 @@ describe('Funcionario : Modificar expediente ', () => {
         cy.get('section.searcherContainer').find('input').type(`${testData.expedient.expedient_number}{enter}`);
 
         cy.get('section.procedures-table-container').find('tr').filter(`:contains("${testData.expedient.expedient_number}")`).as('expedienteRow');
-        cy.get('@expedienteRow')
-            .then(($row) => {
-                expect($row.length).to.be.equal(1);
-                cy.wrap($row).find('div.edit').click()
-            });
-        
+        cy.get('@expedienteRow').should('have.length', 1)
+        cy.get('@expedienteRow').find('div.edit').click();
+
+                
         cy.intercept('**/api/v1/matters/get_list').as('getMatters');
         cy.intercept('**/api/v1/electronic_expedient/crimes/*').as('getCrimes');
         cy.wait(['@getMatters', '@getCrimes']).then((interceptions) => {
@@ -96,11 +94,8 @@ describe('Funcionario : Modificar expediente ', () => {
         cy.get('section.searcherContainer').find('input').type(`${testData.expedient.expedient_number}{enter}`);
 
         cy.get('section.procedures-table-container').find('tr').filter(`:contains("${testData.expedient.expedient_number}")`).as('expedienteRow');
-        cy.get('@expedienteRow')
-            .then(($row) => {
-                expect($row.length).to.be.equal(1);
-                cy.wrap($row).find('div.edit').click()
-            });
+        cy.get('@expedienteRow').should('have.length', 1)
+        cy.get('@expedienteRow').find('div.edit').click();
         
         cy.intercept('**/api/v1/matters/get_list').as('getMatters');
         cy.intercept('**/api/v1/electronic_expedient/crimes/*').as('getCrimes');
@@ -176,11 +171,8 @@ describe('Funcionario : Modificar expediente ', () => {
         cy.get('section.searcherContainer').find('input').type(`${testData.expedient.expedient_number}{enter}`);
 
         cy.get('section.procedures-table-container').find('tr').filter(`:contains("${testData.expedient.expedient_number}")`).as('expedienteRow');
-        cy.get('@expedienteRow')
-            .then(($row) => {
-                expect($row.length).to.be.equal(1);
-                cy.wrap($row).find('div.edit').click()
-            });
+        cy.get('@expedienteRow').should('have.length', 1)
+        cy.get('@expedienteRow').find('div.edit').click();
         
         cy.intercept('**/api/v1/matters/get_list').as('getMatters');
         cy.intercept('**/api/v1/electronic_expedient/crimes/*').as('getCrimes');

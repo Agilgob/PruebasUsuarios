@@ -1,11 +1,11 @@
 {
     "tresPartes" : {
-        "numeroExpediente" : "L3/2025TEST4",
-        "destinatario" : "MANUEL VALDEZ ACUERDOS - Secretario de Acuerdos",
+        "numeroExpediente" : "L3/2025TEST7",
+        "destinatario" : "SECRETARIO DE ACUERDOS",
         "tipoJuicio" : "Actos prejudiciales - ACP",
         "via" : "Jurisdicción Voluntaría - 26",
-        "materia" : "Familiar",
-        "accionPrincipal" : "ABANDONO",
+        "materia" : "Laboral",
+        "accionPrincipal" : "ACCIDENTE DE TRABAJO",
         "observaciones" : "Observaciones de prueba",
 
         "partes" : [
@@ -44,7 +44,7 @@
                 }
             },
             {   
-                "tipoParte" : "Tercero Interesado",
+                "tipoParte" : "Tercero interesado",
 
                 "datosPersonales" : {
                     "regimen" : "Persona Física",
@@ -78,7 +78,7 @@
                 }
             },
             {   
-                "tipoParte" : "Tercero Interesado",
+                "tipoParte" : "Tercero interesado",
 
                 "datosPersonales" : {
                     "regimen" : "Persona Física",
