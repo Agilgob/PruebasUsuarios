@@ -1,7 +1,9 @@
 {
     "dependencies": {
+        "@slack/web-api": "^7.9.2",
         "cypress": "^14.0.1",
         "cypress-localstorage-commands": "^2.2.7",
+        "node-fetch": "^3.3.2",
         "playwright": "^1.51.1"
     },
     "devDependencies": {
