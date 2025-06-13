@@ -33,7 +33,7 @@ export default defineConfig({
   },
 
   defaultCommandTimeout: 10000,
-  video: false,
+  video: true,
   videoCompression: 32,
   videosFolder: 'tmp/videos',
   screenshotsFolder: 'tmp/screenshots',

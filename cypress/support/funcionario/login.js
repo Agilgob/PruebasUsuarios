@@ -15,7 +15,7 @@ Cypress.Commands.add('loginFuncionario', (email, password) => {
         expect(interception.response.statusCode).to.eq(200)
     })
     cy.then(() => {
-        cy.getCookie('authentication_token_03').should('exist')
+        cy.getCookie('authentication_token_03', { timeout: 5000 }).should('exist')
     })
 
 })
@@ -29,7 +29,7 @@ Cypress.Commands.add('iniciarSesionFuncionario', (email, password, environment) 
         cy.visit(environment.funcionarioURL);
         cy.loginFuncionario(email, password);
         cy.contains('h3', 'Tablero de contro', {timeout: 10000}).should('be.visible');
-        cy.getCookie('authentication_token_03').should('exist');
+        cy.getCookie('authentication_token_03', { timeout: 5000 }).should('exist');
     }, {
         cacheAcrossSpecs: false
     });

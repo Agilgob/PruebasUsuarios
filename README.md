@@ -4,46 +4,69 @@ Este proyecto utiliza Cypress para realizar pruebas end-to-end (E2E) automatizad
 
 ### Descripción de las Configuraciones
 
-- **defaultCommandTimeout**: Tiempo de espera predeterminado para los comandos (5000 ms).
-- **video**: Habilita la grabación de video durante las pruebas.
-- **videoCompression**: Nivel de compresión de los videos grabados (32).
-- **videosFolder**: Carpeta donde se almacenan los videos (`tmp`).
-- **screenshotsFolder**: Carpeta donde se almacenan las capturas de pantalla (`tmp`).
+Tanto para cypress como para playwright se cargan las variables de entorno antes de la ejecucion de las pruebas, los archivos de variables pueden ser `.env.sandbox` o `.env.prod` dependiendo el ambiente.
 
-### Variables de Entorno
-
-- **funcionario**: `secretarioAcuerdos02`
-- **ciudadano**: `ciudadanoManuel`
-- **tramite**: `promocion_demanda_fam_merc`
-- **environment**: `sandbox`
-
-## Ejecución de Pruebas
-
-Las pruebas pueden ser alimentadas por datos de dos origenes distintos, de los archivos fixture que se encuentran en la carpeta `cypress/fixtures` o pueden tomar datos de pruebas realizadas previamente, siempre que las salidas sean compatibles y que se almacenan en el archivo `tmp/testData.json` el cual almacena los datos de pruebas ejecutados anteriormente en un formato muy similar. 
-
-Para ejecutar la prueba usando los datos de fixtures no debe incluirse el parametro `jsonFile` a la ejecucion, opcionalmente puede pasarse las variables de entorno para usar alguno de los objetos en los archivos de fixtures:
-
-Ejemplo:
-```bash
-npx cypress run --env ciudadano="admin",funcionario="Secretario001",tramite="promocion_demanda_fam_merc" --spec foo
-```
-Si alguna de estas variables de entorno no se proporciona, se tomarán los valores por defecto declarados en el archivo [cypress.config.js](./cypress.config.js)
-
-
-Para ejecutar las pruebas tomando los datos almacenados en al archivo `tmp/testData.json`, epecialmente en casos en que se generan datos en pruebas previas, es neceasario usar la variable de entorno `jsonFile=true` como se muestra a continuacion:
-
-
-```shell
-npx cypress run --env jsonFile=true --spec foo
-```
-En caso de pasar otras variables en el comando, solo se cargan los datos en el archivo `jsonFile` aunque la ejecucion no genera error.
-
+Para k6 es necesario pasar los archivos de credenciales a la carpeta de `k6/data/users.sandbox.json` o `k6/data/users.production.json`
+Es importante que se tengan archivos de usuarios con un volumen por encima de lo que solicitan las estrategias de pruebas (si piden 100 usuarios, tener 100 o mas en los archivos de usuarios.)
 
 
 ## Estructura del Proyecto
 
-- `cypress/`: Carpeta principal que contiene las pruebas y configuraciones de Cypress.
-- `tmp/`: Carpeta donde se almacenan los videos y capturas de pantalla, logs, datos de pruebas (testData.json) generados durante las pruebas.
+- `cypress/`: Almacena pruebas e2e en cypress.
+- `playwright/`: Almacena pruebas e2e pero solo para Penal o alguna otra prueba que llegue a saturar la memoria de cypress.
+- `k6/` : Almacena pruebas de performance, requiere otros archivos de usuarios y passwords en formato JSON 
+- `tmp/`: Guarda archivos temporales que se generan durante la ejecucion de las pruebas de cualquiera de los frameworks que se mencionan anteriormente. Es una carpeta que no se sube al repositorio.
+
+
+<details>
+<summary><h2>Imagen de Docker</h2></summary>
+
+Se recomienda usar la imagen de docker para correr las pruebas, ya que no requiere configuracion adicional al build.
+Puedes consultar el [Dockerfile](Dockerfile) el el root del proyecto.
+
+Crea la imagen asi : 
+```bash
+docker build  -t testing-agilgob . --ignore-cache
+```
+
+Ejecuta las pruebas asi para cada framework :
+```bash
+# PARA K6
+# De performance k6 para todas las pruebas en el shell
+docker run --rm -v "$(pwd)/tmp:/home/tmp" testing-agilgob ./entrypoint/stress.sh
+
+# para una prueba en particular 
+docker run --rm -v "$(pwd)/tmp:/home/tmp" testing-agilgob k6 run k6/functionary/login.js
+
+
+# PARA CYPRESS
+# Para correr una prueba
+docker run --rm -v "$(pwd)/tmp:/home/tmp" cypress run --spec <ruta a la prueba>
+
+# para correr una sesion cobn multiples pruebas o 'Flujos completos'
+docker run --rm -v "$(pwd)/tmp:/home/tmp" testing-agilgob ./entrypoint/demanda-inicial.sh 
+
+
+# PARA PLAYWRIGHT
+# Para correr una prueba
+docker run --rm -v "$(pwd)/tmp:/home/tmp" playwright test playwright/tests/Penal.js
+
+# para correr una sesion cobn multiples pruebas o 'Flujos completos'
+docker run --rm -v "$(pwd)/tmp:/home/tmp" playwright ./entrypoint/penal.js
+
+```
+
+Si se ejecuta el entrypoint del contenedor sin parametros se inician varias sesiones, dependiendo del archivo de entorno que se pase al `run` del contenedor. 
+Para saber que sesiones o suit se va a correr revisa la variable TEST_SCENARIOS
+Por ejemplo en este caso al ejecutar el `docker run testing-agilgob` se ejecutaran test exploratorios, de penal en playwright y demandas iniciales en cypress.
+``` bash
+TEST_SCENARIOS=exploratorios,penal,demanda-inicial
+```
+
+Hay un archivo .sh en la carpeta entrypoint que envia el reporte como .zip a un canal de slack, se ejecuta al final del todo en el entrypoint. El canal y el tocken con el que se envia estan en el archivo de entorno que se pasa. 
+
+</details>
+
 
 
 <details>
@@ -201,4 +224,3 @@ Al final del formulario de configuracion selecciona los siguientes valores:
 
 
 </details>
-Este es un cambio menor para probar el trigger :)

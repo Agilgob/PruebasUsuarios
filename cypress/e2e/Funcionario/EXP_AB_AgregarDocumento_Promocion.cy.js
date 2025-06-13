@@ -29,8 +29,8 @@ describe('El expediente permite agregar documento Promocion', () => {
         cy.session('sesionFuncionario', () => {
             cy.visit(environment.funcionarioURL);
             cy.loginFuncionario(funcionario.email, funcionario.password);
-          
-            cy.getCookie('authentication_token_03').should('exist');
+            cy.wait(2000);
+            cy.getCookie('authentication_token_03', { timeout: 5000 }).should('exist');
         }, {
             cacheAcrossSpecs: true
         }); 
