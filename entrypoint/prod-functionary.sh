@@ -5,6 +5,14 @@
 export $(grep -v '^#' .env.prod | xargs)
 export FUNCTIONARY=FUNC_LABORAL_ACUERDOS
 
+
+npx cypress run --spec cypress/e2e/Funcionario/MISEXP_AgregarExpediente.cy.js
+if [ $? -ne 0 ]; then
+    echo "La prueba MISEXP_AgregarExpediente.cy.js falló. Terminando el script."
+    exit 1
+fi
+
+
 npx cypress run --spec cypress/e2e/Funcionario/CP_EP_PanelVencimiento.cy.js
 
 npx cypress run --spec cypress/e2e/Funcionario/EXP_AB_ActionButtonsEnabled.cy.js

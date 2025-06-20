@@ -1,0 +1,27 @@
+{
+
+    "production" : {
+
+        "functionary" : {
+            "stages" : [
+                { "duration" : "30s", "target" : 5},
+                { "duration" : "30s", "target" : 48},
+                { "duration" : "30s", "target" : 48},
+                { "duration" : "10s", "target" : 58},
+                { "duration" : "10s", "target" : 58},
+                { "duration" : "1m", "target" : 0}
+            ]
+        }
+    },
+
+    "sandbox" : {
+
+        "functionary" : {
+            "stages" : [
+                { "duration" : "10s", "target" : 58},
+                { "duration" : "30s", "target" : 58},
+                { "duration" : "1s", "target" : 1}
+            ]
+        }
+    }   
+}
