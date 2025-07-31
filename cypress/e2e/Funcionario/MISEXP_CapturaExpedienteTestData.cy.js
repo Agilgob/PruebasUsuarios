@@ -1,5 +1,5 @@
 import { loadTestData, saveTestData } from '../../support/loadTestData';
-import { getExpedientData } from '../../support/funcionario/expediente';
+import { getExpedientDataByNumber } from '../../support/funcionario/expediente';
 
 const environment = Cypress.env('environment');
 const funcionario = Cypress.env('funcionario');
@@ -16,7 +16,7 @@ describe('Satisface la precondicion cuando el testData no se encuentra en tmp', 
     
     it('captura los datos del expediente', () => {
         cy.visit(environment.funcionarioURL);
-        getExpedientData(Cypress.env('expedientNumber')).then((expedientData) => {
+        getExpedientDataByNumber(Cypress.env('expedientNumber')).then((expedientData) => {
             cy.url().then((url) => {
                 expedientData['tramite'] = { url };
                 expedientData['expedientFound'] = true;

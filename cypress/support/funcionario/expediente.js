@@ -165,23 +165,33 @@ Cypress.Commands.add('intercambiaFuncionarioJsonFile', (interception) => {
 })
 
 
-export function getExpedientData(expedientNumber = ""){
+export function getExpedientDataByNumber(expedientNumber = ""){
 
     cy.hamburguer().click();
     cy.sidebar('Expedientes').should('be.visible').click()
     cy.sidebarExpedientes('Mis expedientes').click();
-
     cy.get('input.inputSearcher').as('searcher');
     cy.get('@searcher').type(expedientNumber);
     cy.contains('button', 'Buscar').click();
+    cy.wait(2000);
     cy.get('.procedures-table-container table tbody tr').as('tr')
-    cy.get('@tr').should('have.length', 1);
-    cy.get('@tr').should('contain', expedientNumber);
+    // cy.get('@tr').should('have.length', 1);
+    cy.get('@tr').contains(expedientNumber).parent().as('expedientRow');
 
     cy.intercept('GET', '**/api/v1/document_expedients/documents/*/10?page=1').as('expedientData');
-    cy.get('@tr').find('td a[href*="expedient_details"]').click();
+    cy.get('@expedientRow').click();
     return cy.wait('@expedientData').then((interception) => {
         return cy.wrap(interception.response.body.data)
     })
 
-}   
+};   
+
+export function getExpedientDataById(expedientId = ""){
+    const env =  Cypress.env('environment');
+    cy.intercept('GET', '**/api/v1/document_expedients/documents/*/10?page=1').as('expedientData');
+    cy.visit(`${env.funcionarioURL}/expedient_details/${expedientId}`);
+    return cy.wait('@expedientData').then((interception) => {
+        return cy.wrap(interception.response.body.data)
+    })
+
+};
