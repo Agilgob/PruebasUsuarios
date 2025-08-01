@@ -34,7 +34,7 @@ Cypress.Commands.add('buscarExpediente', (testData) => {
 
 
 Cypress.Commands.add('getActionButton', (buttonText) => {
-    return cy.get('section[class^="ExpedientActions_actions"]').find('button').filter(`:contains("${buttonText}")`).first()
+    return cy.get('section[class^="ExpedientActions_actions"]', {timeout:10000}).find('button').filter(`:contains("${buttonText}")`).first()
 })
 
 Cypress.Commands.add('clickListarPartes', () => {

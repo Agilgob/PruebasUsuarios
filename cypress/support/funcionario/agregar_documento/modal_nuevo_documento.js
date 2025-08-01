@@ -1,14 +1,7 @@
 
 
-export function modalNewDocument() {
-    return 
-}
 
-
-
-
-
-class ModalNewDocument {
+export class ModalNewDocument {
     constructor() {}
 
     modal() {
@@ -49,14 +42,27 @@ class ModalNewDocument {
         return this.modal().find('input[placeholder="Da clic y elige la fecha correspondiente"]');
     }
     
+    modalAlertMultisign(){
+        return new ModalAlertMultisign();
+    }
+
     // Methods to interact with the modal
 
 
-    multisign(multisign = false){ // TODO validar el funcionamiento de este metodo
-        if(!multisign) {
-            cy.get('label[for="isMultipleSignatureToggleButton"] div').click(); 
-        }
+    multisign(desiredState = false) {
+        cy.get('input#isMultipleSignatureToggleButton')
+        .invoke('prop', 'checked')
+        .then((isChecked) => {
+            if (isChecked !== desiredState) {
+                cy.get('label[for="isMultipleSignatureToggleButton"] div').click();
+            }
+        });
     }
+
+    // NOTA DE COMO USAR ESTA COSA:
+    // modalNewDocument.multisign(false);
+    // modalNewDocument.modalAlertMultisign().btnAccept().click()
+
 
     selectDocument(filePath) {
         this.modal().contains('div', 'Selecciona un documento')
@@ -73,4 +79,27 @@ class ModalNewDocument {
             .check();
     }
 
+}
+
+
+
+class ModalAlertMultisign{
+
+    constructor() {}
+
+    modal() {
+        return cy.getModal('Atención');
+    }
+
+    btnAccept() {
+        return this.modal().find('button').contains('Continuar');
+    }
+
+    btnCancel() {
+        return this.modal().find('button').contains('Cancelar');
+    }
+
+    alertMessage() {
+        return this.modal().find('h4');
+    }
 }
