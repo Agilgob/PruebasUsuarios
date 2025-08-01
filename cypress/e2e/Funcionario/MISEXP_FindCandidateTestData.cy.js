@@ -1,6 +1,7 @@
 import { fa } from '@faker-js/faker';
 import { getAllExpedients } from '../../support/funcionario/misExpedientes/misExpedientesPage';
-import {getExpedientDataById} from '../../support/funcionario/expediente';
+import {getExpedientDataById, getExpedientDataByNumber} from '../../support/funcionario/expediente';
+
 
 const environment = Cypress.env('environment');
 const funcionario = Cypress.env('funcionario');
@@ -27,15 +28,20 @@ describe('Satisface la precondicion cuando el testData no se encuentra en tmp', 
                 throw new Error('No se encontraron expedientes que cumplan con los criterios de búsqueda');
             }
             let expedientData = { ...filtered[0] };
-
-            cy.url().then((url) => {
-                expedientData['tramite'] = { url };
-                expedientData['expedientFound'] = true;
-                expedientData['expedientCreated'] = true;
-                cy.writeFile('tmp/testData.json', expedientData, { log: false });
-            }); 
+            cy.visit(environment.funcionarioURL)
+            getExpedientDataByNumber(expedientData.expedient_number).then((expedientData) => {
+                cy.url().then((url) => {
+                    expedientData['tramite'] = { url };
+                    expedientData['expedientFound'] = true;
+                    expedientData['expedientCreated'] = true
+                    console.log(expedientData); 
+                    cy.writeFile('tmp/testData.json', expedientData, { log: false });
+                });
+                
+            })
             
 
         });
     });
 })
+//TODO : Este codigo esta hecho con las patas, se puede hacer en su mayoria con endpoints !!!

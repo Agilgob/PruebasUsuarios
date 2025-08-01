@@ -1,7 +1,7 @@
 import { loadTestData, saveTestData } from '../../support/loadTestData';
 
 
-describe('El expediente permite agregar documento Promocion', () => {
+describe('Agrega un documento de tipo promocion, sin anexos', () => {
 
 
     let testData, tramite = null;
@@ -36,7 +36,7 @@ describe('El expediente permite agregar documento Promocion', () => {
         }); 
     });
 
-    it('El expediente permite agregar documento Promocion', () => {
+    it('El expediente permite agregar documento Promocion sin anexos', () => {
 
         if(!testData.expedientFound) {
             throw new Error("Abortada porque no se ha encontrado el expediente");
@@ -95,6 +95,9 @@ describe('El expediente permite agregar documento Promocion', () => {
            
         })
 
+        // No cambia los permisos del documento a los usuarios del expediente
+        // TODO en un modulo aparte seprar la logica del modal de permisos para corroborar
+        // la cantidad de usuarios y permisos que se asignan, intercepciones etc.
         cy.get('.users-and-permissions-list-modal').as('modalPermisosUsuarios');
         cy.get('@modalPermisosUsuarios').should('be.visible');
         cy.get('@modalPermisosUsuarios').contains('button', 'Guardar').click();
