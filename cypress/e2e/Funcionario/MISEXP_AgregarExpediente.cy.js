@@ -1,4 +1,4 @@
-import { loadTestData, saveTestData } from '../../support/loadTestData';
+import { loadTestData, saveTestData } from '../../utilities/loadTestData';
 import '../../support/funcionario/misExpedientes/misExpedientesPage';
 import { AltaNuevoExpediente , AgregarParte, ParteCreada} from '../../support/funcionario/misExpedientes/modal_altaNuevoExpediente';
 import { agregarExpedienteBtn } from '../../support/funcionario/misExpedientes/misExpedientesPage';

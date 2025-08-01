@@ -1,5 +1,5 @@
 
-import { saveTestData } from "../loadTestData";
+import { saveTestData } from "../../utilities/loadTestData";
 
 Cypress.Commands.add('buscarExpediente', (testData) => {
     if (testData.expedientFound && testData.tramite.url) {

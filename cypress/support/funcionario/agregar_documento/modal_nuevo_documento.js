@@ -63,6 +63,14 @@ export class ModalNewDocument {
     // modalNewDocument.multisign(false);
     // modalNewDocument.modalAlertMultisign().btnAccept().click()
 
+    selectPublishDate(date = '2025-12-31') {
+        this.inputPublishBulletinDate()
+        .scrollIntoView()
+        .should('be.visible')
+        .click()
+        .type(date, { force: true })
+        .type('{enter}');
+    }
 
     selectDocument(filePath) {
         this.modal().contains('div', 'Selecciona un documento')

@@ -1,7 +1,8 @@
-import { loadTestData, saveTestData } from '../../support/loadTestData';
+import { loadTestData, saveTestData } from '../../utilities/loadTestData';
 import {getNewExpedientId} from '../../support/commands';
 import {getAllExpedients} from '../../support/ciudadano/expedientes';
 import {ModalNewDocument} from '../../support/funcionario/agregar_documento/modal_nuevo_documento';
+import {ModalElectronicSignature} from '../../support/funcionario/agregar_documento/modal_firma_electronica';
 
 const environment = Cypress.env('environment');
 const funcionario = Cypress.env('funcionario');
@@ -56,6 +57,26 @@ describe('Inicia Tramite desde el portal de ciudadano', () => {
         modalNewDocument.modalAlertMultisign().btnAccept().click()
         cy.wait(1000);
         modalNewDocument.multisign(true);
+
+
+        modalNewDocument.radioPubishToBulletin(true);
+        modalNewDocument.inputJudge().should('be.visible');
+        modalNewDocument.inputSecretary().should('be.visible');
+
+        modalNewDocument.btnAddSignature().scrollIntoView().should('be.visible').click();
+        
+        const modalElectronicSignature = new ModalElectronicSignature();
+        modalElectronicSignature.selectFirelFile('assets/Firel/COAA000405MJCRLDA6.pfx');
+        modalElectronicSignature.inputPassword().clear().type('WrongPassword');
+        modalElectronicSignature.btnAdd().scrollIntoView().should('be.visible').click();
+        modalElectronicSignature.messageError().scrollIntoView().should('be.visible');
+        cy.wait(3000);
+        modalElectronicSignature.inputPassword().clear().type('Cordova2024');
+        modalElectronicSignature.btnAdd().scrollIntoView().should('be.visible').click();
+
+        modalNewDocument.selectPublishDate('2025-10-10');
+
+        modalNewDocument.selectDocument('assets/documento.pdf')
 
 
     })

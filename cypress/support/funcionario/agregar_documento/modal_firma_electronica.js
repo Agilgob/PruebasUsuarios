@@ -1,6 +1,6 @@
 
 
-class ModalElectronicSignature {
+export class ModalElectronicSignature {
     constructor() {}
 
     modal(){
@@ -33,10 +33,6 @@ class ModalElectronicSignature {
     }
 
     // Methods to interact with the modal
-
-    fillPassword(password){
-        this.inputPassword().type(password);
-    }
 
     selectFirelFile(filePath){
         this.modal().find('input[type=file]').selectFile(filePath, { force: true });
