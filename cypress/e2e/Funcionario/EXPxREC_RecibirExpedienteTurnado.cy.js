@@ -1,4 +1,3 @@
-import { loadTestData, saveTestData } from "../../support/loadTestData";
 
 describe('Recibe el expediente como segundo secretario', () => {
 

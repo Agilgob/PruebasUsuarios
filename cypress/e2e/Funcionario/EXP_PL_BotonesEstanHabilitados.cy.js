@@ -1,4 +1,3 @@
-import { loadTestData, saveTestData } from '../../support/loadTestData';
 
 
 describe('Botones de las plantillas estan disponibles yse muestran correctamente', () => {

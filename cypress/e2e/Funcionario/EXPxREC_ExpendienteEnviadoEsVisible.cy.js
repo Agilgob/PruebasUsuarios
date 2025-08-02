@@ -1,4 +1,3 @@
-import { loadTestData, saveTestData } from "../../support/loadTestData";
 
 describe('El expediente enviado es visible en los Expedientes por recibir para el receptor', () => {
 

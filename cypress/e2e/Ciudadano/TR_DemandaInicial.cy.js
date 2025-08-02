@@ -1,7 +1,5 @@
 import { en } from '@faker-js/faker';
 import {getNewExpedientId, getAllExpedients} from '../../support/ciudadano/expedientes';
-import { saveTestData, loadTestData } from '../../support/loadTestData';
-
 
 
 describe('Juzgados Civiles, Familiares y Mercantiles en línea', () => {

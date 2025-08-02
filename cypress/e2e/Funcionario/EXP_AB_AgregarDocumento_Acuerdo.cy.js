@@ -1,5 +1,3 @@
-import { loadTestData, saveTestData } from '../../support/loadTestData';
-
 
 describe('Agrega un documento de tipo acuerdo con respuesta a todas las promociones pendientes', () => {
 

@@ -25,17 +25,17 @@
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
 import './commands-functionary/home';
-import '../page/functionary/expediente';
 import './commands-functionary/login';
 import './commands-functionary/modal';
-
-import '../page/citizen/expedientes';
-import '../page/citizen/login';
-import '../page/citizen/PageHome';
-
 import './commands-functionary/overwrite'
 import './commands-functionary/fill-form-fields';
 import './commands-functionary/iframe';
+
+import './commands-citizen/login';
+
+import '../page/functionary/expediente';
+import '../page/citizen/expedientes';
+
 import './faker'
 
 

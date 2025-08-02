@@ -1,6 +1,3 @@
-import { loadTestData, saveTestData } from '../../support/loadTestData';
-
-
 
 describe('Turnado interno de expediente', () => {
 

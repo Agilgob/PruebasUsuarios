@@ -1,5 +1,5 @@
 
-import { loadTestData, saveTestData } from '../../support/loadTestData';
+import { loadTestData, saveTestData } from '../../utilities/loadTestData';
 
 const findInputInModal = function (modalName, label){
     cy.getModal(modalName).contains('label', label).parent().find('input').as('input');

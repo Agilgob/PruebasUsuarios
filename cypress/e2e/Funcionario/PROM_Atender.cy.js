@@ -1,6 +1,5 @@
 
 
-import { loadTestData, saveTestData } from '../../support/loadTestData';
 import { getAllPromotions } from '../../support/funcionario/panel_vencimientos';
 
 const findInputInModal = function (modalName, label){

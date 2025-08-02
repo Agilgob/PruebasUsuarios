@@ -1,4 +1,4 @@
-import { fa } from '@faker-js/faker';
+
 import { getAllExpedients } from '../../support/funcionario/misExpedientes/misExpedientesPage';
 import {getExpedientDataById, getExpedientDataByNumber} from '../../support/funcionario/expediente';
 

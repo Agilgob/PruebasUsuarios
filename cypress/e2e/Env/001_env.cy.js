@@ -1,7 +1,4 @@
-import { loadTestData, saveTestData } from '../../utilities/loadTestData';
-import {getNewExpedientId} from '../../support/commands';
-import {getAllExpedients} from '../../page/citizen/expedientes';
-import {ModalNewDocument} from '../../page/functionary/electronic-expedient/ModalAlertMultisign';
+import { ModalNewDocument } from '../../page/functionary/electronic-expedient/ModalNewDocument';
 import {ModalElectronicSignature} from '../../page/functionary/electronic-expedient/ModalElectronicSignature';
 
 const environment = Cypress.env('environment');

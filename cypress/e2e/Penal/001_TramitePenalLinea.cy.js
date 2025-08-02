@@ -1,4 +1,4 @@
-import { loadTestData, saveTestData } from '../../support/loadTestData';
+import { loadTestData, saveTestData } from '../../utilities/loadTestData';
 
 
 describe('Automatización de Trámite Penal en Línea', () => {
