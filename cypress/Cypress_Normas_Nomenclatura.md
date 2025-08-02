@@ -59,7 +59,7 @@ Este documento define las reglas obligatorias para la nomenclatura de todos los 
 
     Deben ejecutar acciones de interacción sobre elementos del DOM.
 
-### 4.3. Métodos de validación
+### 4.3. Métodos de validación ( NO APLICA )
 
     Formato: shouldResultadoEsperado
 

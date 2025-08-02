@@ -1,8 +1,8 @@
 import { loadTestData, saveTestData } from '../../utilities/loadTestData';
 import {getNewExpedientId} from '../../support/commands';
-import {getAllExpedients} from '../../support/ciudadano/expedientes';
-import {ModalNewDocument} from '../../support/funcionario/agregar_documento/modal_nuevo_documento';
-import {ModalElectronicSignature} from '../../support/funcionario/agregar_documento/modal_firma_electronica';
+import {getAllExpedients} from '../../page/citizen/expedientes';
+import {ModalNewDocument} from '../../page/functionary/electronic-expedient/ModalAlertMultisign';
+import {ModalElectronicSignature} from '../../page/functionary/electronic-expedient/ModalElectronicSignature';
 
 const environment = Cypress.env('environment');
 const funcionario = Cypress.env('funcionario');

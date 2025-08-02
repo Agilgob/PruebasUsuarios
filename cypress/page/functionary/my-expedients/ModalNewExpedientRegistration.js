@@ -1,24 +1,61 @@
 // Modal de agregar expediente
 
-export class AltaNuevoExpediente {
+
+export class ModalNewExpedientRegistration {
     constructor() {
-        this.titleH4 = () => cy.get('.modal-title.h4');
-        this.numeroExpedienteInput = () => cy.get('input[aria-label="numero de expediente"]');
-        this.destinatarioSelect = (value = "") => cy.llenarSelectModal('Destinatario', value);
-        this.tipoJuicioSelect = (value = "") => cy.llenarSelectModal('Tipo de Juicio', value);
-        this.viaSelect = (value = "") => cy.llenarSelectModal('Vía', value);
-        this.materiaSelect = (value = "") => cy.llenarSelectModal('Materia', value);
-        this.observacionesTextarea = () => cy.get('textarea[aria-label="Observaciones"]');
-        this.accionPrincipalSelect = (value = "") => cy.llenarSelectModal('Acción principal:', value);
-
-        this.partesP = () => cy.contains('p', 'Partes');
-        this.partesAgregarBtn = () => this.partesP().siblings('button');
-
-        this.modalFooter = () => cy.get('.modal-footer');
-        this.enviarBtn = () => this.modalFooter().contains('button', 'Enviar');
-        this.cerrarBtn = () => this.modalFooter().contains('button', 'Cerrar');
-       
     }
+
+    modal(){
+        return cy.getModal('Alta de nuevo expediente');
+    }
+
+    pPartsTitle(){
+        return this.modal().contains('p', 'Partes');
+    }
+
+    btnAddPart(){
+        return this.modal().siblings('button');
+    }
+
+    inputExpedientNumber(){
+        return cy.get('input[aria-label="numero de expediente"]')
+    };
+
+    textAreaObservation() {
+        return cy.get('textarea[aria-label="Observaciones"]')
+    }
+
+    btnSend(){ 
+        return this.modal().find('button').contains('Enviar'); 
+    }
+
+    btnClose(){
+        return this.modal().find('button').contains('Cerrar'); 
+    }
+
+    // Methods to perform actions in the modal
+
+    fillMultiselectAddressee(value) {
+        return cy.llenarSelectModal('Destinatario', value)
+    }
+
+    fillMultiselectJudgeType(value) {
+        cy.llenarSelectModal('Tipo de Juicio', value)
+    }
+
+    fillMultiselectWay(value) {
+        cy.llenarSelectModal('Vía', value)
+    }
+
+    fillMultiselectMatter(value) {
+        cy.llenarSelectModal('Materia', value)
+    }
+
+    fillMultiselectPrincipalAction(value) {
+        return cy.llenarSelectModal('Acción principal:', value)
+    }
+
+    
 }
 
 export class AgregarParte {

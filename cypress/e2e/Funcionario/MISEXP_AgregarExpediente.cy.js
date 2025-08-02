@@ -1,8 +1,8 @@
 import { loadTestData, saveTestData } from '../../utilities/loadTestData';
-import '../../support/funcionario/misExpedientes/misExpedientesPage';
-import { AltaNuevoExpediente , AgregarParte, ParteCreada} from '../../support/funcionario/misExpedientes/modal_altaNuevoExpediente';
-import { agregarExpedienteBtn } from '../../support/funcionario/misExpedientes/misExpedientesPage';
-import { getExpedientData } from '../../support/funcionario/expediente';
+import '../../page/functionary/my-expedients/misExpedientesPage';
+import { AltaNuevoExpediente , AgregarParte, ParteCreada} from '../../page/functionary/my-expedients/modal_altaNuevoExpediente';
+import { agregarExpedienteBtn } from '../../page/functionary/my-expedients/misExpedientesPage';
+import { getExpedientData } from '../../page/functionary/expediente';
 import { ne } from '@faker-js/faker';
 
 describe('Agregar plantilla de sentencias', () => {
