@@ -1,3 +1,6 @@
+
+
+
 Cypress.Commands.add('loginCiudadano', (email, password) => {
     cy.get('input[placeholder="Correo electrónico"]').as('email')
     cy.get('@email').should('be.visible')

@@ -24,6 +24,9 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
+import 'cypress-wait-until';
+
+
 import './commands-functionary/home';
 import './commands-functionary/login';
 import './commands-functionary/modal';
