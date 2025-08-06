@@ -1,8 +1,4 @@
 
-// Selecciona los valores de un campo casi tipo select en un formulario
-// de demanda inicial del ciudadano
-// campo : etiqueta del select
-// valorSeleccion : valor a seleccionar de la lista desplegable
 Cypress.Commands.add('llenarSelect', (campo, valorSeleccion) => {
     cy.get('.col-md-12 .row').filter(`:contains("${campo}")`).first().as('currentRow');
     cy.get('@currentRow').click().find('[class$="-menu"]').contains(valorSeleccion).click();
@@ -12,13 +8,12 @@ Cypress.Commands.add('llenarSelect', (campo, valorSeleccion) => {
 Cypress.Commands.add('llenarSelectModal', (campo, valorSeleccion) => {
     cy.get('form .form-group').filter(`:contains("${campo}")`).first().as('currentRow');
     cy.get('@currentRow').click().find('[class$="-menu"]').contains(valorSeleccion).click();
-    // cy.get('@currentRow').find('[class$=singleValue]').should('have.text', valorSeleccion);
 });
 
 
 
-// Selecciona un valor de la lista desplegable de un campo tipo select de forma aleatoria
-// campo : etiqueta del select
+// Selects a random value from the dropdown list of a select field
+// campo: label of the select
 Cypress.Commands.add('llenarSelectRandomValue', (campo) => {
     cy.get('.col-md-12 .row', { log: false })
       .filter(`:contains("${campo}")`)
@@ -38,15 +33,13 @@ Cypress.Commands.add('llenarSelectRandomValue', (campo) => {
 
 
 Cypress.Commands.add('loginErrorMessages', () => {
-
     cy.get('.notification-error div .message').as('error-message')
     cy.get('@error-message').should('be.visible')
     cy.get('@error-message').should('contain', 'Las credenciales de acceso son inválidas. Inténtalo nuevamente')
 
 })
 
-
-// Metodo para agregar el documento a un tramite
+// Method to add the document to a process
 Cypress.Commands.add('cargarDocumento', (buttonText, filePath) => {
   cy.get('button')
     .contains(buttonText)
