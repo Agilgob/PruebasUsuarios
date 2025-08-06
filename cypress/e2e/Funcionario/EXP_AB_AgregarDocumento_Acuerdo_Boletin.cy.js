@@ -1,5 +1,3 @@
-import { loadTestData, saveTestData } from '../../support/loadTestData';
-
 
 describe('Ingreso de acuerdos del funcionario', () => {
 

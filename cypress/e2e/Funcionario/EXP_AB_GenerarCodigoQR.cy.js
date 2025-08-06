@@ -1,5 +1,3 @@
-import { loadTestData, saveTestData } from '../../support/loadTestData';
-
 
 describe('Generar código QR', () => {
 

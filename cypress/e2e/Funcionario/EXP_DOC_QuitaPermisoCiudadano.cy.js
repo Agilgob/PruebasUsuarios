@@ -1,4 +1,3 @@
-import { loadTestData, saveTestData } from '../../support/loadTestData';
 
 
 describe('Quita todos los permisos del expediente al ciudadano', () => {

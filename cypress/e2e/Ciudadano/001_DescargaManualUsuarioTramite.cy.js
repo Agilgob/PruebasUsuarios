@@ -1,6 +1,3 @@
-import { loadTestData, saveTestData } from '../../support/loadTestData';
-
-
 
 describe('Descarga el manual de usuario de los tramites en la primer pantalla', () => {
 

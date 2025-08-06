@@ -1,6 +1,3 @@
-import { loadTestData, saveTestData } from '../../support/loadTestData';
-import fs from 'fs';
-
 
 describe('Action Buttons son accesibles', () => {
 

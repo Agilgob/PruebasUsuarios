@@ -1,5 +1,3 @@
-import { loadTestData, saveTestData } from '../../support/loadTestData';
-
 
 const environment = Cypress.env('environment');
 const funcionario = Cypress.env('funcionario');

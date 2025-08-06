@@ -24,18 +24,18 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
-import './funcionario/home';
-import './funcionario/expediente';
-import './funcionario/login';
-import './funcionario/modal';
+import './commands-functionary/home';
+import './commands-functionary/login';
+import './commands-functionary/modal';
+import './commands-functionary/overwrite'
+import './commands-functionary/fill-form-fields';
+import './commands-functionary/iframe';
 
-import './ciudadano/expedientes';
-import './ciudadano/login';
-import './ciudadano/home';
+import './commands-citizen/login';
 
-import './overwrite'
-import './actions/llenarCamposFormularios';
-import './actions/iframe';
+import '../page/functionary/expediente';
+import '../page/citizen/expedientes';
+
 import './faker'
 
 

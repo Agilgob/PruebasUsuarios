@@ -1,4 +1,4 @@
-import { loadTestData, saveTestData } from '../../support/loadTestData';
+
 import { getExpedientDataByNumber } from '../../support/funcionario/expediente';
 
 const environment = Cypress.env('environment');

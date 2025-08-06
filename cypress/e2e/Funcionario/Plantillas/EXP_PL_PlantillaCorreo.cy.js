@@ -1,7 +1,6 @@
-import { loadTestData, saveTestData } from '../../support/loadTestData';
 
 
-describe('Agregar plantilla de notificaciones', () => {
+describe('Agregar plantilla de correos', () => {
 
 
     let testData, tramite = null;
@@ -36,7 +35,6 @@ describe('Agregar plantilla de notificaciones', () => {
         }); 
     });
 
-
     it('El expediente puede ser localizado desde el buscador', () => {
         cy.buscarExpediente(testData); // support/funcionario/expediente.js
     });
@@ -51,7 +49,7 @@ describe('Agregar plantilla de notificaciones', () => {
         cy.visit(tramite.url, { failOnStatusCode: false });
     
         // const tabs = ['Acuerdos', 'Notificaciones', 'Sentencias', 'Correos', 'Oficios'];
-        const tab = 'Notificaciones'
+        const tab = 'Correos'
         
         // Hace click en agregar plantilla
         cy.get('[class^="Tabs_tabs"][data-rttabs="true"]').should('be.visible').as('pestanas');
@@ -74,7 +72,7 @@ describe('Agregar plantilla de notificaciones', () => {
             expect($plantillas).to.have.length.greaterThan(0)
         })
 
-        cy.get('@plantillas').first().then(($plantilla) => {
+        cy.get('@plantillas').eq(2).then(($plantilla) => {
             cy.wrap($plantilla).parent().find('span').invoke('text').then((text) => {
                 cy.wrap($plantilla).click();
         

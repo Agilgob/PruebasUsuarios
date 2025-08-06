@@ -1,7 +1,6 @@
-import { loadTestData, saveTestData } from '../../support/loadTestData';
 
 
-describe('Agregar plantilla de acuerdos', () => {
+describe('Agregar plantilla de notificaciones', () => {
 
 
     let testData, tramite = null;
@@ -36,14 +35,13 @@ describe('Agregar plantilla de acuerdos', () => {
         }); 
     });
 
+
     it('El expediente puede ser localizado desde el buscador', () => {
         cy.buscarExpediente(testData); // support/funcionario/expediente.js
     });
     
 
-
-
-    it("Es posible cargar una plantilla de acuerdos", () => {
+    it("Es posible agregar plantilla de notificaciones", () => {
 
         if(!testData.expedientFound) {
             throw new Error("Abortada porque no se ha encontrado el expediente");
@@ -52,7 +50,7 @@ describe('Agregar plantilla de acuerdos', () => {
         cy.visit(tramite.url, { failOnStatusCode: false });
     
         // const tabs = ['Acuerdos', 'Notificaciones', 'Sentencias', 'Correos', 'Oficios'];
-        const tab = 'Acuerdos'
+        const tab = 'Notificaciones'
         
         // Hace click en agregar plantilla
         cy.get('[class^="Tabs_tabs"][data-rttabs="true"]').should('be.visible').as('pestanas');
@@ -88,36 +86,18 @@ describe('Agregar plantilla de acuerdos', () => {
             });
         });
 
-        cy.llenarSelectModal('* Rubro', 'AUTOS A SU DISPOSICIÓN')       
-        cy.llenarSelectModal('* Rubro', 'ANUNCIA PRUEBA')
-        cy.get('textarea[aria-label="Observaciones"]')
-            .type('Observaciones de la plantilla pruebas automatizadas Cypress')
-        cy.get('textarea[aria-label="Comentarios"]')
-            .type('Comentarios de la plantilla pruebas automatizadas Cypress')
-        cy.get('input[value="false"][name="publishBulletin"]').click()
-        cy.get("@modalFormPlantilla").contains('label', '¿Deseas responder promociones?').parent().as('responderPromociones')
-        cy.get('@responderPromociones').find('input[class="form-check-input"]').then(($input) => {
-            cy.log(`Estado inicial: ${$input.prop('checked')}`); 
-        
-            if ($input.prop('checked')) {
-                cy.wrap($input).click(); // Desmarcar checkbox
-            }
-        });
-
-        // cy.getIframeBody('div.screenshot-height-container iframe:nth-child(1)')
-        //     .find('body p')
-        //     .invoke('after', '<p>Este es un mensaje después del checkbox</p>');
+        // Llena los campos de la plantilla
+        // // Llena documento texto enriquecido en body del iframe
 
         cy.get('@modalFormPlantilla').find('button').contains('Guardar').click();
 
 
-        // Valida que se muestra la nueva plantilla
+        // // Valida que se muestra la nueva plantilla
         cy.get('@tabPanelContent').find('article button[class^="BadgeWithOptions"]').then(($plantillas) => {
             expect($plantillas).to.have.length.greaterThan(0)
             expect($plantillas).to.be.visible
         })
 
-            
 
     });
     

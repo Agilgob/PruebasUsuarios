@@ -1,5 +1,5 @@
 
-import { saveTestData } from "../loadTestData";
+import { saveTestData } from "../../utilities/loadTestData";
 
 Cypress.Commands.add('buscarExpediente', (testData) => {
     if (testData.expedientFound && testData.tramite.url) {
@@ -34,7 +34,7 @@ Cypress.Commands.add('buscarExpediente', (testData) => {
 
 
 Cypress.Commands.add('getActionButton', (buttonText) => {
-    return cy.get('section[class^="ExpedientActions_actions"]').find('button').filter(`:contains("${buttonText}")`).first()
+    return cy.get('section[class^="ExpedientActions_actions"]', {timeout:10000}).find('button').filter(`:contains("${buttonText}")`).first()
 })
 
 Cypress.Commands.add('clickListarPartes', () => {
@@ -195,3 +195,5 @@ export function getExpedientDataById(expedientId = ""){
     })
 
 };
+
+

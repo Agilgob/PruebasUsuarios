@@ -1,6 +1,3 @@
-import { el } from '@faker-js/faker';
-import { loadTestData, saveTestData } from '../../support/loadTestData';
-
 
 describe('Funcionario : Mis Expedientes', () => {
 
