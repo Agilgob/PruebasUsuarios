@@ -2,13 +2,15 @@ import { loadTestData, saveTestData } from '../../support/loadTestData';
 import '../../support/funcionario/misExpedientes/misExpedientesPage';
 import { AltaNuevoExpediente , AgregarParte, ParteCreada} from '../../support/funcionario/misExpedientes/modal_altaNuevoExpediente';
 import { agregarExpedienteBtn } from '../../support/funcionario/misExpedientes/misExpedientesPage';
-import { getExpedientData } from '../../support/funcionario/expediente';
-import { ne } from '@faker-js/faker';
+
+import {getExpedientDataByNumber} from '../../support/funcionario/expediente';
+
 
 describe('Agregar plantilla de sentencias', () => {
 
 
     let testData, tramite = null;
+    let expedientCreated = false;
     const funcionario = Cypress.env('funcionario');
     const environment = Cypress.env('environment');
     let exp = null;
@@ -96,7 +98,8 @@ describe('Agregar plantilla de sentencias', () => {
             agregarParte.guardarBtn().click();
 
             const parteCreada = new ParteCreada(parte);
-            parteCreada.registroDiv().should('exist');
+            parteCreada.registroDiv().scrollIntoView().should('exist');
+            cy.screenshot(`parte-${parte.datosPersonales.nombres}-${parte.datosPersonales.apellidoPaterno}`);
             parteCreada.registroDiv().should('contain', parte.datosPersonales.nombres);
             parteCreada.registroDiv().should('contain', parte.datosPersonales.apellidoPaterno);
             parteCreada.registroDiv().should('contain', parte.datosPersonales.apellidoMaterno);
@@ -111,21 +114,24 @@ describe('Agregar plantilla de sentencias', () => {
             expect(interception.response.body.code).to.equal(200);
             expect(interception.response.body.data.message).to.equal("El expediente ha sido transferido correctamente");
             cy.writeFile("tmp/expediente-creado-funcionario.json" , expediente);
-
-            if(expediente.receiver_id == expediente.sender_id){
-                cy.visit(environment.funcionarioURL);
-                getExpedientData(expediente.expedient_number).then((expedientData) => {
-                    cy.url().then((url) => {
-                        expedientData['tramite'] = { url };
-                        expedientData['expedientFound'] = true;
-                        expedientData['expedientCreated'] = true
-                        console.log(expedientData); 
-                        cy.writeFile('tmp/testData.json', expedientData, { log: false });
-                    });
-                    
-                })
-            }
-
         })
-    })    
+    }) 
+    
+    after(() => {
+        if (expedientCreated) {
+            cy.visit(environment.funcionarioURL);
+            getExpedientDataByNumber(exp.numeroExpediente).then((expedientData) => {
+                cy.url().then((url) => {
+                    expedientData['tramite'] = { url };
+                    expedientData['expedientFound'] = true;
+                    expedientData['expedientCreated'] = true
+                    console.log(expedientData); 
+                    cy.writeFile('tmp/testData.json', expedientData, { log: false });
+                });
+                
+            })
+        }
+    });
+
+    
 })
