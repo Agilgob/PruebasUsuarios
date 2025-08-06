@@ -1,12 +1,25 @@
 // Modal de agregar expediente
 
-
+import './SectionCreatedPart';
+import './SectionPartPersonalData';
+import './SectionPartContactData';
+import './SectionPartTransparency'
 export class ModalNewExpedientRegistration {
     constructor() {
+        this.createdParts = [];
+        this.sectionPartPersonalData = () => new SectionPartPersonalData();
+        this.sectionPartContactData = () => new SectionPartContactData();
+        this.sectionPartTransparency = () => new SectionPartTransparency();
     }
 
     modal(){
         return cy.getModal('Alta de nuevo expediente');
+    }
+
+    createNewPart(partInformation = {}) {
+        const newPart = new SectionCreatedPart(partInformation);
+        this.createdParts.push(newPart);
+        return newPart;
     }
 
     pPartsTitle(){
@@ -55,8 +68,19 @@ export class ModalNewExpedientRegistration {
         return cy.llenarSelectModal('Acción principal:', value)
     }
 
-    
+    btnCancel = () => this.modal().contains('.justify-content-between button', 'Cancelar');
+
+    btnSave = () => this.modal().contains('.justify-content-between button', 'Guardar');
 }
+
+
+
+
+
+
+
+
+
 
 export class AgregarParte {
     constructor() {
@@ -101,20 +125,3 @@ export class AgregarParte {
     }
 }
 
-export class ParteCreada {
-    constructor(parte = {}) {
-        
-        this.registroDiv = () => {
-            const dp = parte.datosPersonales;
-            return cy.contains('div', `${dp.nombres} ${dp.apellidoPaterno} ${dp.apellidoMaterno}`)
-                .closest('div.user-select-none')
-        }; 
-
-        this.trashIcon = () => this.registroDiv().find('span.ti-trash').parent();
-
-        this.seccionEliminarParte = () => cy.contains('¿Estás seguro de eliminar la parte?').closest('.mt-2.mb-2');
-        this.cancelaEliminacionBtn = () => this.seccionEliminarParte().find('button').contains('Cancelar');
-        this.confirmaEliminacionBtn = () => this.seccionEliminarParte().find('button').contains('Eliminar');
-
-    }
-}
