@@ -2,7 +2,8 @@ import { loadTestData, saveTestData } from '../../support/loadTestData';
 import '../../support/funcionario/misExpedientes/misExpedientesPage';
 import { AltaNuevoExpediente , AgregarParte, ParteCreada} from '../../support/funcionario/misExpedientes/modal_altaNuevoExpediente';
 import { agregarExpedienteBtn } from '../../support/funcionario/misExpedientes/misExpedientesPage';
-
+import { ModalNewExpedientRegistration } from '../../page/functionary/my-expedients/ModalNewExpedientRegistration';
+import { PageMyExpedients } from '../../page/functionary/PageMyExpedients';
 import {getExpedientDataByNumber} from '../../support/funcionario/expediente';
 
 
@@ -47,8 +48,15 @@ describe('Agregar plantilla de sentencias', () => {
         cy.sidebar('Expedientes').click();
         cy.sidebarExpedientes('Mis expedientes').click();
         
+        const myExpedients = new PageMyExpedientsCommands();
+        const modalNewExpedient = new ModalNewExpedientRegistration();
         const altaExp = new AltaNuevoExpediente();
         const agregarParte = new AgregarParte();
+
+        myExpedients.btnAddExpedient().click();
+        modalNewExpedient.modal().should('be.visible');
+
+        
 
         agregarExpedienteBtn().click();
         altaExp.numeroExpedienteInput().type(exp.numeroExpediente);

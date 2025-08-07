@@ -33,11 +33,74 @@ export const crearPersonasFalsas = (cantidad = 1) => {
 };
 
 
+export function createParty(partyType='random', partyRegime='random'){
+  const partyTypes = ['Actor', 'Demandado', 'Imputado'];
+  const partyRegimes = ['Persona Fisica', 'Persona Moral'];
+
+  const _type = partyType === 'random'
+    ? partyTypes[Math.floor(Math.random() * partyTypes.length)]
+    : partyType;
+
+  if (!partyTypes.includes(_type)) {
+    throw new Error(`El tipo "${_type}" no es válido. Debe ser uno de: ${partyTypes.join(', ')}`);
+  }
 
 
-Cypress.Commands.add('crearUnaPersonaFalsa', () => {
-  return cy.wrap(crearUnaPersonaFalsa());
-});
+  const _regime = partyRegime === 'random'
+    ? partyRegimes[Math.floor(Math.random() * partyRegimes.length)]
+    : partyRegime;
+
+  if (!partyRegimes.includes(_regime)) {
+    throw new Error(`El régimen "${_regime}" no es válido. Debe ser uno de: ${partyRegimes.join(', ')}`);
+  }
+
+    let _personalData = {
+        regime: _regime,
+        firstName: faker.person.firstName(),
+        maternalLastName: faker.person.lastName().split(' ')[0],
+        paternalLastName: faker.person.lastName().split(' ')[0],
+        alias: faker.person.firstName(),
+        age: Math.floor(Math.random() * 50) + 18,
+        birthDate: '15-05-1990',
+        sex: "Masculino",
+        gender: "Heteronormatividad",
+        classification: "Privado",
+        showCover: true
+    };
+
+    let _contactData = {
+        email : "eltuercas@gmailmail.com",
+        phone : "5555555555",
+        residencePlace : "Calle de la prueba"
+    }
+
+    let _transparencyData = {
+        canReadWrite: "Si",
+        speaksSpanish: "Si",
+        languageOrDialect: "Ninguno",
+        educationLevel: "Secundaria",
+        maritalStatus: "No especifica",
+        nationality: "MEXICANA",
+        occupation: "QA Tester",
+        belongsToIndigenousCommunity: "no"
+    };
+
+
+  if (_personalData.regime == 'Persona Moral'){
+    _personalData['companyName'] = fakerES_MX.company.name()
+  }
+
+  return {
+    type : _type,
+    personalData : _personalData,
+    contactData : _contactData,
+    transparency : _transparencyData
+  }
+
+
+};
+
+
 
 Cypress.Commands.add('crearPersonasFalsas', (cantidad) => {
   return cy.wrap(crearPersonasFalsas(cantidad));

@@ -16,6 +16,12 @@ export class ModalNewExpedientRegistration {
         return cy.getModal('Alta de nuevo expediente');
     }
 
+    tabPartSection( text = "Datos Personales" ){
+        assert(['Datos Personales', 'Datos de Contacto', 'Transparencia'].includes(text), 
+        `El texto ${text} no es un tab válido en el formulario de partes`);
+        return this.modal().find('button').contains(text);
+    }
+          
     createNewPart(partInformation = {}) {
         const newPart = new SectionCreatedPart(partInformation);
         this.createdParts.push(newPart);
