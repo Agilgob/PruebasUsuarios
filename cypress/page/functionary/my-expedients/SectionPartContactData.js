@@ -1,5 +1,7 @@
-export default class SectionPartContactlData{
+export class SectionPartContactData{
 
+        constructor() {}
+        
         inputEmail = () => cy.contains('label', 'Correo electrónico').siblings('input');
 
         inputPhoneNumber = () => cy.contains('label', 'Teléfono').siblings('input');

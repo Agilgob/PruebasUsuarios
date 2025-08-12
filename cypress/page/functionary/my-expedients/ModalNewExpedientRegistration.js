@@ -1,21 +1,22 @@
 // Modal de agregar expediente
 
-import './SectionCreatedPart';
-import './SectionPartPersonalData';
-import './SectionPartContactData';
-import './SectionPartTransparency'
+import { SectionPartContactData } from './SectionPartContactData';
+import { SectionPartPersonalData } from './SectionPartPersonalData';
+import { SectionPartTransparency } from './SectionPartTransparency';
+
 export class ModalNewExpedientRegistration {
     constructor() {
         this.createdParts = [];
-        this.sectionPartPersonalData = () => new SectionPartPersonalData();
-        this.sectionPartContactData = () => new SectionPartContactData();
-        this.sectionPartTransparency = () => new SectionPartTransparency();
+        this.sectionPartPersonalData = new SectionPartPersonalData();
+        this.sectionPartContactData = new SectionPartContactData();
+        this.sectionPartTransparency = new SectionPartTransparency();
     }
 
     modal(){
         return cy.getModal('Alta de nuevo expediente');
     }
 
+    
     tabPartSection( text = "Datos Personales" ){
         assert(['Datos Personales', 'Datos de Contacto', 'Transparencia'].includes(text), 
         `El texto ${text} no es un tab válido en el formulario de partes`);
@@ -33,7 +34,7 @@ export class ModalNewExpedientRegistration {
     }
 
     btnAddPart(){
-        return this.modal().siblings('button');
+        return this.pPartsTitle().siblings('button');
     }
 
     inputExpedientNumber(){
@@ -53,6 +54,10 @@ export class ModalNewExpedientRegistration {
     }
 
     // Methods to perform actions in the modal
+
+    fillMultiselectPartyType(value){
+        return cy.llenarSelectModal('Tipo de parte', value)
+    }
 
     fillMultiselectAddressee(value) {
         return cy.llenarSelectModal('Destinatario', value)

@@ -1,4 +1,4 @@
-export default class SectionCreatedPart {
+export class SectionCreatedPart {
     constructor(parte = {}) {
         
         this.divRow = () => {

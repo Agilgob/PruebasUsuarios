@@ -1,4 +1,4 @@
-export default class SectionPartTransparency {
+export class SectionPartTransparency {
         multiselectCanReadWrite = (value = "") => cy.llenarSelectModal('* ¿Puede Leer y Escribir?', value);
 
         multiselectSpeaksSpanish = (value = "") => cy.llenarSelectModal('* ¿Sabe hablar español?', value);
@@ -15,7 +15,7 @@ export default class SectionPartTransparency {
 
         radioBelongsToIndigenousCommunity = (value = "") => {
             if (value !== "si" && value !== "no") {
-                throw new Error('Value for radioBelongsToIndigenousCommunity must be "si" or "no" in lowercase.');
+                throw new Error('Value for radioBelongsToIndigenousCommunity must be "ni" or "no" in uppercase.');
             }
             return cy.get(`input[type="radio"][value="${value}"]`);
         }

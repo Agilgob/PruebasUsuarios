@@ -6,7 +6,19 @@ Cypress.Commands.add('llenarSelect', (campo, valorSeleccion) => {
 });
 
 Cypress.Commands.add('llenarSelectModal', (campo, valorSeleccion) => {
+
     cy.get('form .form-group').filter(`:contains("${campo}")`).first().as('currentRow');
+
+    if(valorSeleccion == 'random'){
+        cy.get('@currentRow', { log: false }).click().find('[class$="-menu"]').within(() => {
+            cy.get('div[class!="option"][id^="react-select"]').as('options');
+            cy.get('@options').its('length').then((length) => {
+                const randomOption = Math.floor(Math.random() * length);
+                cy.get('@options').eq(randomOption).click();
+            })
+        })
+        return;
+    }
     cy.get('@currentRow').click().find('[class$="-menu"]').contains(valorSeleccion).click();
 });
 

@@ -1,8 +1,12 @@
 import { fakerES_MX } from '@faker-js/faker';
+import { getRandomInt, chooseRandom } from '../utilities/random.js';
+import { deepMerge } from '../utilities/deepMerge.js';
+
+
+const faker = fakerES_MX;
 
 export const crearUnaPersonaFalsa = () => {
-  const faker = fakerES_MX;
-
+ 
   const usuario = {
     nombre: faker.person.firstName(),
     apellidoMaterno: faker.person.lastName().split(' ')[0],
@@ -33,75 +37,84 @@ export const crearPersonasFalsas = (cantidad = 1) => {
 };
 
 
-export function createParty(partyType='random', partyRegime='random'){
-  const partyTypes = ['Actor', 'Demandado', 'Imputado'];
-  const partyRegimes = ['Persona Fisica', 'Persona Moral'];
 
-  const _type = partyType === 'random'
-    ? partyTypes[Math.floor(Math.random() * partyTypes.length)]
-    : partyType;
-
-  if (!partyTypes.includes(_type)) {
-    throw new Error(`El tipo "${_type}" no es válido. Debe ser uno de: ${partyTypes.join(', ')}`);
-  }
-
-
-  const _regime = partyRegime === 'random'
-    ? partyRegimes[Math.floor(Math.random() * partyRegimes.length)]
-    : partyRegime;
-
-  if (!partyRegimes.includes(_regime)) {
-    throw new Error(`El régimen "${_regime}" no es válido. Debe ser uno de: ${partyRegimes.join(', ')}`);
-  }
-
-    let _personalData = {
-        regime: _regime,
+/* 
+All multi-select values will be omitted from these fixtures, to avoid changes in selectors.   
+*/ 
+function personalData(){
+    return {
+        regime : 'random',
         firstName: faker.person.firstName(),
         maternalLastName: faker.person.lastName().split(' ')[0],
         paternalLastName: faker.person.lastName().split(' ')[0],
         alias: faker.person.firstName(),
-        age: Math.floor(Math.random() * 50) + 18,
-        birthDate: '15-05-1990',
-        sex: "Masculino",
-        gender: "Heteronormatividad",
-        classification: "Privado",
-        showCover: true
+        age: getRandomInt(19,80),
+        birthDate: `${getRandomInt(1,29)}-${getRandomInt(1,12)}-${getRandomInt(1945, 2005)}`,
+        sex: chooseRandom(['Masculino', "Femenino"]), 
+        gender: 'random',
+        classification: 'random'
     };
+}
 
-    let _contactData = {
-        email : "eltuercas@gmailmail.com",
-        phone : "5555555555",
-        residencePlace : "Calle de la prueba"
+
+function contactData(){
+    return {
+        email: faker.internet.email(),
+        phoneNumber: getRandomInt(1111111111,9999999999),
+        residencePlace: `${faker.location.streetAddress()}, ${faker.location.city()}` 
     }
+}
 
-    let _transparencyData = {
-        canReadWrite: "Si",
-        speaksSpanish: "Si",
-        languageOrDialect: "Ninguno",
-        educationLevel: "Secundaria",
-        maritalStatus: "No especifica",
-        nationality: "MEXICANA",
-        occupation: "QA Tester",
-        belongsToIndigenousCommunity: "no"
-    };
+function transparency(){
+    const indigenous = [
+      'Nahuatl', 'Tonantzin', 'Huirarica', 'Maya', 'Zapoteco', 'Mixteco', 'Otomí', 'Tzotzil',
+      'Tzeltal', 'Mazateco', 'Purépecha', 'Huasteco', 'Chol', 'Tojolabal', 'Mazahua', 'Tarahumara',
+      'Yaqui', 'Cora', 'Huichol', 'Chinanteco', 'Triqui', 'Amuzgo', 'Tepehuano', 'Popoloca',
+      'Chontal', 'Zoque', 'Cuicateco', 'Mixe', 'Tlapaneco', 'Chatino', 'Chichimeca', 'Pame',
+      'Guarijío', 'Seri', 'Cahuilla', 'Cochimi', 'Kiliwa', 'Kumiai', 'Paipai', 'Kickapoo'
+    ];
+    return {
+        canReadWrite : 'random',
+        speaksSpanish : 'random',
+        languageOrDialect : chooseRandom(indigenous),
+        educationalLevel : 'random',
+        maritalStatus : 'random',
+        nationality : 'random',
+        occupation : faker.person.jobType(),
+        indigenousCommunity : {
+            answer : chooseRandom(['si','no']),
+            community :  chooseRandom(indigenous)
+        }
+    }
+}
 
 
-  if (_personalData.regime == 'Persona Moral'){
-    _personalData['companyName'] = fakerES_MX.company.name()
+
+export function createParty( personAttributes = {} ){
+
+  let person = {
+    partType : 'random',
+    personalData : personalData(),
+    contactData : contactData(),
+    transparency : transparency()
   }
 
-  return {
-    type : _type,
-    personalData : _personalData,
-    contactData : _contactData,
-    transparency : _transparencyData
-  }
-
+  return deepMerge(person, personAttributes);
 
 };
+
+// console.clear()
+// console.log(
+//     createParty({
+//         'partType' : 'Asesino en serie', 
+//         'personalData' : { 'firstName' : 'El Galletoso'},
+//         'contactData' : { 'email' : 'manuel@agilgob.com'},
+//         'kind': 'public'
+//     }))
 
 
 
 Cypress.Commands.add('crearPersonasFalsas', (cantidad) => {
   return cy.wrap(crearPersonasFalsas(cantidad));
 });
+

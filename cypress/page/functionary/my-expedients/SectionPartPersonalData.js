@@ -1,5 +1,5 @@
-export default class SectionPartPersonalData{
-        regimenDeLaParteSelect = (value="") => cy.llenarSelectModal('Régimen de la parte', value);
+export class SectionPartPersonalData{
+        fillMultiselectRegime = (value="") => cy.llenarSelectModal('Régimen de la parte', value);
 
         inputNames = () => cy.contains('label', 'Nombres').siblings('input');
 
@@ -9,7 +9,7 @@ export default class SectionPartPersonalData{
 
         inputAlias = () => cy.contains('label', 'Alias').siblings('input');
 
-        inputBirthDate = () => this.section().contains('Fecha de nacimiento').parent().find('input');
+        inputBirthDate = () => cy.contains('Fecha de nacimiento').parent().find('input');
 
         inputShowCover = () => cy.get('input#showCover');
 

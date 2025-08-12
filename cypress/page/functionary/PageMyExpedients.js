@@ -1,9 +1,9 @@
 
-export default class PageMyExpedients {
+export class PageMyExpedients {
     constructor() {}
 
     btnAddExpedient() {
-        return cy.get('button').contains('Agregar Expediente');
+        return cy.get('button').contains('Agregar expediente');
     }
 
     inputSearch() {
@@ -21,9 +21,9 @@ export default class PageMyExpedients {
     btnTurnExpedient() {
         return cy.get('button').contains('Turnar expedientes seleccionados');
     }
-
-    
 }
+
+
 export class PageMyExpedientsCommands extends PageMyExpedients {
     constructor() {
         super();
