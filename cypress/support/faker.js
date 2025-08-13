@@ -93,7 +93,7 @@ function transparency(){
 export function createParty( personAttributes = {} ){
 
   let person = {
-    partType : 'random',
+    partyType : 'random',
     personalData : personalData(),
     contactData : contactData(),
     transparency : transparency()

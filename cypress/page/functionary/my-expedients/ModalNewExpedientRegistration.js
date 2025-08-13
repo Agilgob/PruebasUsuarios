@@ -3,6 +3,7 @@
 import { SectionPartContactData } from './SectionPartContactData';
 import { SectionPartPersonalData } from './SectionPartPersonalData';
 import { SectionPartTransparency } from './SectionPartTransparency';
+import { SectionCreatedPart } from './SectionCreatedPart';
 
 export class ModalNewExpedientRegistration {
     constructor() {
@@ -10,10 +11,15 @@ export class ModalNewExpedientRegistration {
         this.sectionPartPersonalData = new SectionPartPersonalData();
         this.sectionPartContactData = new SectionPartContactData();
         this.sectionPartTransparency = new SectionPartTransparency();
+        this.modalTitle = 'Alta de nuevo expediente';
+    }
+
+    setModalTitle(modalTitle){
+        this.modalTitle = modalTitle;
     }
 
     modal(){
-        return cy.getModal('Alta de nuevo expediente');
+        return cy.getModal(this.modalTitle);
     }
 
     
@@ -23,11 +29,15 @@ export class ModalNewExpedientRegistration {
         return this.modal().find('button').contains(text);
     }
           
-    createNewPart(partInformation = {}) {
-        const newPart = new SectionCreatedPart(partInformation);
+    divRowPartCreated(party) {
+        const newPart = new SectionCreatedPart(party);
         this.createdParts.push(newPart);
         return newPart;
     }
+
+    btnCancel = () => this.modal().contains('.justify-content-between button', 'Cancelar');
+
+    btnSave = () => this.modal().contains('.justify-content-between button', 'Guardar');
 
     pPartsTitle(){
         return this.modal().contains('p', 'Partes');
@@ -79,19 +89,58 @@ export class ModalNewExpedientRegistration {
         return cy.llenarSelectModal('Acción principal:', value)
     }
 
-    btnCancel = () => this.modal().contains('.justify-content-between button', 'Cancelar');
 
-    btnSave = () => this.modal().contains('.justify-content-between button', 'Guardar');
 }
 
 
+export class ModalNewExpedientRegistrationCommands extends ModalNewExpedientRegistration {
+    constructor(){
+        super();
+    }
 
+    fillSectionPersonalData(partyPersonalData){
+        const pd = this.sectionPartPersonalData;
 
+        pd.fillMultiselectRegime(partyPersonalData.regime)
+        pd.inputNames().type(partyPersonalData.firstName)
+        pd.inputPaternalSurname().type(partyPersonalData.paternalLastName)
+        pd.inputMaternalSurname().type(partyPersonalData.maternalLastName)
+        pd.inputAlias().type(partyPersonalData.alias)
+        pd.fillMultiselectAge(partyPersonalData.age)
+        pd.inputBirthDate().type(partyPersonalData.birthDate)
+        pd.fillMultiselectSex(partyPersonalData.sex)
+        pd.fillMultiselectGender(partyPersonalData.gender)
+        pd.fillMultiselectClassification(partyPersonalData.classification)
+    }
 
+    fillSectionContactData(partyContactData){
+        const cd = this.sectionPartContactData;
 
+        cd.inputEmail().type(partyContactData.email)
+        cd.inputPhoneNumber().type(partyContactData.phoneNumber)
+        cd.inputResidence().type(partyContactData.residencePlace)
+    }
 
+    fillSectionTransparency(partyTransparencyData){
+        const t = this.sectionPartTransparency;
 
+        t.multiselectCanReadWrite(partyTransparencyData.canReadWrite)
+        t.multiselectSpeaksSpanish(partyTransparencyData.speaksSpanish)
+        t.inputLanguageOrDialect().type(partyTransparencyData.languageOrDialect)
+        t.multiselectEducationLevel(partyTransparencyData.educationalLevel)
+        t.multiselectMaritalStatus(partyTransparencyData.maritalStatus)
+        t.multiselectNationality(partyTransparencyData.nationality)
+        t.inputOccupation().type(partyTransparencyData.occupation)
 
+        t.radioBelongsToIndigenousCommunity(partyTransparencyData.indigenousCommunity.answer).click()
+        if(partyTransparencyData.indigenousCommunity.answer == 'si'){
+            t.inputEthnicGroup().type(partyTransparencyData.indigenousCommunity.community)
+        }
+    }
+
+}
+
+    
 
 export class AgregarParte {
     constructor() {

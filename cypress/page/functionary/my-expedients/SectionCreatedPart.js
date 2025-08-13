@@ -1,9 +1,9 @@
 export class SectionCreatedPart {
-    constructor(parte = {}) {
+    constructor(party = {}) {
         
         this.divRow = () => {
-            const dp = parte.datosPersonales;
-            return cy.contains('div', `${dp.nombres} ${dp.apellidoPaterno} ${dp.apellidoMaterno}`)
+            const pd = party.personalData;
+            return cy.contains('div', `${pd.firstName} ${pd.paternalLastName} ${pd.maternalLastName}`)
                 .closest('div.user-select-none')
         }; 
 
@@ -18,3 +18,5 @@ export class SectionCreatedPart {
     btnConfirmDeletion = () => this.sectionRemovePart().find('button').contains('Eliminar');
 
 }
+
+
