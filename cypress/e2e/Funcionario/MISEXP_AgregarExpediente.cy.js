@@ -24,15 +24,16 @@ describe('Agregar plantilla de sentencias', () => {
             exp = data["tresPartes"]
         })
 
-        const party = createParty({
-            'partyType' : 'Actor',
-            'personalData' : {'regime': 'Persona Física'},
+        parties.push(createParty({'partyType' : 'Actor','personalData' : {'regime': 'Persona Moral'}}))
+        parties.push(createParty({'partyType' : 'Actor','personalData' : {'regime': 'Persona Física'}}))
 
-        });
+        parties.push(createParty({'partyType' : 'Tercero Interesado','personalData' : {'regime': 'Persona Física'}}))
+        parties.push(createParty({'partyType' : 'Tercero Interesado','personalData' : {'regime': 'Persona Física'}}))
 
-        parties.push(party)
-        parties.push(createParty({'partyType' : 'Actor'}))
-        parties.push(createParty({'partyType' : 'Abogado Patrono del Actor'}))
+        parties.push(createParty({'partyType' : 'Demandado','personalData' : {'regime': 'Persona Física'}}))
+        parties.push(createParty({'partyType' : 'Demandado','personalData' : {'regime': 'Persona Física'}}))
+
+        parties.push(createParty({'partyType' : 'Abogado Patrono del Actor', 'personalData' : {'regime': 'Persona Física'}}))
 
     });
 
@@ -68,11 +69,12 @@ describe('Agregar plantilla de sentencias', () => {
         modalNewExpedient.modal().should('be.visible');
         modalNewExpedient.inputExpedientNumber().type(expedientNumber)
         modalNewExpedient.setModalTitle(expedientNumber); // The modal changes its name when the expedient number is set
-        modalNewExpedient.modal().should('be.visible');
-        // TODO Seleccionar al funcionario que recibira el expediente una vez creado campo : 'Destinatario:'
+        modalNewExpedient.modal().should('be.visible'); // Validate modal name 
+        modalNewExpedient.fillMultiselectAddressee(funcionario.nombre)
 
+        // TODO agregar metodos para seleccionar partes cuando el tipo es defensor (tercero interesado, actor, demandado)
         parties.forEach((party) => {
-            modalNewExpedient.btnAddPart().should('be.visible').click()
+            modalNewExpedient.btnAddPart().scrollIntoView().should('be.visible').click()
 
             modalNewExpedient.fillMultiselectPartyType(party.partyType)
 

@@ -45,6 +45,7 @@ function personalData(){
     return {
         regime : 'random',
         firstName: faker.person.firstName(),
+        companyName : faker.company.name(),
         maternalLastName: faker.person.lastName().split(' ')[0],
         paternalLastName: faker.person.lastName().split(' ')[0],
         alias: faker.person.firstName(),

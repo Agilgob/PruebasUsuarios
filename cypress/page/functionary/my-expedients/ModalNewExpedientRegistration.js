@@ -102,6 +102,9 @@ export class ModalNewExpedientRegistrationCommands extends ModalNewExpedientRegi
         const pd = this.sectionPartPersonalData;
 
         pd.fillMultiselectRegime(partyPersonalData.regime)
+        if (partyPersonalData.regime == 'Persona Moral'){
+            pd.inputCompanyName().type(partyPersonalData.companyName)
+        }
         pd.inputNames().type(partyPersonalData.firstName)
         pd.inputPaternalSurname().type(partyPersonalData.paternalLastName)
         pd.inputMaternalSurname().type(partyPersonalData.maternalLastName)

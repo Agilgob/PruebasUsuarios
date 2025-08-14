@@ -1,6 +1,8 @@
 export class SectionPartPersonalData{
         fillMultiselectRegime = (value="") => cy.llenarSelectModal('Régimen de la parte', value);
 
+        inputCompanyName = () => cy.contains('* Razón Social').siblings('input')
+
         inputNames = () => cy.contains('label', 'Nombres').siblings('input');
 
         inputPaternalSurname = () => cy.contains('label', 'Apellido Paterno').siblings('input');
@@ -20,4 +22,8 @@ export class SectionPartPersonalData{
         fillMultiselectGender = (value="") => cy.llenarSelectModal('Género', value);
 
         fillMultiselectClassification = (value="") => cy.llenarSelectModal('Clasificación', value);
+
+        fillRepresentedParty = (value) => cy.llenarSelectModal('Parte Representada', value);
+
+        fillRepresentationKind = (value) => cy.llenarSelectModal('Tipo de representación', value)
 }
