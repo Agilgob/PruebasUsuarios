@@ -1,7 +1,9 @@
 import { ModalSignedDocument } from './ModalSignedDocument';
 
 export class ModalPublishBulletin extends ModalSignedDocument{
-    constructor(){}
+    constructor(){
+        super();
+    }
 
     selectPublishDate(date = '2025-12-31') {
         this.inputPublishBulletinDate()
