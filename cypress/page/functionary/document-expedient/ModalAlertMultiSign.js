@@ -1,5 +1,5 @@
 
-export class ModalAlertMultisign{
+export class ModalAlertMultiSign{
 
     constructor() {}
 

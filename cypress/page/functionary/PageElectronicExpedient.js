@@ -1,13 +1,17 @@
+import { SectionCover } from './electronic-expedient/SectionCover'
+import { SectionActionButtons } from './electronic-expedient/SectionActionButtons';
+import { SectionDocumentFinder } from './electronic-expedient/SectionDocumentFinder';
+import { SectionDocuments } from './electronic-expedient/SectionDocuments';
+import { SectionTemplates } from './electronic-expedient/SectionTemplates';
 
-
-export class ElectronicExpedientPage{
+export class PageElectronicExpedient{
     
     constructor(){
-        this.converSection = new CoverSection();
-        this.converSection = new ActionButtonsSection();
-        this.DocumentFinderSection = new DocumentFinderSection();
-        this.templatesSection = new TemplatesSection();
-        this.documentsSection = new DocumentsSection();
+        this.coverSection = new SectionCover();
+        this.actionButtons = new SectionActionButtons();
+        this.DocumentFinder = new SectionDocumentFinder();
+        this.templates = new SectionTemplates();
+        this.documents = new SectionDocuments();
     }
 
 }
