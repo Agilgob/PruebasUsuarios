@@ -1,5 +1,5 @@
 
-import { getExpedientDataByNumber } from '../../support/funcionario/expediente';
+import { getExpedientDataByNumber } from '../../page/functionary/expediente'
 
 const environment = Cypress.env('environment');
 const funcionario = Cypress.env('funcionario');

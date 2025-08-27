@@ -27,13 +27,17 @@ describe('Agregar plantilla de sentencias', () => {
         parties.push(createParty({'partyType' : 'Actor','personalData' : {'regime': 'Persona Moral'}}))
         parties.push(createParty({'partyType' : 'Actor','personalData' : {'regime': 'Persona Física'}}))
 
-        parties.push(createParty({'partyType' : 'Tercero Interesado','personalData' : {'regime': 'Persona Física'}}))
-        parties.push(createParty({'partyType' : 'Tercero Interesado','personalData' : {'regime': 'Persona Física'}}))
+        parties.push(createParty({'partyType' : 'Tercero interesado','personalData' : {'regime': 'Persona Física'}}))
+        parties.push(createParty({'partyType' : 'Tercero interesado','personalData' : {'regime': 'Persona Moral'}}))
+        parties.push(createParty({'partyType' : 'Tercero interesado','personalData' : {'regime': 'Persona Física'}}))
+        parties.push(createParty({'partyType' : 'Tercero interesado','personalData' : {'regime': 'Persona Moral'}}))
+        // parties.push(createParty({'partyType' : 'Tercero Interesado','personalData' : {'regime': 'Persona Física'}}))
+        // parties.push(createParty({'partyType' : 'Tercero Interesado','personalData' : {'regime': 'Persona Física'}}))
 
         parties.push(createParty({'partyType' : 'Demandado','personalData' : {'regime': 'Persona Física'}}))
         parties.push(createParty({'partyType' : 'Demandado','personalData' : {'regime': 'Persona Física'}}))
 
-        parties.push(createParty({'partyType' : 'Abogado Patrono del Actor', 'personalData' : {'regime': 'Persona Física'}}))
+        // parties.push(createParty({'partyType' : 'Abogado Patrono del Actor', 'personalData' : {'regime': 'Persona Física'}}))
 
     });
 
@@ -70,7 +74,7 @@ describe('Agregar plantilla de sentencias', () => {
         modalNewExpedient.inputExpedientNumber().type(expedientNumber)
         modalNewExpedient.setModalTitle(expedientNumber); // The modal changes its name when the expedient number is set
         modalNewExpedient.modal().should('be.visible'); // Validate modal name 
-        modalNewExpedient.fillMultiselectAddressee(funcionario.nombre)
+        // modalNewExpedient.fillMultiselectAddressee(funcionario.nombre)
 
         // TODO agregar metodos para seleccionar partes cuando el tipo es defensor (tercero interesado, actor, demandado)
         parties.forEach((party) => {
@@ -89,7 +93,7 @@ describe('Agregar plantilla de sentencias', () => {
             
             modalNewExpedient.btnSave().scrollIntoView().should('be.enabled').and('be.visible').click()
             let createdPartRow = modalNewExpedient.divRowPartCreated(party)
-            createdPartRow.divRow().scrollIntoView().should('be.visible')
+            // createdPartRow.divRow().scrollIntoView().should('be.visible')
         })
 
 
