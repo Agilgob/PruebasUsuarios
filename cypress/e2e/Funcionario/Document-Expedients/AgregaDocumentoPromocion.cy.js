@@ -3,11 +3,14 @@ import { ModalPublishBulletin } from "../../../page/functionary/document-expedie
 import { PageElectronicExpedient } from "../../../page/functionary/PageElectronicExpedient";
 import { ModalElectronicSignature } from "../../../page/functionary/ModalElectronicSignature";
 import { ModalManagePermissionsDocument } from "../../../page/functionary/ModalManagePermissionsDocument";
+
+
 describe('Ingreso de acuerdos del funcionario', () => {
 
-    let testData, tramite = null;
+    let testData, tramite, documentLabel = null;
     const funcionario = Cypress.env('funcionario');
     const environment = Cypress.env('environment');
+
     
     before(() => {
         
@@ -49,9 +52,9 @@ describe('Ingreso de acuerdos del funcionario', () => {
         const es = new ModalElectronicSignature();
         const mp = new ModalManagePermissionsDocument();
 
-        exp.actionButtons.btnAddDocument().should('be.visible').scrollIntoView().click()
-        
-        
+        cy.wait(1500);
+        exp.actionButtons.btnAddDocument().scrollIntoView().should('be.visible').and('be.enabled').click()
+
         nd.multiselectDocumentType('Promoción')
         nd.btnAddSignature().click()
 
@@ -59,25 +62,37 @@ describe('Ingreso de acuerdos del funcionario', () => {
         es.inputPassword().should('be.visible').type(funcionario.passwordFirel)
         es.btnAdd().click()
 
-        nd.inputLabel().scrollIntoView().should('be.visible').type(`Promocion de prueba ${Date.now()}`)
+        documentLabel = `Promocion de prueba ${Date.now()}`;
+        nd.inputLabel().scrollIntoView().should('be.visible').type(documentLabel)
         nd.selectDocument('assets/promocion.pdf')
         nd.inputPromoterName().scrollIntoView().should('be.visible').type('Manuel Valdez')
         nd.radioAddAnnex(false)
 
         cy.intercept('POST', '**/api/v1/document_expedients/upload').as('uploadDocument')
+        cy.wait(5000)
         nd.btnSign().click()
-        cy.wait('@uploadDocument').its('response.statusCode').should('eq', 200)
+        cy.wait('@uploadDocument', { timeout: 60000 }).its('response.statusCode').should('eq', 200)
 
         mp.btnSave().scrollIntoView().should('be.visible').click()
         mp.getModalWarning().btnAccept().should('be.visible').click()
 
     })
 
-    // after(() => { //TODO hacer la validacion de la vista del documento en el expediente usando el nombre creado
-    //     // Guardar la informacion del expediente en el archivo testData.json
-    //     cy.writeFile('tmp/testData.json', JSON.stringify(testData), { log: false, timeout: 500 });
-    // });
+
+    after(() => { //TODO hacer la validacion de la vista del documento en el expediente usando el nombre creado
+
+        cy.visit(tramite.url, {failOnStatusCode: false});
+        const ee = new PageElectronicExpedient();
+        ee.documents.getTableRow(documentLabel).should('exist').and('be.visible');
+
+        ee.documents.getTableRow(documentLabel).then( row => {
+            ee.documents.getDotIndicator(row).should('exist').and('be.visible');
+            ee.documents.getDotIndicator(row).should('have.class', 'dot-green');
+            ee.documents.getDotIndicator(row).click();
+        });
+    });
+
 })
 
 
-// TODO Revisar ya que tira codigo 422 en lugar de 200
+// TODO Hacer la validacion de la fecha de vencimiento en el modal

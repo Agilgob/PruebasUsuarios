@@ -1,5 +1,5 @@
 import { en } from '@faker-js/faker';
-import {getNewExpedientId, getAllExpedients} from '../../support/ciudadano/expedientes';
+import {getNewExpedientId, getAllExpedients} from '../../page/citizen/expedientes';
 
 
 describe('Juzgados Civiles, Familiares y Mercantiles en línea', () => {
@@ -11,7 +11,7 @@ describe('Juzgados Civiles, Familiares y Mercantiles en línea', () => {
 
     before(() => {
         cy.fixture('tramites.json').then((tramites) => {
-            const nombreTramite = Cypress.env('tramite') || 'civiles_familiares_mercantiles_abogado_demandado';
+            const nombreTramite = 'di-rep-abog-demandado-anexo';
             tramite = tramites[nombreTramite];
             expect(tramite).to.exist;
         })

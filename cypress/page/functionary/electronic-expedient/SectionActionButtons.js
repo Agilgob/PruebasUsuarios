@@ -8,7 +8,7 @@ export class SectionActionButtons{
     }
 
     findButton(btnText){
-        return this.section().contains('span', btnText )
+        return this.section().contains('span', btnText ).closest('button')
     }
 
     btnPrintCover() {
